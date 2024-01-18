@@ -1,1 +1,60 @@
-/build
+# Android Studio
+/.idea/
+/.gradle/
+/build/
+
+# Gradle
+*.iml
+.gradle/
+local.properties
+
+# Compiled files
+*.class
+*.jar
+
+# Dependencies
+/.externalNativeBuild
+/captures/
+*.rdb
+*.ldb
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Android
+*.apk
+*.ap_
+*.dex
+*.pro
+*.so
+*.o
+/cmake-build*/
+.ndk
+
+# IntelliJ
+*.iws
+*.iws.*
+*.ipr
+*.log
+.idea/
+*.jks
+
+
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+
+
