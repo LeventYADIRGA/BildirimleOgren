@@ -1,4 +1,4 @@
-package com.lyadirga.bildirimleogren
+package com.lyadirga.bildirimleogren.data
 
 data class Language(val wordOrSentence: String, val meaning: String)
 

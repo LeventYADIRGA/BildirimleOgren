@@ -1,4 +1,4 @@
-package com.lyadirga.bildirimleogren
+package com.lyadirga.bildirimleogren.data
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
+import com.lyadirga.bildirimleogren.data.Language
 import java.util.Locale
 
 class RecyclerAdapter(private val context: Context, private var dataList: Array<Language>): RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>(), TextToSpeech.OnInitListener{

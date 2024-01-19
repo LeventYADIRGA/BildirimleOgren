@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
+import com.lyadirga.bildirimleogren.data.PrefData
+import com.lyadirga.bildirimleogren.data.getData
+import com.lyadirga.bildirimleogren.data.week1
+import com.lyadirga.bildirimleogren.util.ParseCsv
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         list.addItemDecoration(dividerItemDecoration)
         list.adapter = adapter
         list.scheduleLayoutAnimation()
+
+        ParseCsv.parse(this)
     }
 
     override fun onResume() {

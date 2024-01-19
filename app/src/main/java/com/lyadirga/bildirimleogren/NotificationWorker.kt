@@ -3,14 +3,15 @@ package com.lyadirga.bildirimleogren
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.lyadirga.bildirimleogren.data.PrefData
+import com.lyadirga.bildirimleogren.data.getData
+import com.lyadirga.bildirimleogren.data.week1
 import java.util.Random
 import java.util.concurrent.TimeUnit
 
