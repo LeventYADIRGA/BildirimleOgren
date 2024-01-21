@@ -31,7 +31,7 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
 
 
         // bildirim gönder
-        val model = week1[index]
+        val model =set[index]
         sendNotification(model.wordOrSentence, model.meaning)
 
         return Result.success()

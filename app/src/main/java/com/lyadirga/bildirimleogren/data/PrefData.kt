@@ -27,7 +27,7 @@ class PrefData(context: Context) {
     }
 
     fun getIndex(): Int{
-      return sharedPref.getInt(CALISMA_SETI, DEFAULT_INDEX)
+      return sharedPref.getInt(INDEX, DEFAULT_INDEX)
     }
 
     fun setCalismaSeti(index: Int){

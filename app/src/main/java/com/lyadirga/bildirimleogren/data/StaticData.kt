@@ -32,6 +32,9 @@ fun getData(which: Int): Array<Language> {
         8 -> {
             data = lingusta3
         }
+        9 -> {
+            data = week7
+        }
         else -> {
             println("Geçersiz seçenek.")
         }
@@ -229,12 +232,12 @@ val week6 = arrayOf(
     Language("What is this?","Bu nedir?"),
     Language("close","yakın"),
     Language("for now","şimdilik"),
-    Language("",""),
-    Language("",""),
-    Language("",""),
-    Language("",""),
-    Language("",""),
-    Language("","")
+    Language("one more","bir daha"),
+    Language("I don't think so","Öyle düşünmüyorum"),
+    Language("I din't know that","Bunu bilmiyordum"),
+    Language("reptile","sürüngen"),
+    Language("I din't have task","Görevim yoktu"),
+    Language("Kindergarten","Anaokulu")
 )
 
 val lingusta1 = arrayOf(
@@ -256,6 +259,16 @@ val lingusta3 = arrayOf(
     Language("",""),
     Language("",""),
     Language("","")
+)
+
+val week7 = arrayOf(
+    Language("I remember", "Ben hatırlıyorum"),
+    Language("alive", "canlı"),
+    Language("choke", "boğmak"),
+    Language("I meet a co-worker", "Bir iş arkadaşımla tanıştım"),
+    Language("I enjoy listening to music", "Müzik dinlemek hoşuma gidiyor"),
+    Language("I like software development", "Yazılım geliştirmeyi seviyorum"),
+    Language("I'm doing well, thank you. How about you?", "İyiyim, teşekkürler. Peki ya sen?")
 )
 
 
