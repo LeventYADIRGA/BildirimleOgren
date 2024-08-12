@@ -24,16 +24,16 @@ fun getData(which: Int): Array<Language> {
             data = week6
         }
         6 -> {
-            data = lingusta1
+            data = week7
         }
         7 -> {
-            data = lingusta2
+            data = lingusta1
         }
         8 -> {
-            data = lingusta3
+            data = lingusta2
         }
         9 -> {
-            data = week7
+            data = lingusta3
         }
         else -> {
             println("Geçersiz seçenek.")
@@ -237,18 +237,124 @@ val week6 = arrayOf(
     Language("I din't know that","Bunu bilmiyordum"),
     Language("reptile","sürüngen"),
     Language("I din't have task","Görevim yoktu"),
-    Language("Kindergarten","Anaokulu")
+    Language("Kindergarten","Anaokulu"),
+    Language("I watch it every day","Her gün izliyorum"),
+    Language("along with","ile birlikte / bununla birlikte / Maamafih"),
+    Language("it make sense","mantıklı geliyor"),
+    Language("in person","bizzat / şahsen"),
+    Language("big deal","önemli bir şey / büyük bir şey")
 )
 
+val week7 = arrayOf(
+    Language("I remember", "Ben hatırlıyorum"),
+    Language("alive", "canlı"),
+    Language("choke", "boğmak"),
+    Language("I meet a co-worker", "Bir iş arkadaşımla tanıştım"),
+    Language("I enjoy listening to music", "Müzik dinlemek hoşuma gidiyor"),
+    Language("I like software development", "Yazılım geliştirmeyi seviyorum"),
+    Language("I'm doing well, thank you. How about you?", "İyiyim, teşekkürler. Peki ya sen?"),
+    Language("Not at all!", "Hiçte bile"),
+    Language("You made my day!", "Günümü güzelleştirdin"),
+    Language("Via", "Aracılığıyla"),
+    Language("the way you work", "çalışma şeklin"),
+    Language("deny", "inkar etmek"),
+    Language("anymore", "artık"),
+    Language("surely", "kesinlikle"),
+    Language("show off", "hava atmak / gösteriş yapmak"),
+    Language("outfit", "kıyafet"),
+    Language("for saving my day", "günümü kurtardığın için"),
+    Language("on the contrary", "tam aksine / bilakis"),
+    Language("as well", "aynı zamanda"),
+    Language("no offense", "alınma / gücenme"),
+    Language("as you wish", "nasıl istersen"),
+    Language("Actually", "Aslında"),
+    Language("Board of Trustees", "yönetim kadrosu"),
+    Language("a number of", "birtakım"),
+    Language("If you don't mind", "mahzuru yoksa"),
+    Language("I have having fun", "eğleniyorum"),
+    Language("keep alive", "canlı tutmak"),
+    Language("Sorry for interrapting", "Böldüğüm için özür dilerim"),
+    Language("lots of", "bir çok (sayılabilir)"),
+    Language("lot of", "çok (sayılamaz)"),
+    Language("grace", "lütuf"),
+    Language("favors", "iyilikler"),
+    Language("out off", "bitti"),
+    Language("literally", "gerçekten / kelimenin tam anlamıyla"),
+    Language("let me know", "bana bildir"),
+    Language("Have been to Bodrum?", "Bodrum da bulundun mu?")
+)
+
+val week8 = arrayOf(
+    Language("immediately", "hemen / derhal"),
+    Language("chores", "ev işleri"),
+    Language("at all", "hiç"),
+    Language("favow of", "lehine"),
+    Language("clear-cut", "net bir şekilde / bıçak gibi keskin"),
+    Language("society", "toplum"),
+    Language("officer", "memur"),
+    Language("downside", "dezevantaj"),
+    Language("Overal", "Özetle / etraflı"),
+    Language("Do you mind if I + V1", "Eğer sakıncası yoksa ben + V1"),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", "")
+    )
+
 val lingusta1 = arrayOf(
-    Language("ğkp","kğ"),
-    Language("",""),
-    Language("",""),
-    Language("","")
+    Language("very well", "çok iyi"),
+    Language("not very well", "çok iyi değil"),
+    Language("Would you like something to eat?", "Bir şey yemek ister misin?"),
+    Language("I would / I'd", "isterim"),
+    Language("to have dinner", "akşam yemeği için"),
+    Language("What do you want to do?", "Ne yapmak istiyorsun?"),
+    Language("have lunch", "Öğlen yemeği yemek"),
+    Language("How about having lunch?", "Öğle yemeği yemeye ne dersin?"),
+    Language("I am going to eat now", "Ben şimdi yemek yiyeceğim"),
+    Language("What are you going to do today?", "Bu gün ne yapacaksın?"),
+    Language("Can you give me?", "Bana verebilir misin?"),
+    Language("I am late for work", "işe geç kaldım"),
+    Language("I speak a little English", "Biraz İngilizce konuşurum"),
+    Language("Do I owe you?", "sana borçlu muyum?"),
+    Language("Do you have money?", "Paran var mı?"),
+    Language("How much is this?", "Bu ne kadar?"),
+    Language("15. derste kaldım", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", ""),
+    Language("", "")
 )
 
 val lingusta2 = arrayOf(
-    Language("ğkp","kğ"),
+    Language("ğkp","çok iyi"),
     Language("",""),
     Language("",""),
     Language("","")
@@ -261,15 +367,7 @@ val lingusta3 = arrayOf(
     Language("","")
 )
 
-val week7 = arrayOf(
-    Language("I remember", "Ben hatırlıyorum"),
-    Language("alive", "canlı"),
-    Language("choke", "boğmak"),
-    Language("I meet a co-worker", "Bir iş arkadaşımla tanıştım"),
-    Language("I enjoy listening to music", "Müzik dinlemek hoşuma gidiyor"),
-    Language("I like software development", "Yazılım geliştirmeyi seviyorum"),
-    Language("I'm doing well, thank you. How about you?", "İyiyim, teşekkürler. Peki ya sen?")
-)
+
 
 
 

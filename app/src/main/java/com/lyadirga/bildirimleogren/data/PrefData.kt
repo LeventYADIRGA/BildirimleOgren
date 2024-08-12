@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 
 class PrefData(context: Context) {
 
-    private var sharedPref: SharedPreferences
+    private var sharedPref: SharedPreferences = context.getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE)
 
     companion object {
         private const val PREF_DATA = "Preferences"
@@ -13,10 +13,6 @@ class PrefData(context: Context) {
         private const val CALISMA_SETI = "calisma_seti"
         private const val DEFAULT_INDEX = 0
         private const val DEFAULT_CALISMA_SETI = 0
-    }
-
-    init {
-        sharedPref = context.getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE)
     }
 
     fun setIndex(index: Int){
