@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
@@ -41,11 +43,17 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "reminder_channel"
 
+        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val channel = NotificationChannel(
             channelId,
             "Reminder Channel",
             NotificationManager.IMPORTANCE_DEFAULT
-        )
+        ).apply {
+            setSound(soundUri, AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build())
+        }
+
         notificationManager.createNotificationChannel(channel)
 
         // Ana aktiviteyi açmak için bir intent
