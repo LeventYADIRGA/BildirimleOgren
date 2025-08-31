@@ -14,7 +14,7 @@
         android:id="@+id/sentence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_color_title"
+        android:textColor="?attr/colorOnSurface"
         android:fontFamily="sans-serif"
         android:textSize="17sp"
         tools:text="Unlikely"/>
@@ -24,6 +24,7 @@
         android:id="@+id/mean"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:fontFamily="sans-serif-light"
         android:textSize="14sp"
         tools:text="Muhtemel olmayan / beklenmeyen"/>
