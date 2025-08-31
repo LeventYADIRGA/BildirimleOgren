@@ -2,7 +2,37 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.BildirimleOgren" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimary">@color/green_primary_light</item>
+        <item name="colorOnPrimary">@color/green_on_primary_light</item>
+        <item name="colorPrimaryContainer">@color/green_primary_container_light</item>
+        <item name="colorOnPrimaryContainer">@color/green_on_primary_container_light</item>
+        <item name="colorSecondary">@color/green_secondary_light</item>
+        <item name="colorOnSecondary">@color/green_on_secondary_light</item>
+        <item name="colorSecondaryContainer">@color/green_secondary_container_light</item>
+        <item name="colorOnSecondaryContainer">@color/green_on_secondary_container_light</item>
+        <item name="colorTertiary">@color/green_tertiary_light</item>
+        <item name="colorOnTertiary">@color/green_on_tertiary_light</item>
+        <item name="colorTertiaryContainer">@color/green_tertiary_container_light</item>
+        <item name="colorOnTertiaryContainer">@color/green_on_tertiary_container_light</item>
+        <item name="colorError">@color/green_error_light</item>
+        <item name="colorOnError">@color/green_on_error_light</item>
+        <item name="colorErrorContainer">@color/green_error_container_light</item>
+        <item name="colorOnErrorContainer">@color/green_on_error_container_light</item>
+        <item name="android:windowBackground">@color/green_background_light</item>
+        <item name="colorOnBackground">@color/green_on_background_light</item>
+        <item name="colorSurface">@color/green_surface_light</item>
+        <item name="colorOnSurface">@color/green_on_surface_light</item>
+        <item name="colorSurfaceVariant">@color/green_surface_variant_light</item>
+        <item name="colorOnSurfaceVariant">@color/green_on_surface_variant_light</item>
+        <item name="colorOutline">@color/green_outline_light</item>
+        <item name="colorOutlineVariant">@color/green_outline_variant_light</item>
+        <item name="colorSurfaceDim">@color/green_surface_dim_light</item>
+        <item name="colorSurfaceBright">@color/green_surface_bright_light</item>
+        <item name="colorSurfaceContainerLowest">@color/green_surface_container_lowest_light</item>
+        <item name="colorSurfaceContainerLow">@color/green_surface_container_low_light</item>
+        <item name="colorSurfaceContainer">@color/green_surface_container_light</item>
+        <item name="colorSurfaceContainerHigh">@color/green_surface_container_high_light</item>
+        <item name="colorSurfaceContainerHighest">@color/green_surface_container_highest_light</item>
     </style>
 
     <style name="Theme.BildirimleOgren" parent="Base.Theme.BildirimleOgren" />

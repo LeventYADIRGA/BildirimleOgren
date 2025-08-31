@@ -61,7 +61,7 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
             .setContentText(message)
             .setContentIntent(pendingIntent) // PendingIntent'i bildirimde kullan
             .setAutoCancel(true) // Bildirime tıklanınca otomatik olarak kapat
-            .setSmallIcon(R.drawable.app_small_icon)
+            .setSmallIcon(R.mipmap.app_icon)
 
         // imageResId null değilse büyük resim ekle
         imageResId?.let {

@@ -2,6 +2,32 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.BildirimleOgren" parent="Theme.Material3.DayNight">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/green_primary_dark</item>
+        <item name="colorOnPrimary">@color/green_on_primary_dark</item>
+        <item name="colorPrimaryContainer">@color/green_primary_container_dark</item>
+        <item name="colorOnPrimaryContainer">@color/green_on_primary_container_dark</item>
+        <item name="colorSecondary">@color/green_secondary_dark</item>
+        <item name="colorOnSecondary">@color/green_on_secondary_dark</item>
+        <item name="colorSecondaryContainer">@color/green_secondary_container_dark</item>
+        <item name="colorOnSecondaryContainer">@color/green_on_secondary_container_dark</item>
+        <item name="colorError">@color/green_error_dark</item>
+        <item name="colorOnError">@color/green_on_error_dark</item>
+        <item name="colorErrorContainer">@color/green_error_container_dark</item>
+        <item name="colorOnErrorContainer">@color/green_on_error_container_dark</item>
+        <item name="android:windowBackground">@color/green_background_dark</item>
+        <item name="colorOnBackground">@color/green_on_background_dark</item>
+        <item name="colorSurface">@color/green_surface_dark</item>
+        <item name="colorOnSurface">@color/green_on_surface_dark</item>
+        <item name="colorSurfaceVariant">@color/green_surface_variant_dark</item>
+        <item name="colorOnSurfaceVariant">@color/green_on_surface_variant_dark</item>
+        <item name="colorOutline">@color/green_outline_dark</item>
+        <item name="colorOutlineVariant">@color/green_outline_variant_dark</item>
+        <item name="colorSurfaceDim">@color/green_surface_dim_dark</item>
+        <item name="colorSurfaceBright">@color/green_surface_bright_dark</item>
+        <item name="colorSurfaceContainerLowest">@color/green_surface_container_lowest_dark</item>
+        <item name="colorSurfaceContainerLow">@color/green_surface_container_low_dark</item>
+        <item name="colorSurfaceContainer">@color/green_surface_container_dark</item>
+        <item name="colorSurfaceContainerHigh">@color/green_surface_container_high_dark</item>
+        <item name="colorSurfaceContainerHighest">@color/green_surface_container_highest_dark</item>
     </style>
 </resources>
