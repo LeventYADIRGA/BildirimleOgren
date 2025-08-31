@@ -3,71 +3,98 @@ package com.lyadirga.bildirimleogren.ui
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.google.android.material.textview.MaterialTextView
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.data.getLanguageSet
 import com.lyadirga.bildirimleogren.data.languageSets
+import com.lyadirga.bildirimleogren.data.remote.SHEET_URL
+import com.lyadirga.bildirimleogren.data.remote.SHEET_URL2
+import com.lyadirga.bildirimleogren.data.remote.SSS
+import com.lyadirga.bildirimleogren.databinding.ActivityMainBinding
 import com.lyadirga.bildirimleogren.notification.NotificationWorker
+import com.lyadirga.bildirimleogren.ui.base.BaseActivity
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private var adapter: RecyclerAdapter? = null
-    private lateinit var list: RecyclerView
-    private lateinit var title: MaterialTextView
+    private val viewModel: MainViewModel by viewModels()
+
+
+    private var listAdapter: RecyclerAdapter? = null
     private lateinit var prefData: PrefData
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun createBinding(inflater: LayoutInflater): ActivityMainBinding {
+        return ActivityMainBinding.inflate(inflater)
+    }
 
-        //Android 15 ve üzeri için
-        val rootView = findViewById<View>(android.R.id.content)
-        setupEdgeToEdgeAndStatusBar(rootView)
+    override fun prepareView(savedInstanceState: Bundle?) {
 
         prefData = PrefData(this)
 
         initPermission()
-
-        title = findViewById(R.id.title)
-        list = findViewById(R.id.list)
+        test()
 
         val currentCalismaSetiIndex = prefData.getCalismaSeti()
         val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
-        title.text = currentCalismaSeti?.title ?: ""
+        binding.title.text = currentCalismaSeti?.title ?: ""
 
         val animation =
             AnimationUtils.loadAnimation(this, R.anim.layout_animation_fall_down)
-        list.layoutAnimation = LayoutAnimationController(animation)
-        adapter = RecyclerAdapter(this, currentCalismaSeti?.items ?: emptyList())
+        listAdapter = RecyclerAdapter(this, currentCalismaSeti?.items ?: emptyList())
         val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
-        list.addItemDecoration(dividerItemDecoration)
-        list.adapter = adapter
-        list.scheduleLayoutAnimation()
+        binding.list.apply {
+            layoutAnimation = LayoutAnimationController(animation)
+            addItemDecoration(dividerItemDecoration)
+            adapter = listAdapter
+            scheduleLayoutAnimation()
+        }
+    }
+
+    override fun observeViewModel() {}
+
+
+    private fun test() {
+        viewModel.fetchSheet(SSS)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.wordSet.collect { wordSet ->
+                        // UI güncelle
+                        println("LLL: $wordSet")
+                    }
+                }
+
+                launch {
+                    viewModel.errorEvent.collect { errorMessage ->
+                        Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
 
     }
 
@@ -146,10 +173,10 @@ class MainActivity : AppCompatActivity() {
             setPositiveButton("Tamam"){ _, _ ->
                     prefData.setCalismaSeti(currentCalismaSetiIndex)
                     prefData.resetIndex()
-                    title.text = choices[currentCalismaSetiIndex]
+                    binding.title.text = choices[currentCalismaSetiIndex]
                     val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
-                    adapter?.swapData(currentCalismaSeti?.items ?: emptyList())
-                    list.scheduleLayoutAnimation()
+                    listAdapter?.swapData(currentCalismaSeti?.items ?: emptyList())
+                    binding.list.scheduleLayoutAnimation()
             }
             .setSingleChoiceItems(choices, currentCalismaSetiIndex){_, which ->
                 currentCalismaSetiIndex = which
@@ -188,38 +215,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setupEdgeToEdgeAndStatusBar(view: View) {
-        if (Build.VERSION.SDK_INT >= 35) {
-            ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-                val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(
-                    v.paddingLeft,
-                    systemBarsInsets.top,
-                    v.paddingRight,
-                    systemBarsInsets.bottom
-                )
-
-                val isDarkTheme = when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                    Configuration.UI_MODE_NIGHT_YES -> true   // Koyu mod
-                    Configuration.UI_MODE_NIGHT_NO -> false   // Açık mod
-                    else -> false
-                }
-
-                val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-
-                // true -> ikonlar koyu, false -> ikonlar açık
-                windowInsetsController.isAppearanceLightStatusBars = !isDarkTheme
-
-
-                insets
-            }
-        }
-    }
 
 
     override fun onDestroy() {
         super.onDestroy()
-        adapter?.releaseTextToSpeech()
-        adapter = null
+        listAdapter?.releaseTextToSpeech()
+        listAdapter = null
     }
 }
