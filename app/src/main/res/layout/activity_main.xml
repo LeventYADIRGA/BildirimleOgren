@@ -8,10 +8,12 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="Öğrenimde Olanlar"
+        tools:text="Olanlar Öğrenimde Olanlar Olanlar "
         android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="center"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:fontFamily="sans-serif-condensed"
         android:textSize="24sp"

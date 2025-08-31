@@ -29,9 +29,9 @@ import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.data.getLanguageSet
 import com.lyadirga.bildirimleogren.data.languageSets
-import com.lyadirga.bildirimleogren.data.remote.SHEET_URL
+import com.lyadirga.bildirimleogren.data.remote.SHEET_URL1
 import com.lyadirga.bildirimleogren.data.remote.SHEET_URL2
-import com.lyadirga.bildirimleogren.data.remote.SSS
+import com.lyadirga.bildirimleogren.data.remote.toLanguageSet
 import com.lyadirga.bildirimleogren.databinding.ActivityMainBinding
 import com.lyadirga.bildirimleogren.notification.NotificationWorker
 import com.lyadirga.bildirimleogren.ui.base.BaseActivity
@@ -55,7 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         prefData = PrefData(this)
 
         initPermission()
-        test()
+        fetchAllSheets()
 
         val currentCalismaSetiIndex = prefData.getCalismaSeti()
         val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
@@ -73,18 +73,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    override fun observeViewModel() {}
-
-
-    private fun test() {
-        viewModel.fetchSheet(SSS)
+    override fun observeViewModel() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.wordSet.collect { wordSet ->
-                        // UI güncelle
-                        println("LLL: $wordSet")
+                    viewModel.wordSets.collect { wordSets ->
+                        val languageSets = wordSets.map { it.toLanguageSet() }
+                        prefData.saveLanguageSets(languageSets)
                     }
                 }
 
@@ -95,7 +91,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
             }
         }
+    }
 
+
+    private fun fetchAllSheets() {
+        val urls = listOf(SHEET_URL1, SHEET_URL2)
+        viewModel.fetchSheets(urls)
     }
 
     private fun initPermission() {
@@ -152,12 +153,41 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> {
+            R.id.action_local -> {
                 openSelectionDialog()
+                true
+            }
+            R.id.action_remote -> {
+                openRemoteSetsSelectionDialog()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun openRemoteSetsSelectionDialog() {
+
+        val languageSets = prefData.getLanguageSets()
+        val choices: Array<CharSequence> = languageSets
+            .map { it.title as CharSequence }
+            .toTypedArray()
+
+        var currentCalismaSetiIndex = 0
+
+        val builder = AlertDialog.Builder(this).apply {
+            setTitle("E Tablolardan Çalışma Seti Seçin")
+            setPositiveButton("Tamam") { _, _ ->
+                binding.title.text = choices[currentCalismaSetiIndex]
+                listAdapter?.swapData(languageSets[currentCalismaSetiIndex].items)
+                binding.list.scheduleLayoutAnimation()
+            }
+                .setSingleChoiceItems(choices, currentCalismaSetiIndex) { _, which ->
+                    currentCalismaSetiIndex = which
+                }
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun openSelectionDialog() {

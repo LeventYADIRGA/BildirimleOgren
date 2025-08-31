@@ -1,14 +1,15 @@
 package com.lyadirga.bildirimleogren.data.remote
 
+import com.lyadirga.bildirimleogren.model.Language
+import com.lyadirga.bildirimleogren.model.LanguageSet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import java.net.URL
 
-val SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTO8rQRuzuW4R1t94Bpfd-Dsc8sR-ZZdlGiAvoFmP9_61bgaaHsOU2GynonalYSc-bdNHNjwqIMG20p/pub?gid=0&single=true&output=csv"
-val SHEET_URL2 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTO8rQRuzuW4R1t94Bpfd-Dsc8sR-ZZdlGiAvoFmP9_61bgaaHsOU2GynonalYSc-bdNHNjwqIMG20p/pub?output=csv"
-val SSS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTO8rQRuzuW4R1t94Bpfd-Dsc8sR-ZZdlGiAvoFmP9_61bgaaHsOU2GynonalYSc-bdNHNjwqIMG20p/pub?gid=1239646743&single=true&output=csv"
+val SHEET_URL1 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTO8rQRuzuW4R1t94Bpfd-Dsc8sR-ZZdlGiAvoFmP9_61bgaaHsOU2GynonalYSc-bdNHNjwqIMG20p/pub?gid=0&single=true&output=csv"
+val SHEET_URL2 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTO8rQRuzuW4R1t94Bpfd-Dsc8sR-ZZdlGiAvoFmP9_61bgaaHsOU2GynonalYSc-bdNHNjwqIMG20p/pub?gid=1239646743&single=true&output=csv"
 
 
 // CSV’yi internetten çekip parse eden Flow fonksiyonu, WordSet döner
@@ -49,3 +50,17 @@ data class WordEntry(
     val word: String,
     val meaning: String
 )
+
+fun WordEntry.toLanguage(): Language {
+    return Language(
+        wordOrSentence = this.word,
+        meaning = this.meaning
+    )
+}
+
+fun WordSet.toLanguageSet(): LanguageSet {
+    return LanguageSet(
+        title = this.setTitle,
+        items = this.entries.map { it.toLanguage() }
+    )
+}
