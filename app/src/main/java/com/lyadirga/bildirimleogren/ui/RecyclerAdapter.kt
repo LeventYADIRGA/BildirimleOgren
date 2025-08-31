@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
 import com.lyadirga.bildirimleogren.R
@@ -24,6 +25,7 @@ class RecyclerAdapter(private val context: Context, private var dataList: List<L
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val sentence: MaterialTextView = itemView.findViewById(R.id.sentence)
         val mean: MaterialTextView = itemView.findViewById(R.id.mean)
+        val image: AppCompatImageView = itemView.findViewById(R.id.image)
     }
 
     // Adapter içindeki veri kümesinin uzunluğu
@@ -41,6 +43,12 @@ class RecyclerAdapter(private val context: Context, private var dataList: List<L
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.sentence.text = dataList[position].wordOrSentence
         holder.mean.text = dataList[position].meaning
+        dataList[position].imageResId?.let {
+            holder.image.visibility = View.VISIBLE
+            holder.image.setImageResource(it)
+        } ?: run {
+            holder.image.visibility = View.GONE
+        }
 
         holder.itemView.setOnClickListener {
             val sentenceToSpeak = dataList[position].wordOrSentence
