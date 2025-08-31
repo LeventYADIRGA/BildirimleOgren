@@ -2,7 +2,9 @@ package com.lyadirga.bildirimleogren.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -12,6 +14,7 @@ import androidx.work.WorkerParameters
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.data.getLanguageSet
+import com.lyadirga.bildirimleogren.ui.MainActivity
 
 class NotificationWorker(private val context: Context, params: WorkerParameters) : Worker(context, params) {
     override fun doWork(): Result {
@@ -45,9 +48,19 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
         )
         notificationManager.createNotificationChannel(channel)
 
+        // Ana aktiviteyi açmak için bir intent oluşturun
+        val intent = Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE)
+
         val builder = NotificationCompat.Builder(applicationContext, channelId)
             .setContentTitle(title)
             .setContentText(message)
+            .setContentIntent(pendingIntent) // PendingIntent'i bildirimde kullanın
+            .setAutoCancel(true) // Bildirime tıklanınca otomatik olarak kapat
             .setSmallIcon(R.drawable.app_small_icon)
 
         // imageResId null değilse büyük resim ekle
