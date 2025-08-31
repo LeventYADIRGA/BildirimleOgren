@@ -13,6 +13,7 @@ class PrefData(context: Context) {
         private const val CALISMA_SETI = "calisma_seti"
         private const val DEFAULT_INDEX = 0
         private const val DEFAULT_CALISMA_SETI = 0
+        private const val IS_FIRST_LAUNCH = "is_first_launch"
     }
 
     fun setIndex(index: Int){
@@ -35,5 +36,17 @@ class PrefData(context: Context) {
 
     fun getCalismaSeti(): Int{
         return sharedPref.getInt(CALISMA_SETI, DEFAULT_CALISMA_SETI)
+    }
+
+    // ✅ İlk açılışı takip eden fonksiyonlar
+    fun isFirstLaunch(): Boolean {
+        return sharedPref.getBoolean(IS_FIRST_LAUNCH, true)
+    }
+
+    fun setFirstLaunch(value: Boolean) {
+        with(sharedPref.edit()) {
+            putBoolean(IS_FIRST_LAUNCH, value)
+            apply()
+        }
     }
 }

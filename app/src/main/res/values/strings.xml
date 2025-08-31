@@ -1,17 +1,3 @@
 <resources>
     <string name="app_name">Bildirimle Öğren</string>
-
-    <array name="calisma_setleri">
-        <item>1. Hafta</item>
-        <item>2. Hafta</item>
-        <item>3. Hafta</item>
-        <item>4. Hafta</item>
-        <item>5. Hafta</item>
-        <item>6. Hafta</item>
-        <item>7. Hafta</item>
-        <item>Lingusta 1. Faz</item>
-        <item>Lingusta 2. Faz</item>
-        <item>Lingusta 3. Faz</item>
-
-    </array>
 </resources>

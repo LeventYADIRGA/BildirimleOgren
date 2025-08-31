@@ -1,0 +1,64 @@
+package com.lyadirga.bildirimleogren.notification
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.work.Worker
+import androidx.work.WorkerParameters
+import com.lyadirga.bildirimleogren.R
+import com.lyadirga.bildirimleogren.data.PrefData
+import com.lyadirga.bildirimleogren.data.getLanguageSet
+
+class NotificationWorker(private val context: Context, params: WorkerParameters) : Worker(context, params) {
+    override fun doWork(): Result {
+
+        val prefData = PrefData(context)
+        var index = prefData.getIndex()
+        val currentCalismaSetiIndex = prefData.getCalismaSeti()
+        val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)!!
+        val setSize = currentCalismaSeti.items.size
+        index += 1
+        if (index >= setSize) {
+            index = 0
+        }
+        prefData.setIndex(index)
+
+        // bildirim gönder
+        val languageModel = currentCalismaSeti.items[index]
+        showNotification(languageModel.wordOrSentence, languageModel.meaning, languageModel.imageResId)
+
+        return Result.success()
+    }
+
+    private fun showNotification(title: String, message: String, imageResId: Int?) {
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channelId = "reminder_channel"
+
+        val channel = NotificationChannel(
+            channelId,
+            "Reminder Channel",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        notificationManager.createNotificationChannel(channel)
+
+        val builder = NotificationCompat.Builder(applicationContext, channelId)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setSmallIcon(R.drawable.app_small_icon)
+
+        // imageResId null değilse büyük resim ekle
+        imageResId?.let {
+            val largeImage = BitmapFactory.decodeResource(applicationContext.resources, it)
+            builder.setStyle(
+                NotificationCompat.BigPictureStyle()
+                    .bigPicture(largeImage)
+            )
+        }
+
+        notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
+    }
+}

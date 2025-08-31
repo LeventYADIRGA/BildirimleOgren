@@ -1,11 +1,16 @@
 package com.lyadirga.bildirimleogren.model
 
-data class LearningSet(
-    var header: String = "",
-    var data: MutableList<Sentence> = mutableListOf()
+import androidx.annotation.DrawableRes
+
+
+data class Language(
+    val wordOrSentence: String,
+    val meaning: String,
+    @DrawableRes
+    val imageResId: Int? = null
 )
 
-data class Sentence(
-    val wordOrSentence: String = "",
-    val meaning: String = ""
+data class LanguageSet(
+    val title: String,
+    val items: List<Language>
 )

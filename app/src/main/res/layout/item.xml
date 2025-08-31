@@ -14,7 +14,7 @@
         android:id="@+id/sentence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/text_color_title"
         android:fontFamily="sans-serif"
         android:textSize="17sp"
         tools:text="Unlikely"/>

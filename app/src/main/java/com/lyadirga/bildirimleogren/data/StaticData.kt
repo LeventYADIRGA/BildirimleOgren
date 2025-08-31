@@ -1,73 +1,36 @@
 package com.lyadirga.bildirimleogren.data
 
-data class Language(val wordOrSentence: String, val meaning: String)
+import com.lyadirga.bildirimleogren.R
+import com.lyadirga.bildirimleogren.model.Language
+import com.lyadirga.bildirimleogren.model.LanguageSet
 
-fun getData(which: Int): Array<Language> {
-    var data = week1
-    when (which) {
-        0 -> {
-            data = week1
-        }
-        1 -> {
-            data = week2
-        }
-        2 -> {
-            data = week3
-        }
-        3 -> {
-            data = week4
-        }
-        4 -> {
-            data = week5
-        }
-        5 -> {
-            data = week6
-        }
-        6 -> {
-            data = week7
-        }
-        7 -> {
-            data = lingusta1
-        }
-        8 -> {
-            data = lingusta2
-        }
-        9 -> {
-            data = lingusta3
-        }
-        else -> {
-            println("Geçersiz seçenek.")
-        }
-    }
-    return data
-}
 
-val week1 = arrayOf(
-    Language("Unlikely","Muhtemel olmayan / beklenmeyen"),
-    Language("At some point","Bir noktada"),
-    Language("Craving","Özlem"),
+val week1 = listOf(
+    Language("Unlikely", "Muhtemel olmayan / beklenmeyen"),
+    Language("At some point","Bir noktada", R.drawable.at_some_point),
+    Language("Craving","Özlem", R.drawable.craving),
     Language("I'm waiting for her","Onu bekliyorum"),
     Language("Tom is not here","Tom burada değil"),
     Language("wall","duvar"),
     Language("Although","Yine de"),
     Language("just a minute / second","Bir dakika bekle"),
-    Language("I am serious","Ben ciddiyim"),
+    Language("I am serious","Ben ciddiyim", R.drawable.i_am_serious),
     Language("By the way","Bu arada"),
-    Language("Don't mention it","Önemli değil / Ne demek / Sıkıntı yok"),
+    Language("Don't mention it","Önemli değil / Ne demek / Sıkıntı yok", R.drawable.dont_mention_it),
     Language("Right away!","Hemen / Derhal"),
     Language("got it","anladım"),
     Language("In fact","Aslında"),
     Language("instead","yerine"),
-    Language("So in summary","Yani özetle"),
+    Language("So in summary","Yani özetle", R.drawable.so_in_summary),
     Language("either","herhangi biri"),
-    Language("I hate","Nefret ediyorum"),
+    Language("I hate","Nefret ediyorum", R.drawable.i_hate),
     Language("Skin","Deri"),
     Language("I think so","Sanırım öyle / Ben de öyle düşünüyorum"),
     Language("at least","en azından"),
     Language("So","Bu yüzden"),
-    Language("Incredible / Amazing / Unbelievable","İnanılmaz"),
+    Language("Incredible / Amazing / Unbelievable","İnanılmaz", R.drawable.iau),
     Language("I always wonder","Her zaman merak ediyorum / Hep merak ederim"),
-    Language("I know none","Hiçbirini bilmiyorum"),
+    Language("I know none","Hiçbirini bilmiyorum", R.drawable.i_know_none),
     Language("Even a kid","Bir çocuk bile"),
     Language("Let me help","İzin ver yardımcı olayım"),
     Language("Worth it","Buna değer"),
@@ -75,7 +38,7 @@ val week1 = arrayOf(
     Language("You know why","Nedenini biliyorsun")
 )
 
-val week2 = arrayOf(
+val week2 = listOf(
     Language("... is useless","işe yaramaz"),
     Language("Neither","Hiçbiri"),
     Language("I prefer neither pink nor purple","Ne pembeyi ne de moru tercih ederim"),
@@ -108,7 +71,7 @@ val week2 = arrayOf(
     Language("Such as / For example","Örneğin")
 )
 
-val week3 = arrayOf(
+val week3 = listOf(
     Language("workout","antrenman yapmak"),
     Language("Like what?","Ne gibi?"),
     Language("but also","ama aynı zamanda"),
@@ -141,7 +104,7 @@ val week3 = arrayOf(
     Language("I don't think so","Öyle olduğunu düşünmüyorum")
 )
 
-val week4 = arrayOf(
+val week4 = listOf(
     Language("As for as I know","Bildiğim kadarıyla"),
     Language("I'd love to","memnuniyetle yaparım"),
     Language("Would you like to join us for dinner tonight? I'd love to!","Bu akşam bizimle akşam yemeğine gelmek ister misin? Memnuniyetle!"),
@@ -174,7 +137,7 @@ val week4 = arrayOf(
     Language("I need to rush to catch the bus","Otobüsü yakalamak için acele etmem gerekiyor")
 )
 
-val week5 = arrayOf(
+val week5 = listOf(
     Language("Hi there","Merhaba"),
     Language("on time","zamanında"),
     Language("The train arrived on time, and we were able to catch our connecting flight","Tren belirlenen saatte geldi ve bağlantı uçuşumuzu yakalayabildik"),
@@ -207,7 +170,7 @@ val week5 = arrayOf(
     Language("The scientist made an exciting discovery while conducting experiments in the laboratory","Bilim adamı laboratuvarda deneyler yaparken heyecan verici bir keşif yaptı")
 )
 
-val week6 = arrayOf(
+val week6 = listOf(
     Language("That's terrible","Bu korkunç"),
     Language("I want to try","Denemek istiyorum"),
     Language("I remember you","Seni hatırlıyorum"),
@@ -245,7 +208,7 @@ val week6 = arrayOf(
     Language("big deal","önemli bir şey / büyük bir şey")
 )
 
-val week7 = arrayOf(
+val week7 = listOf(
     Language("I remember", "Ben hatırlıyorum"),
     Language("alive", "canlı"),
     Language("choke", "boğmak"),
@@ -281,10 +244,11 @@ val week7 = arrayOf(
     Language("out off", "bitti"),
     Language("literally", "gerçekten / kelimenin tam anlamıyla"),
     Language("let me know", "bana bildir"),
-    Language("Have been to Bodrum?", "Bodrum da bulundun mu?")
+    Language("Have been to Bodrum?", "Bodrum da bulundun mu?"),
+    Language("doubth", "şüphe"),
 )
 
-val week8 = arrayOf(
+val week8 = listOf(
     Language("immediately", "hemen / derhal"),
     Language("chores", "ev işleri"),
     Language("at all", "hiç"),
@@ -295,6 +259,42 @@ val week8 = arrayOf(
     Language("downside", "dezevantaj"),
     Language("Overal", "Özetle / etraflı"),
     Language("Do you mind if I + V1", "Eğer sakıncası yoksa ben + V1"),
+    Language("certain", "belirli"),
+    Language("suited", "uygun"),
+    Language("according", "binaen / a göre"),
+    Language("Opportanity", "Fırsat"),
+    Language("distraction", "dikkat dağıtıcı"),
+    Language("teenager", "genç"),
+    Language("Obviusly", "Açıkça / Açıkçası"),
+    Language("Involuing", "dahil olduğu / kapsayan"),
+    Language("kind of / sort of", "Sayılır / bir nevi"),
+    Language("based", "bağlı olarak / temelli"),
+    Language("attitude", "davranış / tavır"),
+    Language("afford", "alabilmek / parası yetmek"),
+    Language("rare", "nadir"),
+    Language("far less", "çok daha az"),
+    Language("far more", "çok daha fazla"),
+    Language("no longer", "artık / bundan böyle"),
+    Language("look forward to", "sabırsızlıkla bekliyorum / dört gözle beklemek"),
+    Language("step away", "uzaklaşmak / geri adım atmak"),
+    Language("once a year", "yılda bir kez"),
+    Language("per year", "her yıl"),
+    Language("How important is it?", "Ne kadar önemli?"),
+    Language("take unwind", "sakinleşmek / rahatlamak / gevşemek"),
+    Language("rubbish", "çöp / zırva"),
+    Language("majority", "çoğunluk"),
+    Language("minority", "azınlık"),
+    Language("many more", "çok daha fazlası"),
+    Language("apreciate", "Takdir etmek / kıymet vermek / değer vermek / minnet duyma"),
+    Language("I apreciate you", "Takdirlerimi sunuyorum / Seni takdir ediyorum"),
+    Language("How have you been?", "Görüşmeyeli nasılsın?")
+)
+
+val week9 = listOf(
+    Language("as soon as possible","mümkün olan en kısa sürede"),
+    Language("in the meantime", "bu arada"),
+    Language("very well", "çok iyi"),
+    Language("due to", "dolayı"),
     Language("", ""),
     Language("", ""),
     Language("", ""),
@@ -317,12 +317,16 @@ val week8 = arrayOf(
     Language("", ""),
     Language("", ""),
     Language("", ""),
+    Language("", ""),
+)
+
+val isIngilizcesi = listOf(
     Language("", ""),
     Language("", ""),
     Language("", "")
-    )
+)
 
-val lingusta1 = arrayOf(
+val lingusta1 = listOf(
     Language("very well", "çok iyi"),
     Language("not very well", "çok iyi değil"),
     Language("Would you like something to eat?", "Bir şey yemek ister misin?"),
@@ -353,14 +357,14 @@ val lingusta1 = arrayOf(
     Language("", "")
 )
 
-val lingusta2 = arrayOf(
+val lingusta2 = listOf(
     Language("ğkp","çok iyi"),
     Language("",""),
     Language("",""),
     Language("","")
 )
 
-val lingusta3 = arrayOf(
+val lingusta3 = listOf(
     Language("ğkp","kğ"),
     Language("",""),
     Language("",""),
@@ -368,6 +372,51 @@ val lingusta3 = arrayOf(
 )
 
 
+val languageSets = listOf(
+    LanguageSet(
+        title = "Week 1",
+        items = week1
+    ),
+    LanguageSet(
+        title = "Week 2",
+        items = week2
+    ),
+    LanguageSet(
+        title = "Week 3",
+        items = week3
+    ),
+    LanguageSet(
+        title = "Week 2",
+        items = week4
+    ),
+    LanguageSet(
+        title = "Week 5",
+        items = week5
+    ),
+    LanguageSet(
+        title = "Week 6",
+        items = week6
+    ),
+    LanguageSet(
+        title = "Week 7",
+        items = week7
+    ),
+    LanguageSet(
+        title = "Week 8",
+        items = week8
+    ),
+    LanguageSet(
+        title = "Week 9",
+        items = week9
+    ),
+    LanguageSet(
+        title = "Lingusta 1",
+        items = lingusta1
+    )
+)
 
+fun getLanguageSet(index: Int): LanguageSet? {
+    return languageSets.getOrNull(index)
+}
 
 
