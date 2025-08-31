@@ -2,6 +2,7 @@ package com.lyadirga.bildirimleogren.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class PrefData(context: Context) {
 
@@ -16,10 +17,15 @@ class PrefData(context: Context) {
         private const val IS_FIRST_LAUNCH = "is_first_launch"
     }
 
+    fun resetIndex(){
+        sharedPref.edit {
+            putInt(INDEX, DEFAULT_INDEX)
+        }
+    }
+
     fun setIndex(index: Int){
-        with(sharedPref.edit()) {
+        sharedPref.edit {
             putInt(INDEX, index)
-            apply()
         }
     }
 
@@ -28,10 +34,10 @@ class PrefData(context: Context) {
     }
 
     fun setCalismaSeti(index: Int){
-        with(sharedPref.edit()) {
+        sharedPref.edit {
             putInt(CALISMA_SETI, index)
-            apply()
         }
+
     }
 
     fun getCalismaSeti(): Int{
@@ -44,9 +50,8 @@ class PrefData(context: Context) {
     }
 
     fun setFirstLaunch(value: Boolean) {
-        with(sharedPref.edit()) {
+        sharedPref.edit {
             putBoolean(IS_FIRST_LAUNCH, value)
-            apply()
         }
     }
 }

@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
             setTitle("Çalışma Seti Seçin")
             setPositiveButton("Tamam"){ _, _ ->
                     prefData.setCalismaSeti(currentCalismaSetiIndex)
-                    prefData.setIndex(0)
+                    prefData.resetIndex()
                     title.text = choices[currentCalismaSetiIndex]
                     val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
                     adapter?.swapData(currentCalismaSeti?.items ?: emptyList())
