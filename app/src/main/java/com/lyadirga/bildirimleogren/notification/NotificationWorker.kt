@@ -48,7 +48,7 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
         )
         notificationManager.createNotificationChannel(channel)
 
-        // Ana aktiviteyi açmak için bir intent oluşturun
+        // Ana aktiviteyi açmak için bir intent
         val intent = Intent(applicationContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -59,7 +59,7 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
         val builder = NotificationCompat.Builder(applicationContext, channelId)
             .setContentTitle(title)
             .setContentText(message)
-            .setContentIntent(pendingIntent) // PendingIntent'i bildirimde kullanın
+            .setContentIntent(pendingIntent) // PendingIntent'i bildirimde kullan
             .setAutoCancel(true) // Bildirime tıklanınca otomatik olarak kapat
             .setSmallIcon(R.drawable.app_small_icon)
 

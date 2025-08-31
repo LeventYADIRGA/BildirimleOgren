@@ -11,7 +11,7 @@ class PrefData(context: Context) {
         private const val PREF_DATA = "Preferences"
         private const val INDEX = "index"
         private const val CALISMA_SETI = "calisma_seti"
-        private const val DEFAULT_INDEX = 0
+        private const val DEFAULT_INDEX = -1
         private const val DEFAULT_CALISMA_SETI = 0
         private const val IS_FIRST_LAUNCH = "is_first_launch"
     }
