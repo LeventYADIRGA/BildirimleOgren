@@ -1,11 +1,8 @@
 package com.lyadirga.bildirimleogren.ui
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -45,7 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val viewModel: MainViewModel by viewModels()
 
 
-    private var listAdapter: RecyclerAdapter? = null
+    private lateinit var listAdapter: LanguageListAdapter
     private lateinit var prefData: PrefData
 
     override fun createBinding(inflater: LayoutInflater): ActivityMainBinding {
@@ -69,16 +66,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         binding.title.text = currentCalismaSeti?.title ?: ""
 
-        val animation =
-            AnimationUtils.loadAnimation(this, R.anim.layout_animation_fall_down)
-        listAdapter = RecyclerAdapter(this, currentCalismaSeti?.items ?: emptyList())
+        listAdapter = LanguageListAdapter(this)
+        val animation = AnimationUtils.loadAnimation(this, R.anim.layout_animation_fall_down)
         val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
+
         binding.list.apply {
             layoutAnimation = LayoutAnimationController(animation)
             addItemDecoration(dividerItemDecoration)
             adapter = listAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity)
             scheduleLayoutAnimation()
         }
+        listAdapter.submitList(currentCalismaSeti?.items)
     }
 
     override fun observeViewModel() {
@@ -201,7 +200,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             setPositiveButton("Tamam") { _, _ ->
                 binding.title.text = choices[currentCalismaSetiIndex]
                 prefData.setCalismaSeti(100 + currentCalismaSetiIndex)
-                listAdapter?.swapData(languageSets[currentCalismaSetiIndex].items)
+                listAdapter.submitList(languageSets[currentCalismaSetiIndex].items)
                 binding.list.scheduleLayoutAnimation()
             }
                 .setSingleChoiceItems(choices, currentCalismaSetiIndex) { _, which ->
@@ -231,7 +230,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     prefData.resetIndex()
                     binding.title.text = choices[currentCalismaSetiIndex]
                     val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
-                    listAdapter?.swapData(currentCalismaSeti?.items ?: emptyList())
+                    listAdapter.submitList(currentCalismaSeti?.items)
                     binding.list.scheduleLayoutAnimation()
             }
             .setSingleChoiceItems(choices, currentCalismaSetiIndex){_, which ->
@@ -272,10 +271,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
 
-
     override fun onDestroy() {
         super.onDestroy()
-        listAdapter?.releaseTextToSpeech()
-        listAdapter = null
+        listAdapter.releaseTextToSpeech()
     }
 }
