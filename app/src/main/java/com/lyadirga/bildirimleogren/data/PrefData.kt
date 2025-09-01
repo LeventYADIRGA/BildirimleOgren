@@ -37,6 +37,7 @@ class PrefData(context: Context) {
       return sharedPref.getInt(INDEX, DEFAULT_INDEX)
     }
 
+    // ✅ Çalışma setinin indexini kaydet
     fun setCalismaSeti(index: Int){
         sharedPref.edit {
             putInt(CALISMA_SETI, index)
@@ -44,6 +45,7 @@ class PrefData(context: Context) {
 
     }
 
+    // ✅ Çalışma setinin indexini oku
     fun getCalismaSeti(): Int{
         return sharedPref.getInt(CALISMA_SETI, DEFAULT_CALISMA_SETI)
     }
