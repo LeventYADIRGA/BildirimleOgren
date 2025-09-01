@@ -58,7 +58,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         fetchAllSheets()
 
         val currentCalismaSetiIndex = prefData.getCalismaSeti()
-        val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
+        var currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
+        if (currentCalismaSetiIndex >= 100){
+            currentCalismaSeti = prefData.getLanguageSets()[currentCalismaSetiIndex - 100]
+        }
         binding.title.text = currentCalismaSeti?.title ?: ""
 
         val animation =
@@ -168,16 +171,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun openRemoteSetsSelectionDialog() {
 
         val languageSets = prefData.getLanguageSets()
+        if (languageSets.isEmpty()){
+            Toast.makeText(this, "Birkaç saniye sonra tekrar deneyiniz.", Toast.LENGTH_LONG).show()
+            return
+        }
         val choices: Array<CharSequence> = languageSets
             .map { it.title as CharSequence }
             .toTypedArray()
 
+        val calismaSetiIndex = prefData.getCalismaSeti()
+
         var currentCalismaSetiIndex = 0
+        //100 ve 100 den büyükse remote
+        if (calismaSetiIndex >= 100){
+            currentCalismaSetiIndex = calismaSetiIndex - 100
+        }
 
         val builder = AlertDialog.Builder(this).apply {
             setTitle("E Tablolardan Çalışma Seti Seçin")
             setPositiveButton("Tamam") { _, _ ->
                 binding.title.text = choices[currentCalismaSetiIndex]
+                prefData.setCalismaSeti(100 + currentCalismaSetiIndex)
                 listAdapter?.swapData(languageSets[currentCalismaSetiIndex].items)
                 binding.list.scheduleLayoutAnimation()
             }
@@ -197,6 +211,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             .toTypedArray()
 
         var currentCalismaSetiIndex = prefData.getCalismaSeti()
+        if (currentCalismaSetiIndex >= 100){
+            currentCalismaSetiIndex = 0
+        }
 
         val builder = AlertDialog.Builder(this).apply {
             setTitle("Çalışma Seti Seçin")
