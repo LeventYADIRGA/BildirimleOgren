@@ -53,7 +53,6 @@ abstract class BaseActivity<VB: ViewBinding> : AppCompatActivity(){
                 // true -> ikonlar koyu, false -> ikonlar açık
                 windowInsetsController.isAppearanceLightStatusBars = !isDarkTheme
 
-
                 insets
             }
         }

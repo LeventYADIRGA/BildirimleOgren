@@ -15,28 +15,24 @@ val SHEET_URL2 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTO8rQRuzuW4R1
 
 
 fun fetchSheetCsvFlow(url: String): Flow<LanguageSet> = flow {
-    try {
-        // CSV verisini çek
-        val csvText = URL(url).readText()
+    // CSV verisini çek
+    val csvText = URL(url).readText()
 
-        // OpenCSV kullanarak parse et
-        val reader = CSVReader(StringReader(csvText))
-        val rows = reader.readAll()
+    // OpenCSV kullanarak parse et
+    val reader = CSVReader(StringReader(csvText))
+    val rows = reader.readAll()
 
-        // İlk satır başlık (örneğin Çalışma Seti Başlığı)
-        val setTitle = rows.firstOrNull()?.firstOrNull() ?: ""
-        val dataRows = rows.drop(1) // ilk satırı at
+    // İlk satır başlık
+    val setTitle = rows.firstOrNull()?.firstOrNull() ?: ""
+    val dataRows = rows.drop(1)
 
-        val entries = dataRows.map { row ->
-            Language(
-                wordOrSentence = row.getOrElse(0) { "" },
-                meaning = row.getOrElse(1) { "" }
-            )
-        }
-
-        emit(LanguageSet(setTitle, entries))
-    } catch (e: Exception) {
-        e.printStackTrace()
-        emit(LanguageSet("", emptyList()))
+    val entries = dataRows.map { row ->
+        Language(
+            wordOrSentence = row.getOrElse(0) { "" },
+            meaning = row.getOrElse(1) { "" }
+        )
     }
+
+    emit(LanguageSet(title = setTitle, items = entries, url = url))
 }.flowOn(Dispatchers.IO)
+
