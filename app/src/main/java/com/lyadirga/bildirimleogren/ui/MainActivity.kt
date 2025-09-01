@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.data.getLanguageSet
@@ -52,6 +53,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun prepareView(savedInstanceState: Bundle?) {
 
         prefData = PrefData(this)
+        setSupportActionBar(binding.toolbar) // MaterialToolbar’ı ActionBar olarak ayarla
 
         initPermission()
         fetchAllSheets()
@@ -189,8 +191,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val intervalsInMinutes = arrayOf(30, 60, 360, 1440) // dakika cinsinden
 
         var currentIntervalIndex = prefData.getNotificationIntervalIndex()
+        MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog)
 
-        val builder = AlertDialog.Builder(this).apply {
+        val builder = MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
             setTitle("Bildirim Sıklığı")
             setPositiveButton("Tamam") { _, _ ->
                 prefData.setNotificationIntervalIndex(currentIntervalIndex)
@@ -226,7 +229,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             currentCalismaSetiIndex = calismaSetiIndex - 100
         }
 
-        val builder = AlertDialog.Builder(this).apply {
+        val builder = MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
             setTitle("E Tablolardan Çalışma Seti Seçin")
             setPositiveButton("Tamam") { _, _ ->
                 binding.title.text = choices[currentCalismaSetiIndex]
@@ -253,7 +256,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             currentCalismaSetiIndex = 0
         }
 
-        val builder = AlertDialog.Builder(this).apply {
+        val builder = MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
             setTitle("Çalışma Seti Seçin")
             setPositiveButton("Tamam"){ _, _ ->
                     prefData.setCalismaSeti(currentCalismaSetiIndex)
@@ -272,7 +275,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
     
     private fun showNotificationPermissionDialog() {
-        AlertDialog.Builder(this).apply {
+        MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
             setTitle("Bildirim İzin")
             setMessage("Uygulamamızın temel özelliği bildirim göndermesidir. Lütfen izin verin.")
             setPositiveButton("Ayarlar'a Git") { _, _ ->

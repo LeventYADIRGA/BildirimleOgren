@@ -1,6 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.BildirimleOgren" parent="Theme.Material3.DayNight">
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
         <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/green_primary_dark</item>
         <item name="colorOnPrimary">@color/green_on_primary_dark</item>
@@ -30,4 +34,22 @@
         <item name="colorSurfaceContainerHigh">@color/green_surface_container_high_dark</item>
         <item name="colorSurfaceContainerHighest">@color/green_surface_container_highest_dark</item>
     </style>
+
+    <style name="Theme.BildirimleOgren.PopupMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@color/green_surface_container_dark</item>
+        <item name="android:textColor">@color/green_on_surface_dark</item>
+    </style>
+
+    <style name="Theme.BildirimleOgren.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <!-- Arka plan -->
+        <item name="android:background">@color/green_surface_container_dark</item>
+        <!-- Başlık rengi -->
+        <item name="titleTextColor">@color/green_on_surface_dark</item>
+        <!-- Mesaj rengi -->
+        <item name="android:textColor">@color/green_on_surface_dark</item>
+        <!-- Pozitif buton rengi -->
+        <item name="colorPrimary">@color/green_primary_dark</item>
+    </style>
+
+
 </resources>
