@@ -62,7 +62,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val currentCalismaSetiIndex = prefData.getCalismaSeti()
         var currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
         if (currentCalismaSetiIndex >= 100){
-            currentCalismaSeti = prefData.getLanguageSets()[currentCalismaSetiIndex - 100]
+            val sets = prefData.getLanguageSets()
+            if (sets.isNotEmpty()){
+                currentCalismaSeti = sets[currentCalismaSetiIndex - 100]
+            }
         }
         binding.title.text = currentCalismaSeti?.title ?: ""
 
