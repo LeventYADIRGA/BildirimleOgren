@@ -24,12 +24,17 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
         val prefData = PrefData(context)
         var index = prefData.getIndex()
         val currentCalismaSetiIndex = prefData.getCalismaSeti()
-        val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)!!
-        val setSize = currentCalismaSeti.items.size
-        index += 1
-        if (index >= setSize) {
-            index = 0
+
+        val currentCalismaSeti = if (currentCalismaSetiIndex >= 100) {
+            prefData.getLanguageSets()[currentCalismaSetiIndex - 100]
+        } else {
+            getLanguageSet(currentCalismaSetiIndex)!!
         }
+
+        val setSize = currentCalismaSeti.items.size
+
+        // index güncelle
+        index = (index + 1) % setSize
         prefData.setIndex(index)
 
         // bildirim gönder
