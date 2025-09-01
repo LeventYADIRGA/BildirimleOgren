@@ -1,8 +1,11 @@
 package com.lyadirga.bildirimleogren.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -31,7 +34,6 @@ import com.lyadirga.bildirimleogren.data.getLanguageSet
 import com.lyadirga.bildirimleogren.data.languageSets
 import com.lyadirga.bildirimleogren.data.remote.SHEET_URL1
 import com.lyadirga.bildirimleogren.data.remote.SHEET_URL2
-import com.lyadirga.bildirimleogren.data.remote.toLanguageSet
 import com.lyadirga.bildirimleogren.databinding.ActivityMainBinding
 import com.lyadirga.bildirimleogren.notification.NotificationWorker
 import com.lyadirga.bildirimleogren.ui.base.BaseActivity
@@ -81,15 +83,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.wordSets.collect { wordSets ->
-                        val languageSets = wordSets.map { it.toLanguageSet() }
-                        prefData.saveLanguageSets(languageSets)
+                    viewModel.languageSets.collect {
+                        prefData.saveLanguageSets(it)
                     }
                 }
 
                 launch {
                     viewModel.errorEvent.collect { errorMessage ->
-                        Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                        showToast(errorMessage)
                     }
                 }
             }
@@ -99,8 +100,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun fetchAllSheets() {
         val urls = listOf(SHEET_URL1, SHEET_URL2)
-        viewModel.fetchSheets(urls)
+        if (isInternetAvailable()) {
+            viewModel.fetchSheets(urls)
+        } else {
+            showToast("İnternet yok")
+        }
     }
+
 
     private fun initPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -172,7 +178,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         val languageSets = prefData.getLanguageSets()
         if (languageSets.isEmpty()){
-            Toast.makeText(this, "Birkaç saniye sonra tekrar deneyiniz.", Toast.LENGTH_LONG).show()
+            showToast("Birkaç saniye sonra tekrar deneyiniz.", Toast.LENGTH_LONG)
             return
         }
         val choices: Array<CharSequence> = languageSets

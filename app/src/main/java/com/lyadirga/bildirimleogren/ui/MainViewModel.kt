@@ -1,9 +1,12 @@
 package com.lyadirga.bildirimleogren.ui
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lyadirga.bildirimleogren.data.remote.WordSet
 import com.lyadirga.bildirimleogren.data.remote.fetchSheetCsvFlow
+import com.lyadirga.bildirimleogren.model.LanguageSet
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -14,8 +17,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
-    private val _wordSets = MutableStateFlow<List<WordSet>>(emptyList())
-    val wordSets: StateFlow<List<WordSet>> get() = _wordSets
+    private val _languageSets = MutableStateFlow<List<LanguageSet>>(emptyList())
+    val languageSets: StateFlow<List<LanguageSet>> get() = _languageSets
 
     private val _errorEvent = MutableSharedFlow<String>()
     val errorEvent: SharedFlow<String> get() = _errorEvent
@@ -29,12 +32,11 @@ class MainViewModel: ViewModel() {
                 }.catch { e ->
                     _errorEvent.emit(e.localizedMessage ?: "Beklenmeyen bir hata oluştu.")
                 }.collect { sets ->
-                    _wordSets.value = sets
+                    _languageSets.value = sets
                 }
             } catch (e: Exception) {
                 _errorEvent.emit(e.localizedMessage ?: "Beklenmeyen bir hata oluştu.")
             }
         }
     }
-
 }

@@ -5,7 +5,6 @@ import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
@@ -44,10 +43,10 @@ class RecyclerAdapter(private val context: Context, private var dataList: List<L
         holder.sentence.text = dataList[position].wordOrSentence
         holder.mean.text = dataList[position].meaning
         dataList[position].imageResId?.let {
-            holder.image.visibility = View.VISIBLE
+            holder.image.setVisible()
             holder.image.setImageResource(it)
         } ?: run {
-            holder.image.visibility = View.GONE
+            holder.image.setGone()
         }
 
         holder.itemView.setOnClickListener {
@@ -79,7 +78,7 @@ class RecyclerAdapter(private val context: Context, private var dataList: List<L
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 // Dil desteklenmiyorsa veya eksikse, hata mesajı göster
                 // Gerekirse ek işlemleri burada gerçekleştirebilirsiniz
-                Toast.makeText(context, result.toString(), Toast.LENGTH_SHORT).show()
+                context.showToast(result.toString())
             }
         }
     }
