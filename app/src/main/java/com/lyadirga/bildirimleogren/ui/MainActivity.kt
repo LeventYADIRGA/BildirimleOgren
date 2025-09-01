@@ -67,11 +67,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.title.text = currentCalismaSeti?.title ?: ""
 
         listAdapter = LanguageListAdapter(this)
-        val animation = AnimationUtils.loadAnimation(this, R.anim.layout_animation_fall_down)
         val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
 
         binding.list.apply {
-            layoutAnimation = LayoutAnimationController(animation)
             addItemDecoration(dividerItemDecoration)
             adapter = listAdapter
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -147,7 +145,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // İzin verildi
                 if(prefData.isFirstLaunch()){
-                    scheduleNotificationWork()
+                    scheduleNotifications(15)
                     prefData.setFirstLaunch(false)
                 }
             } else {
@@ -172,8 +170,41 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 openRemoteSetsSelectionDialog()
                 true
             }
+            R.id.action_settings -> {
+                openNotificationIntervalSettings()
+                true
+            }
+
+            R.id.action_share -> {
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun openNotificationIntervalSettings() {
+
+        // Seçenekler
+        val choices: Array<CharSequence> = arrayOf("30 dakika", "1 saat", "6 saat", "1 gün")
+        val intervalsInMinutes = arrayOf(30, 60, 360, 1440) // dakika cinsinden
+
+        var currentIntervalIndex = prefData.getNotificationIntervalIndex()
+
+        val builder = AlertDialog.Builder(this).apply {
+            setTitle("Bildirim Sıklığı")
+            setPositiveButton("Tamam") { _, _ ->
+                prefData.setNotificationIntervalIndex(currentIntervalIndex)
+                val notificationInterval = intervalsInMinutes[currentIntervalIndex]
+                scheduleNotifications(notificationInterval)
+            }
+            setSingleChoiceItems(choices, currentIntervalIndex) { _, which ->
+                currentIntervalIndex = which
+            }
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+
     }
 
     private fun openRemoteSetsSelectionDialog() {
@@ -201,7 +232,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 binding.title.text = choices[currentCalismaSetiIndex]
                 prefData.setCalismaSeti(100 + currentCalismaSetiIndex)
                 listAdapter.submitList(languageSets[currentCalismaSetiIndex].items)
-                binding.list.scheduleLayoutAnimation()
             }
                 .setSingleChoiceItems(choices, currentCalismaSetiIndex) { _, which ->
                     currentCalismaSetiIndex = which
@@ -231,7 +261,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     binding.title.text = choices[currentCalismaSetiIndex]
                     val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
                     listAdapter.submitList(currentCalismaSeti?.items)
-                    binding.list.scheduleLayoutAnimation()
             }
             .setSingleChoiceItems(choices, currentCalismaSetiIndex){_, which ->
                 currentCalismaSetiIndex = which
@@ -252,17 +281,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    private fun scheduleNotificationWork(){
-        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(10, TimeUnit.MINUTES)
+    private fun scheduleNotifications(notificationInterval: Int) {
+
+        val intervalMinutes = notificationInterval.coerceAtLeast(15)
+        // WorkManager minimum 15 dakikada bir çalışır, daha küçükse 15 yap
+
+        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(intervalMinutes.toLong(), TimeUnit.MINUTES)
             .build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "notification_work",
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.REPLACE, // Önceki varsa iptal et ve yenisiyle değiştir
             workRequest
         )
-
     }
+
 
     private fun openNotificationSettings() {
         val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)

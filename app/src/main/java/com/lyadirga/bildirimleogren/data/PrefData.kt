@@ -19,6 +19,10 @@ class PrefData(context: Context) {
         private const val DEFAULT_CALISMA_SETI = 0
         private const val IS_FIRST_LAUNCH = "is_first_launch"
         private const val LANGUAGE_SETS_KEY = "language_sets"
+
+        // ✅ Bildirim ile ilgili anahtarlar
+        private const val NOTIFICATION_INTERVAL_INDEX = "notification_interval_index"
+        private const val NOTIFICATION_INTERVAL_MINUTES = "notification_interval_minutes"
     }
 
     fun resetIndex(){
@@ -79,4 +83,14 @@ class PrefData(context: Context) {
         }
     }
 
+    // Bildirim periyodu indexini kaydet
+    fun setNotificationIntervalIndex(index: Int) {
+        sharedPref.edit {
+            putInt(NOTIFICATION_INTERVAL_INDEX, index)
+        }
+    }
+
+    fun getNotificationIntervalIndex(): Int {
+        return sharedPref.getInt(NOTIFICATION_INTERVAL_INDEX, 0)
+    }
 }
