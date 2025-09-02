@@ -50,6 +50,9 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
 
+    // Data Store
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
+
     // OpenCSV
     implementation("com.opencsv:opencsv:5.12.0")
 

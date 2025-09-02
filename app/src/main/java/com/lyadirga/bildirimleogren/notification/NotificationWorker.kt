@@ -11,6 +11,7 @@ import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.lyadirga.bildirimleogren.R
@@ -18,15 +19,15 @@ import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.data.getLanguageSet
 import com.lyadirga.bildirimleogren.ui.MainActivity
 
-class NotificationWorker(private val context: Context, params: WorkerParameters) : Worker(context, params) {
-    override fun doWork(): Result {
+class NotificationWorker(private val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
 
         val prefData = PrefData(context)
-        var index = prefData.getIndex()
-        val currentCalismaSetiIndex = prefData.getCalismaSeti()
+        var index = prefData.getIndexOnce()
+        val currentCalismaSetiIndex = prefData.getCalismaSetiOnce()
 
         val currentCalismaSeti = if (currentCalismaSetiIndex >= 100) {
-            prefData.getLanguageSets()[currentCalismaSetiIndex - 100]
+            prefData.getLanguageSetsOnce()[currentCalismaSetiIndex - 100]
         } else {
             getLanguageSet(currentCalismaSetiIndex)!!
         }

@@ -1,6 +1,7 @@
 package com.lyadirga.bildirimleogren.ui
 
 import android.Manifest
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -35,7 +36,9 @@ import com.lyadirga.bildirimleogren.data.remote.SHEET_URL2
 import com.lyadirga.bildirimleogren.databinding.ActivityMainBinding
 import com.lyadirga.bildirimleogren.notification.NotificationWorker
 import com.lyadirga.bildirimleogren.ui.base.BaseActivity
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -58,26 +61,31 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         initPermission()
         fetchAllSheets()
 
-        val currentCalismaSetiIndex = prefData.getCalismaSeti()
-        var currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
-        if (currentCalismaSetiIndex >= 100){
-            val sets = prefData.getLanguageSets()
-            if (sets.isNotEmpty()){
-                currentCalismaSeti = sets[currentCalismaSetiIndex - 100]
+        binding.title.text = "Yükleniyor..."
+
+        runBlocking {
+            val currentCalismaSetiIndex = prefData.getCalismaSetiOnce()
+            var currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
+            if (currentCalismaSetiIndex >= 100){
+                val sets = prefData.getLanguageSetsOnce()
+                if (sets.isNotEmpty()){
+                    currentCalismaSeti = sets[currentCalismaSetiIndex - 100]
+                }
             }
-        }
-        binding.title.text = currentCalismaSeti?.title ?: ""
+            binding.title.text = currentCalismaSeti?.title ?: ""
 
-        listAdapter = LanguageListAdapter(this)
-        val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
+            listAdapter = LanguageListAdapter(this@MainActivity)
+            val dividerItemDecoration = DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL)
 
-        binding.list.apply {
-            addItemDecoration(dividerItemDecoration)
-            adapter = listAdapter
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            scheduleLayoutAnimation()
+            binding.list.apply {
+                addItemDecoration(dividerItemDecoration)
+                adapter = listAdapter
+                layoutManager = LinearLayoutManager(this@MainActivity)
+                scheduleLayoutAnimation()
+            }
+            listAdapter.submitList(currentCalismaSeti?.items)
         }
-        listAdapter.submitList(currentCalismaSeti?.items)
+
     }
 
     override fun observeViewModel() {
@@ -146,10 +154,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // İzin verildi
-                if(prefData.isFirstLaunch()){
-                    scheduleNotifications(30)
-                    prefData.setFirstLaunch(false)
+                lifecycleScope.launch {
+                    if (prefData.isFirstLaunchOnce()) {
+                        scheduleNotifications(30)
+                        prefData.setFirstLaunch(false)
+                    }
                 }
+
             } else {
                 // İzin reddedildi
                 showNotificationPermissionDialog()
@@ -190,59 +201,69 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val choices: Array<CharSequence> = arrayOf("30 dakika", "1 saat", "6 saat", "1 gün")
         val intervalsInMinutes = arrayOf(30, 60, 360, 1440) // dakika cinsinden
 
-        var currentIntervalIndex = prefData.getNotificationIntervalIndex()
-        MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog)
+        lifecycleScope.launch {
+            var currentIntervalIndex = prefData.getNotificationIntervalIndexOnce()
 
-        val builder = MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
-            setTitle("Bildirim Sıklığı")
-            setPositiveButton("Tamam") { _, _ ->
-                prefData.setNotificationIntervalIndex(currentIntervalIndex)
-                val notificationInterval = intervalsInMinutes[currentIntervalIndex]
-                scheduleNotifications(notificationInterval)
+            val builder = MaterialAlertDialogBuilder(this@MainActivity, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
+                setTitle("Bildirim Sıklığı")
+                setPositiveButton("Tamam") { _, _ ->
+                    lifecycleScope.launch {
+                        prefData.setNotificationIntervalIndex(currentIntervalIndex)
+                        val notificationInterval = intervalsInMinutes[currentIntervalIndex]
+                        scheduleNotifications(notificationInterval)
+                    }
+                }
+                setSingleChoiceItems(choices, currentIntervalIndex) { _, which ->
+                    currentIntervalIndex = which
+                }
             }
-            setSingleChoiceItems(choices, currentIntervalIndex) { _, which ->
-                currentIntervalIndex = which
-            }
+
+            val dialog = builder.create()
+            dialog.show()
+
         }
-
-        val dialog = builder.create()
-        dialog.show()
-
     }
 
     private fun openRemoteSetsSelectionDialog() {
 
-        val languageSets = prefData.getLanguageSets()
-        if (languageSets.isEmpty()){
-            showToast("Birkaç saniye sonra tekrar deneyiniz.", Toast.LENGTH_LONG)
-            return
-        }
-        val choices: Array<CharSequence> = languageSets
-            .map { it.title as CharSequence }
-            .toTypedArray()
-
-        val calismaSetiIndex = prefData.getCalismaSeti()
-
-        var currentCalismaSetiIndex = 0
-        //100 ve 100 den büyükse remote
-        if (calismaSetiIndex >= 100){
-            currentCalismaSetiIndex = calismaSetiIndex - 100
-        }
-
-        val builder = MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
-            setTitle("E Tablolardan Çalışma Seti Seçin")
-            setPositiveButton("Tamam") { _, _ ->
-                binding.title.text = choices[currentCalismaSetiIndex]
-                prefData.setCalismaSeti(100 + currentCalismaSetiIndex)
-                listAdapter.submitList(languageSets[currentCalismaSetiIndex].items)
+        lifecycleScope.launch {
+            val languageSets = prefData.getLanguageSetsOnce()
+            if (languageSets.isEmpty()) {
+                showToast("Birkaç saniye sonra tekrar deneyiniz.", Toast.LENGTH_LONG)
+                return@launch
             }
-                .setSingleChoiceItems(choices, currentCalismaSetiIndex) { _, which ->
+            val choices: Array<CharSequence> = languageSets
+                .map { it.title as CharSequence }
+                .toTypedArray()
+
+            val calismaSetiIndex = prefData.getCalismaSetiOnce()
+
+            var currentCalismaSetiIndex = 0
+            //100 ve 100 den büyükse remote
+            if (calismaSetiIndex >= 100) {
+                currentCalismaSetiIndex = calismaSetiIndex - 100
+            }
+
+            val builder = MaterialAlertDialogBuilder(
+                this@MainActivity,
+                R.style.Theme_BildirimleOgren_MaterialAlertDialog
+            ).apply {
+                setTitle("E Tablolardan Çalışma Seti Seçin")
+                setPositiveButton("Tamam") { _, _ ->
+                    lifecycleScope.launch {
+                        binding.title.text = choices[currentCalismaSetiIndex]
+                        prefData.setCalismaSeti(100 + currentCalismaSetiIndex)
+                        listAdapter.submitList(languageSets[currentCalismaSetiIndex].items)
+                    }
+                }
+                setSingleChoiceItems(choices, currentCalismaSetiIndex) { _, which ->
                     currentCalismaSetiIndex = which
                 }
-        }
+            }
 
-        val dialog = builder.create()
-        dialog.show()
+            val dialog = builder.create()
+            dialog.show()
+        }
     }
 
     private fun openSelectionDialog() {
@@ -251,27 +272,31 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             .map { it.title as CharSequence }
             .toTypedArray()
 
-        var currentCalismaSetiIndex = prefData.getCalismaSeti()
-        if (currentCalismaSetiIndex >= 100){
-            currentCalismaSetiIndex = 0
-        }
-
-        val builder = MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
-            setTitle("Çalışma Seti Seçin")
-            setPositiveButton("Tamam"){ _, _ ->
-                    prefData.setCalismaSeti(currentCalismaSetiIndex)
-                    prefData.resetIndex()
-                    binding.title.text = choices[currentCalismaSetiIndex]
-                    val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
-                    listAdapter.submitList(currentCalismaSeti?.items)
+        lifecycleScope.launch {
+            var currentCalismaSetiIndex = prefData.getCalismaSetiOnce()
+            if (currentCalismaSetiIndex >= 100){
+                currentCalismaSetiIndex = 0
             }
-            .setSingleChoiceItems(choices, currentCalismaSetiIndex){_, which ->
-                currentCalismaSetiIndex = which
-            }
-        }
 
-        val dialog = builder.create()
-        dialog.show()
+            val builder = MaterialAlertDialogBuilder(this@MainActivity, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
+                setTitle("Çalışma Seti Seçin")
+                setPositiveButton("Tamam"){ _, _ ->
+                    lifecycleScope.launch {
+                        prefData.setCalismaSeti(currentCalismaSetiIndex)
+                        prefData.resetIndex()
+                        binding.title.text = choices[currentCalismaSetiIndex]
+                        val currentCalismaSeti = getLanguageSet(currentCalismaSetiIndex)
+                        listAdapter.submitList(currentCalismaSeti?.items)
+                    }
+                }
+                setSingleChoiceItems(choices, currentCalismaSetiIndex){_, which ->
+                    currentCalismaSetiIndex = which
+                }
+            }
+
+            val dialog = builder.create()
+            dialog.show()
+        }
     }
     
     private fun showNotificationPermissionDialog() {
