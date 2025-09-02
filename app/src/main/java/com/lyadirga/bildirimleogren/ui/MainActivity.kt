@@ -147,7 +147,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // İzin verildi
                 if(prefData.isFirstLaunch()){
-                    scheduleNotifications(15)
+                    scheduleNotifications(30)
                     prefData.setFirstLaunch(false)
                 }
             } else {
