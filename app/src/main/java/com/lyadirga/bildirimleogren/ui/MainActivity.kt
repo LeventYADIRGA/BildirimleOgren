@@ -88,13 +88,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     }
 
-    override fun observeViewModel() {
+    override fun observeFlows() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.languageSets.collect {
-                        prefData.saveLanguageSets(it)
+                        if (it.isNotEmpty()){
+                            prefData.saveLanguageSets(it)
+                        }
                     }
                 }
 
@@ -105,7 +107,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
             }
         }
-    }
+    } // end observeFlows
 
 
     private fun fetchAllSheets() {
@@ -116,7 +118,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             showToast("İnternet yok")
         }
     }
-
 
     private fun initPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -144,7 +145,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -301,7 +301,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     
     private fun showNotificationPermissionDialog() {
         MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
-            setTitle("Bildirim İzin")
+            setTitle("Bildirim İzni")
             setMessage("Uygulamamızın temel özelliği bildirim göndermesidir. Lütfen izin verin.")
             setPositiveButton("Ayarlar'a Git") { _, _ ->
                 openNotificationSettings()
@@ -330,7 +330,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
         startActivity(intent)
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

@@ -1,8 +1,5 @@
 package com.lyadirga.bildirimleogren.ui
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lyadirga.bildirimleogren.data.remote.fetchSheetCsvFlow

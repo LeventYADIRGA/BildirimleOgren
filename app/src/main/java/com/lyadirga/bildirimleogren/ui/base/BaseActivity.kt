@@ -19,7 +19,7 @@ abstract class BaseActivity<VB: ViewBinding> : AppCompatActivity(){
 
     protected abstract fun createBinding(inflater: LayoutInflater): VB
     protected abstract fun prepareView(savedInstanceState: Bundle?)
-    protected abstract fun observeViewModel()
+    protected abstract fun observeFlows()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,7 @@ abstract class BaseActivity<VB: ViewBinding> : AppCompatActivity(){
         _binding = createBinding(layoutInflater)
         setContentView(binding.root)
         setupEdgeToEdgeAndStatusBar(binding.root)
-        observeViewModel()
+        observeFlows()
         prepareView(savedInstanceState)
     }
 
