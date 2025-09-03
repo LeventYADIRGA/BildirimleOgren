@@ -13,10 +13,23 @@
         <action
             android:id="@+id/action_setListFragment_to_setDetailFragment"
             app:destination="@id/setDetailFragment" />
+        <action
+            android:id="@+id/action_setListFragment_to_bilgiFragment"
+            app:destination="@id/bilgiFragment" />
     </fragment>
     <fragment
         android:id="@+id/setDetailFragment"
         tools:layout="@layout/fragment_set_detail"
         android:name="com.lyadirga.bildirimleogren.ui.setdetail.SetDetailFragment"
-        android:label="SetDetailFragment" />
+        android:label="SetDetailFragment">
+        <argument
+            android:name="setId"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bilgiFragment"
+        tools:layout="@layout/fragment_bilgi"
+        android:name="com.lyadirga.borsadefterim.ui.bilgi.BilgiFragment"
+        android:label="Bilgi" />
 </navigation>

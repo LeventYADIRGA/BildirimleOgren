@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
@@ -73,7 +72,7 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
             .setContentIntent(pendingIntent) // PendingIntent'i bildirimde kullan
             .setAutoCancel(true) // Bildirime tıklanınca otomatik olarak kapat
             .setSmallIcon(R.mipmap.app_icon)
-        
+
         notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
     }
 }

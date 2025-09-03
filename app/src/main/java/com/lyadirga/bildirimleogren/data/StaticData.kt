@@ -1,6 +1,5 @@
 package com.lyadirga.bildirimleogren.data
 
-import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.model.Language
 import com.lyadirga.bildirimleogren.model.LanguageSet
 

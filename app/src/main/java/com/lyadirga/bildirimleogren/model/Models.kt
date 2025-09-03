@@ -1,6 +1,5 @@
 package com.lyadirga.bildirimleogren.model
 
-import androidx.annotation.DrawableRes
 import kotlinx.serialization.Serializable
 
 @Serializable

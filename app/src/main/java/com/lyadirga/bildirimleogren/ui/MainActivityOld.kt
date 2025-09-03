@@ -26,8 +26,6 @@ import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.data.getLanguageSet
 import com.lyadirga.bildirimleogren.data.languageSets
-import com.lyadirga.bildirimleogren.data.remote.SHEET_URL1
-import com.lyadirga.bildirimleogren.data.remote.SHEET_URL2
 import com.lyadirga.bildirimleogren.databinding.ActivityMainOldBinding
 import com.lyadirga.bildirimleogren.notification.NotificationWorker
 import com.lyadirga.bildirimleogren.ui.base.BaseActivity
@@ -91,9 +89,9 @@ class MainActivityOld : BaseActivity<ActivityMainOldBinding>() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.languageSets.collect {
+                    viewModel.languageSetsFlow.collect {
                         if (it.isNotEmpty()){
-                            prefData.saveLanguageSets(it)
+                            //prefData.saveLanguageSets(it)
                         }
                     }
                 }
@@ -103,15 +101,24 @@ class MainActivityOld : BaseActivity<ActivityMainOldBinding>() {
                         showToast(errorMessage)
                     }
                 }
+
+                launch {
+                    viewModel.isLoading.collect { loading ->
+                        if (loading) showProgressBar() else hideProgressBar()
+                    }
+
+                }
             }
         }
     } // end observeFlows
 
 
+    fun showProgressBar(){}
+    fun hideProgressBar(){}
+
     private fun fetchAllSheets() {
-        val urls = listOf(SHEET_URL1, SHEET_URL2)
         if (isInternetAvailable()) {
-            viewModel.fetchSheets(urls)
+            viewModel.fetchSheetsFromDbUrls()
         } else {
             showToast("İnternet yok")
         }
