@@ -37,12 +37,12 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
 
         // bildirim gönder
         val languageModel = currentCalismaSeti.items[index]
-        showNotification(languageModel.wordOrSentence, languageModel.meaning, languageModel.imageResId)
+        showNotification(languageModel.wordOrSentence, languageModel.meaning)
 
         return Result.success()
     }
 
-    private fun showNotification(title: String, message: String, imageResId: Int?) {
+    private fun showNotification(title: String, message: String) {
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "reminder_channel"
 
@@ -73,16 +73,7 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
             .setContentIntent(pendingIntent) // PendingIntent'i bildirimde kullan
             .setAutoCancel(true) // Bildirime tıklanınca otomatik olarak kapat
             .setSmallIcon(R.mipmap.app_icon)
-
-        // imageResId null değilse büyük resim ekle
-        imageResId?.let {
-            val largeImage = BitmapFactory.decodeResource(applicationContext.resources, it)
-            builder.setStyle(
-                NotificationCompat.BigPictureStyle()
-                    .bigPicture(largeImage)
-            )
-        }
-
+        
         notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
     }
 }

@@ -35,13 +35,6 @@ class LanguageListAdapter(
             sentence.text = item.wordOrSentence
             mean.text = item.meaning
 
-            item.imageResId?.let {
-                image.visibility = android.view.View.VISIBLE
-                image.setImageResource(it)
-            } ?: run {
-                image.visibility = android.view.View.GONE
-            }
-
             root.setOnClickListener {
                 speakOut(item.wordOrSentence)
             }

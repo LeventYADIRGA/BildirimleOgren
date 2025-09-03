@@ -6,9 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Language(
     val wordOrSentence: String,
-    val meaning: String,
-    @DrawableRes
-    val imageResId: Int? = null
+    val meaning: String
 )
 
 @Serializable
