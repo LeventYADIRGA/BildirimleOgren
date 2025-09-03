@@ -89,7 +89,7 @@ class MainActivityOld : BaseActivity<ActivityMainOldBinding>() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.languageSetsFlow.collect {
+                    viewModel.setAllSetSummariesFlow.collect {
                         if (it.isNotEmpty()){
                             //prefData.saveLanguageSets(it)
                         }

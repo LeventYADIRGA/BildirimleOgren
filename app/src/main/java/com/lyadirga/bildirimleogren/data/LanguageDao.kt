@@ -10,29 +10,41 @@ interface LanguageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLanguageSet(set: LanguageSetEntity): Long
 
-    @Query("DELETE FROM language_sets WHERE id = :setId")
+    @Query("DELETE FROM ${LanguageSetEntity.TABLE_NAME} WHERE id = :setId")
     suspend fun deleteLanguageSetById(setId: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLanguages(languages: List<LanguageEntity>)
 
     @Transaction
-    @Query("SELECT * FROM language_sets ORDER BY orderIndex ASC")
+    @Query("SELECT * FROM ${LanguageSetEntity.TABLE_NAME} ORDER BY orderIndex ASC")
     suspend fun getAllLanguageSetsWithItems(): List<LanguageSetWithItems>
 
-    @Query("DELETE FROM languages WHERE setId = :setId")
+    @Query("DELETE FROM ${LanguageEntity.TABLE_NAME} WHERE setId = :setId")
     suspend fun deleteLanguagesBySetId(setId: Long)
 
     @Transaction
-    @Query("SELECT * FROM language_sets ORDER BY orderIndex ASC")
+    @Query("SELECT * FROM ${LanguageSetEntity.TABLE_NAME} ORDER BY orderIndex ASC")
     fun getAllLanguageSetsWithItemsFlow(): Flow<List<LanguageSetWithItems>>
 
-    @Query("SELECT id, title, url FROM language_sets ORDER BY orderIndex ASC")
+    @Query("SELECT id, title, url FROM ${LanguageSetEntity.TABLE_NAME} ORDER BY orderIndex ASC")
     fun getAllSetSummariesFlow(): Flow<List<LanguageSetSummary>>
 
     @Transaction
-    @Query("SELECT * FROM language_sets WHERE id = :setId")
+    @Query("SELECT * FROM ${LanguageSetEntity.TABLE_NAME} WHERE id = :setId")
     suspend fun getLanguageSetWithItemsById(setId: Long): LanguageSetWithItems?
+
+    @Query("DELETE FROM ${LanguageSetEntity.TABLE_NAME}")
+    suspend fun deleteAllSets()
+
+    @Query("DELETE FROM ${LanguageEntity.TABLE_NAME}")
+    suspend fun deleteAllLanguages()
+
+    @Transaction
+    suspend fun clearDatabase() {
+        deleteAllLanguages()
+        deleteAllSets()
+    }
 
 }
 

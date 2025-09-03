@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">Bildirimle Öğren</string>
     <string name="bilgi_body">dddd</string>
+    <string name="guide_text_title">Çalışma seti eklemek için aşağıdaki adımları uygulayınız:</string>
+
+    <string name="guide_text">
+• Google E Tablolar’a gidin ve paylaşmak istediğiniz sayfayı açın.\n
+• Sol üstten Dosya -> Paylaş -> Web\'de yayınla seçeneğini seçin.\n
+• Çıkan ekranda, \"Bağlantı\" sekmesin seçili olduğundan emin olun. \n
+• \"Dökümanın tamamı\" yazan yere tıklayın ve açılır menüden istediğiniz sayfayı seçin. (Sayfa1, Sayfa2 gibi)\n
+• \"Web sayfası\" yazan yere tıklayın ve açılır menüden \"Virgülle ayrılmış değerler\" i seçin.\n
+• \"https://docs.google.com/\" ile başlayan linki kopyalayın.\n
+• Uygulamaya dönün ve alttaki \'+\' butonuna basın.\n
+• Açılan alana kopyaladığınız linki yapıştırın ve \"Ekle\" butonuna basın.\n
+• Hepsi bu kadar ☺️ İyi çalışmalar\n
+• Ekran resmi aşağıdadır.
+</string>
+
 </resources>

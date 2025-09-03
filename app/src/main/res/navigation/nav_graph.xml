@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/setListFragment"
         tools:layout="@layout/fragment_set_list"
-        android:name="com.lyadirga.bildirimleogren.ui.setlist.SetListFragment"
-        android:label="SetListFragment" >
+        android:name="com.lyadirga.bildirimleogren.ui.setlist.SetListFragment">
         <action
             android:id="@+id/action_setListFragment_to_setDetailFragment"
             app:destination="@id/setDetailFragment" />
@@ -20,16 +19,17 @@
     <fragment
         android:id="@+id/setDetailFragment"
         tools:layout="@layout/fragment_set_detail"
-        android:name="com.lyadirga.bildirimleogren.ui.setdetail.SetDetailFragment"
-        android:label="SetDetailFragment">
+        android:name="com.lyadirga.bildirimleogren.ui.setdetail.SetDetailFragment">
         <argument
             android:name="setId"
             app:argType="long" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/bilgiFragment"
         tools:layout="@layout/fragment_bilgi"
-        android:name="com.lyadirga.borsadefterim.ui.bilgi.BilgiFragment"
-        android:label="Bilgi" />
+        android:name="com.lyadirga.borsadefterim.ui.bilgi.BilgiFragment" />
 </navigation>

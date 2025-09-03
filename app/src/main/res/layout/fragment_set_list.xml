@@ -11,51 +11,96 @@
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.Material3.ActionBar"
-        app:popupTheme="@style/Theme.BildirimleOgren.PopupMenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/app_name"
-        app:menu="@menu/toolbar_menu" />
+        app:menu="@menu/toolbar_menu"
+        app:popupTheme="@style/Theme.BildirimleOgren.PopupMenu"
+        app:title="@string/app_name" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:visibility="visible"
-        style="?android:attr/progressBarStyleLarge"
-        app:layout_constraintVertical_bias="0.30"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/emptyListMessage"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listSets"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:visibility ="visible"
-        android:gravity="center"
-        android:layout_marginHorizontal="24dp"
-        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-        android:text="Çalışma seti eklemek için aşağıdaki + butonuna tıklayın."
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingTop="6dp"
+        android:paddingBottom="32dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.4" />
+        tools:itemCount="16"
+        tools:listitem="@layout/list_item_set" />
+
+    <ScrollView
+        android:id="@+id/guideLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/guideTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="@string/guide_text_title"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/guideDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginHorizontal="24dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="@string/guide_text"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/guide"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.40"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="24dp"
+        android:backgroundTint="?attr/colorTertiary"
         android:contentDescription="Çalışma Seti Ekle"
+        android:src="@drawable/baseline_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Primary"
-        android:src="@drawable/baseline_add_24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:tint="?attr/colorSurface" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

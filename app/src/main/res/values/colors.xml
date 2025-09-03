@@ -3,6 +3,81 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- todo: Yellow light colors -->
+    <color name="yellow_primary_light">#765084</color>
+    <color name="yellow_on_primary_light">#FFFFFF</color>
+    <color name="yellow_primary_container_light">#F8D8FF</color>
+    <color name="yellow_on_primary_container_light">#2D0A3C</color>
+    <color name="yellow_secondary_light">#69596D</color>
+    <color name="yellow_on_secondary_light">#FFFFFF</color>
+    <color name="yellow_secondary_container_light">#F1DCF4</color>
+    <color name="yellow_on_secondary_container_light">#231728</color>
+    <color name="yellow_tertiary_light">#815250</color>
+    <color name="yellow_on_tertiary_light">#FFFFFF</color>
+    <color name="yellow_tertiary_container_light">#FFDAD8</color>
+    <color name="yellow_on_tertiary_container_light">#331111</color>
+    <color name="yellow_error_light">#BA1A1A</color>
+    <color name="yellow_on_error_light">#FFFFFF</color>
+    <color name="yellow_error_container_light">#FFDAD6</color>
+    <color name="yellow_on_error_container_light">#410002</color>
+    <color name="yellow_background_light">#FFF7FB</color>
+    <color name="yellow_on_background_light">#1F1A1F</color>
+    <color name="yellow_surface_light">#FFF7FB</color>
+    <color name="yellow_on_surface_light">#1F1A1F</color>
+    <color name="yellow_surface_variant_light">#EBDFE9</color>
+    <color name="yellow_on_surface_variant_light">#4D434C</color>
+    <color name="yellow_outline_light">#7E747C</color>
+    <color name="yellow_outline_variant_light">#D8CBD5</color>
+    <color name="yellow_scrim_light">#000000</color>
+    <color name="yellow_inverse_surface_light">#342F34</color>
+    <color name="yellow_inverse_on_surface_light">#FFECF4</color>
+    <color name="yellow_inverse_primary_light">#EDB4FF</color>
+    <color name="yellow_surface_dim_light">#EEE0EA</color>
+    <color name="yellow_surface_bright_light">#FFF7FB</color>
+    <color name="yellow_surface_container_lowest_light">#FFFFFF</color>
+    <color name="yellow_surface_container_low_light">#FBE7F3</color>
+    <color name="yellow_surface_container_light">#F4DCEF</color>
+    <color name="yellow_surface_container_high_light">#ECD4EA</color>
+    <color name="yellow_surface_container_highest_light">#E5CCDF</color>
+
+    <!-- Yellow dark colors -->
+    <color name="yellow_primary_dark">#EDB4FF</color>
+    <color name="yellow_on_primary_dark">#471255</color>
+    <color name="yellow_primary_container_dark">#5E376B</color>
+    <color name="yellow_on_primary_container_dark">#F8D8FF</color>
+    <color name="yellow_secondary_dark">#D5C0D8</color>
+    <color name="yellow_on_secondary_dark">#382C3B</color>
+    <color name="yellow_secondary_container_dark">#504353</color>
+    <color name="yellow_on_secondary_container_dark">#F1DCF4</color>
+    <color name="yellow_tertiary_dark">#F4B7B3</color>
+    <color name="yellow_on_tertiary_dark">#4A2523</color>
+    <color name="yellow_tertiary_container_dark">#653B39</color>
+    <color name="yellow_on_tertiary_container_dark">#FFDAD8</color>
+    <color name="yellow_error_dark">#FFB4AB</color>
+    <color name="yellow_on_error_dark">#690005</color>
+    <color name="yellow_error_container_dark">#93000A</color>
+    <color name="yellow_on_error_container_dark">#FFDAD6</color>
+    <color name="yellow_background_dark">#1F1A1F</color>
+    <color name="yellow_on_background_dark">#E9DCE0</color>
+    <color name="yellow_surface_dark">#1F1A1F</color>
+    <color name="yellow_on_surface_dark">#E9DCE0</color>
+    <color name="yellow_surface_variant_dark">#4D434C</color>
+    <color name="yellow_on_surface_variant_dark">#D8CBD5</color>
+    <color name="yellow_outline_dark">#988D96</color>
+    <color name="yellow_outline_variant_dark">#4D434C</color>
+    <color name="yellow_scrim_dark">#000000</color>
+    <color name="yellow_inverse_surface_dark">#E9DCE0</color>
+    <color name="yellow_inverse_on_surface_dark">#342F34</color>
+    <color name="yellow_inverse_primary_dark">#765084</color>
+    <color name="yellow_surface_dim_dark">#1F1A1F</color>
+    <color name="yellow_surface_bright_dark">#423C41</color>
+    <color name="yellow_surface_container_lowest_dark">#141014</color>
+    <color name="yellow_surface_container_low_dark">#1A151A</color>
+    <color name="yellow_surface_container_dark">#201B1F</color>
+    <color name="yellow_surface_container_high_dark">#2B252A</color>
+    <color name="yellow_surface_container_highest_dark">#362F34</color>
+
+
     <!-- Red light colors -->
     <color name="red_primary_light">#904A45</color>
     <color name="red_on_primary_light">#FFFFFF</color>

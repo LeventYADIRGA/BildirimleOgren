@@ -3,17 +3,21 @@ package com.lyadirga.bildirimleogren.data
 import androidx.room.*
 
 @Entity(
-    tableName = "language_sets"
+    tableName = LanguageSetEntity.TABLE_NAME
 )
 data class LanguageSetEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
     val url: String? = null,
     val orderIndex: Int // setlerin sırasını korumak için
-)
+) {
+    companion object {
+        const val TABLE_NAME = "language_sets"
+    }
+}
 
 @Entity(
-    tableName = "languages",
+    tableName = LanguageEntity.TABLE_NAME,
     foreignKeys = [
         ForeignKey(
             entity = LanguageSetEntity::class,
@@ -29,4 +33,8 @@ data class LanguageEntity(
     val setId: Long,
     val wordOrSentence: String,
     val meaning: String
-)
+){
+    companion object {
+        const val TABLE_NAME = "languages"
+    }
+}

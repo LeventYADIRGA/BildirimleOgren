@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.BildirimleOgren" parent="Theme.Material3.DayNight">
+    <style name="Base.Theme.BildirimleOgren" parent="Theme.Material3.DayNight.NoActionBar">
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -14,6 +14,8 @@
         <item name="colorOnSecondary">@color/green_on_secondary_dark</item>
         <item name="colorSecondaryContainer">@color/green_secondary_container_dark</item>
         <item name="colorOnSecondaryContainer">@color/green_on_secondary_container_dark</item>
+        <item name="colorTertiary">@color/green_tertiary_dark</item>
+        <item name="colorOnTertiary">@color/green_on_tertiary_dark</item>
         <item name="colorError">@color/green_error_dark</item>
         <item name="colorOnError">@color/green_on_error_dark</item>
         <item name="colorErrorContainer">@color/green_error_container_dark</item>

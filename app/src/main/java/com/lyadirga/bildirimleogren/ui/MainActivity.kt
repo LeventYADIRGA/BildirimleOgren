@@ -1,6 +1,7 @@
 package com.lyadirga.bildirimleogren.ui
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -25,6 +26,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             R.id.nav_host_fragment
         ) as NavHostFragment
         navController = navHostFragment.navController
+
+        // Status bar rengini secondary yap
+        val typedValue = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorTertiary, typedValue, true)
+        window.statusBarColor = typedValue.data
+
     }
 
     override fun observeFlows() {}

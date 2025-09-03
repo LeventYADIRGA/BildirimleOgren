@@ -12,8 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.databinding.FragmentSetListBinding
 import com.lyadirga.bildirimleogren.ui.MainViewModel
+import com.lyadirga.bildirimleogren.ui.MarginItemDecoration
 import com.lyadirga.bildirimleogren.ui.base.BaseFragment
+import com.lyadirga.bildirimleogren.ui.setGone
+import com.lyadirga.bildirimleogren.ui.setVisible
 import com.lyadirga.bildirimleogren.ui.showToast
+import com.lyadirga.bildirimleogren.util.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -22,6 +26,7 @@ import kotlin.getValue
 class SetListFragment: BaseFragment<FragmentSetListBinding>() {
 
     private val viewModel: MainViewModel by activityViewModels()
+    private lateinit var adapter: SetListAdapter
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -33,6 +38,16 @@ class SetListFragment: BaseFragment<FragmentSetListBinding>() {
     override fun prepareView(savedInstanceState: Bundle?) {
 
         setupToolbar()
+
+        adapter = SetListAdapter{
+            val action = SetListFragmentDirections.actionSetListFragmentToSetDetailFragment(it.id, it.title)
+            findNavController().navigate(action)
+        }
+        val verticalMargin = resources.getDimensionPixelSize(R.dimen.vertical_item_margin)
+        val horizontalMargin = resources.getDimensionPixelSize(R.dimen.horizontal_item_margin)
+        val dividerItemDecoration = MarginItemDecoration(verticalMargin, horizontalMargin)
+        binding.listSets.addItemDecoration(dividerItemDecoration)
+        binding.listSets.adapter = adapter
 
         val bottomSheet = SetEkleBottomSheet {
             viewModel.fetchSingleSheet(url = it)
@@ -48,15 +63,18 @@ class SetListFragment: BaseFragment<FragmentSetListBinding>() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.setAllSetSummariesFlow.collect {
-                        if(it.isNotEmpty()){
-                            println("LLL : $it")
+                        if (it.isNotEmpty()) {
+                            adapter.submitList(it)
+                            binding.guideLayout.setGone()
+                        } else {
+                            binding.guideLayout.setVisible()
                         }
                     }
                 }
 
                 launch {
                     viewModel.errorEvent.collect { errorMessage ->
-                        requireContext().showToast(errorMessage)
+                        Toast.showAlertToast(requireActivity(), errorMessage)
                     }
                 }
 

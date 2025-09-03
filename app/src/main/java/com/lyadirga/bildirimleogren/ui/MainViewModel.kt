@@ -41,8 +41,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // DB’deki mevcut setlerin URL’lerini al
-                val existingSets = repository.getAllSetsFlow().first() // Flow’u bir kere al
-                val urls = existingSets.mapNotNull { it.set.url }
+                val existingSets = repository.getAllSetSummariesFlow().first() // Flow’u bir kere al
+                val urls = existingSets.mapNotNull { it.url }
 
                 if (urls.isEmpty()) return@launch // URL yoksa çık
 
@@ -63,6 +63,10 @@ class MainViewModel @Inject constructor(
 
     fun fetchSingleSheet(url: String) {
         viewModelScope.launch {
+            if (url.startsWith("https://docs.google.com/spreadsheets/d/").not() || url.contains("output=csv").not()) {
+                _errorEvent.emit("Geçerli bir Google Sheet bağlantısı (URL) girin.")
+                return@launch
+            }
             _isLoading.value = true
             try {
                 val newSet = fetchCsvFromUrl(url)
