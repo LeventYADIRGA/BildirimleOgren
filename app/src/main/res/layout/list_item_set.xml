@@ -36,6 +36,28 @@
                 android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                 android:textColor="?attr/colorOutline"
                 tools:text="https://docs.google.com/forms/d/e/1FAIpQLSdJU8qyKU3szHgVxxlZnaTqBdggME3YaBfFq0lb" />
+            <LinearLayout
+                android:id="@+id/notification_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:gravity="center_vertical"
+                tools:visibility="visible">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/notification_enable" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_marginStart="4dp"
+                    android:text="Bu set bildirim listesine eklendi."
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:textColor="?attr/colorControlNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatImageView

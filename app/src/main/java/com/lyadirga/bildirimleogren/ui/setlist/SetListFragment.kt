@@ -1,5 +1,8 @@
 package com.lyadirga.bildirimleogren.ui.setlist
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.lyadirga.bildirimleogren.R
+import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.databinding.FragmentSetListBinding
+import com.lyadirga.bildirimleogren.ui.MainActivity
 import com.lyadirga.bildirimleogren.ui.MainViewModel
 import com.lyadirga.bildirimleogren.ui.MarginItemDecoration
 import com.lyadirga.bildirimleogren.ui.base.BaseFragment
@@ -20,13 +25,18 @@ import com.lyadirga.bildirimleogren.ui.showToast
 import com.lyadirga.bildirimleogren.util.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.getValue
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class SetListFragment: BaseFragment<FragmentSetListBinding>() {
 
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var adapter: SetListAdapter
+
+    @Inject
+    lateinit var prefData: PrefData
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -39,7 +49,7 @@ class SetListFragment: BaseFragment<FragmentSetListBinding>() {
 
         setupToolbar()
 
-        adapter = SetListAdapter{
+        adapter = SetListAdapter {
             val action = SetListFragmentDirections.actionSetListFragmentToSetDetailFragment(it.id, it.title)
             findNavController().navigate(action)
         }
@@ -82,8 +92,16 @@ class SetListFragment: BaseFragment<FragmentSetListBinding>() {
                     viewModel.isLoading.collect { loading ->
                         binding.progressBar.isVisible = loading
                     }
-
                 }
+
+                // PrefData'dan notification açık olan set id'lerini izle
+                launch {
+                    prefData.observeNotificationSetIds().collect { enabledSetIds ->
+                        // adapter'e bildir
+                        adapter.updateEnabledSets(enabledSetIds.toSet())
+                    }
+                }
+
             }
         }
     } // end observeFlows
@@ -99,18 +117,55 @@ class SetListFragment: BaseFragment<FragmentSetListBinding>() {
                 }
 
                 R.id.action_settings -> {
+                    val activity = requireActivity() as MainActivity
+                    activity.openNotificationIntervalSettings()
                 }
 
                 R.id.action_share -> {
-                    //shareAppLink()
+                    shareAppLink()
                 }
 
                 R.id.action_rate_me -> {
-                    //rateAppOnPlayStore()
+                    rateAppOnPlayStore()
                 }
             }
             true
         }
     }
 
+    private fun shareAppLink() {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "https://play.google.com/store/apps/details?id=${packageName}"
+            )
+        }
+        startActivity(Intent.createChooser(shareIntent, "Uygulamayı Paylaş"))
+    }
+
+    private fun rateAppOnPlayStore() {
+        val uri = "market://details?id=$packageName".toUri()
+        val goToMarket = Intent(Intent.ACTION_VIEW, uri).apply {
+            addFlags(
+                Intent.FLAG_ACTIVITY_NO_HISTORY or
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+            )
+        }
+        try {
+            startActivity(goToMarket)
+        } catch (e: ActivityNotFoundException) {
+            // Play Store yoksa tarayıcı ile aç
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    "https://play.google.com/store/apps/details?id=$packageName".toUri()
+                )
+            )
+        }
+    }
+
+    private val packageName: String
+        get() = "com.lyadirga.bildirimleogren"
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.lyadirga.bildirimleogren.model.LanguageSet
@@ -26,9 +27,11 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
         private val IS_FIRST_LAUNCH = booleanPreferencesKey("is_first_launch")
         private val LANGUAGE_SETS_KEY = stringPreferencesKey("language_sets")
         private val NOTIFICATION_INTERVAL_INDEX = intPreferencesKey("notification_interval_index")
+        private val NOTIFICATION_SET_IDS = stringPreferencesKey("notification_set_ids")
 
         private const val DEFAULT_INDEX = -1
         private const val DEFAULT_CALISMA_SETI = 0
+        const val NOTIFICATION_DISABLED_INDEX = 4 // Bildirim kapalı
     }
 
     // ✅ INDEX
@@ -104,6 +107,41 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
     }
 
     suspend fun getNotificationIntervalIndexOnce(): Int {
-        return context.dataStore.data.first()[NOTIFICATION_INTERVAL_INDEX] ?: 0
+        return context.dataStore.data.first()[NOTIFICATION_INTERVAL_INDEX] ?: NOTIFICATION_DISABLED_INDEX
     }
+
+    // Bildirim açık olan set ID’lerini kaydet
+    suspend fun saveNotificationSetIds(setIds: List<Long>) {
+        val jsonString = json.encodeToString(setIds)
+        context.dataStore.edit { it[NOTIFICATION_SET_IDS] = jsonString }
+    }
+
+    // Akış olarak gözlemle
+    fun observeNotificationSetIds(): Flow<List<Long>> {
+        return context.dataStore.data.map { prefs ->
+            val jsonString = prefs[NOTIFICATION_SET_IDS]
+            if (jsonString.isNullOrEmpty()) emptyList()
+            else json.decodeFromString(jsonString)
+        }
+    }
+
+    // Tek seferlik al
+    suspend fun getNotificationSetIdsOnce(): List<Long> {
+        val jsonString = context.dataStore.data.first()[NOTIFICATION_SET_IDS]
+        return if (jsonString.isNullOrEmpty()) emptyList()
+        else json.decodeFromString(jsonString)
+    }
+
+    // Toggle mantığı (ekle/çıkar)
+    suspend fun toggleNotificationSetId(setId: Long) {
+        val current = getNotificationSetIdsOnce().toMutableList()
+        if (current.contains(setId)) {
+            current.remove(setId) // zaten varsa çıkar
+        } else {
+            current.add(setId) // yoksa ekle
+        }
+        saveNotificationSetIds(current)
+    }
+
+
 }

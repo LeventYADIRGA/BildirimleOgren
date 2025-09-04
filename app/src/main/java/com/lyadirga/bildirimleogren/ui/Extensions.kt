@@ -1,5 +1,6 @@
 package com.lyadirga.bildirimleogren.ui
 
+import android.R.attr.duration
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -9,10 +10,22 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.lyadirga.bildirimleogren.R
 
 fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
+
+fun Context.showAlert(message: String) {
+    MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
+        setTitle("Uyarı")
+        setMessage(message)
+        setPositiveButton("Tamam") { _, _ -> }
+        show()
+    }
+}
+
 
 fun Context.isInternetAvailable(): Boolean {
     val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

@@ -6,6 +6,7 @@ import com.lyadirga.bildirimleogren.data.LanguageSetWithItems
 import com.lyadirga.bildirimleogren.data.Repository
 import com.lyadirga.bildirimleogren.model.Language
 import com.lyadirga.bildirimleogren.model.LanguageSet
+import com.lyadirga.bildirimleogren.model.LanguageSetSummary
 import com.opencsv.CSVReader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +36,20 @@ class MainViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> get() = _isLoading
+
+
+
+    fun getAllSetSummariesOnce(onResult: (List<LanguageSetSummary>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val list = repository.getAllSetSummariesOnce()
+                onResult(list)
+            } catch (e: Exception) {
+                _errorEvent.emit(e.localizedMessage ?: "Beklenmeyen bir hata oluştu.")
+                onResult(emptyList())
+            }
+        }
+    }
 
 
     fun fetchSheetsFromDbUrls() {

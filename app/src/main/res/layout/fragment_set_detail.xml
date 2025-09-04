@@ -10,7 +10,10 @@
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         tools:title="Çalışma Seti"
+        app:menu="@menu/set_detail_toolbar_menu"
+        app:popupTheme="@style/Theme.BildirimleOgren.PopupMenu"
         android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.Material3.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

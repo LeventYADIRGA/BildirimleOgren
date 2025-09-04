@@ -159,12 +159,7 @@ class MainActivityOld : BaseActivity<ActivityMainOldBinding>() {
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // İzin verildi
-                lifecycleScope.launch {
-                    if (prefData.isFirstLaunchOnce()) {
-                        scheduleNotifications(30)
-                        prefData.setFirstLaunch(false)
-                    }
-                }
+                //TODO: bildirim ayarları dialogu göster
 
             } else {
                 // İzin reddedildi

@@ -4,6 +4,7 @@ package com.lyadirga.bildirimleogren.data
 import com.lyadirga.bildirimleogren.model.LanguageSet
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -51,12 +52,21 @@ class Repository @Inject constructor(
         return dao.getAllSetSummariesFlow()
     }
 
+    suspend fun getAllSetSummariesOnce(): List<LanguageSetSummary> {
+        return dao.getAllSetSummariesFlow().first() // Flow'dan ilk değeri al
+    }
+
+
     suspend fun getSetById(setId: Long): LanguageSetWithItems? {
         return dao.getLanguageSetWithItemsById(setId)
     }
 
     fun getAllSetsFlow(): Flow<List<LanguageSetWithItems>> {
         return dao.getAllLanguageSetsWithItemsFlow()
+    }
+
+    suspend fun getSetsByIds(setIds: List<Long>): List<LanguageSetWithItems> {
+        return dao.getLanguageSetsWithItemsByIds(setIds)
     }
 
     suspend fun deleteSetById(setId: Long) {

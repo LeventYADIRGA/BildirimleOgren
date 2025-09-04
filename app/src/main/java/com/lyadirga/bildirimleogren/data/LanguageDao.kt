@@ -34,6 +34,10 @@ interface LanguageDao {
     @Query("SELECT * FROM ${LanguageSetEntity.TABLE_NAME} WHERE id = :setId")
     suspend fun getLanguageSetWithItemsById(setId: Long): LanguageSetWithItems?
 
+    @Transaction
+    @Query("SELECT * FROM ${LanguageSetEntity.TABLE_NAME} WHERE id IN (:setIds)")
+    suspend fun getLanguageSetsWithItemsByIds(setIds: List<Long>): List<LanguageSetWithItems>
+
     @Query("DELETE FROM ${LanguageSetEntity.TABLE_NAME}")
     suspend fun deleteAllSets()
 

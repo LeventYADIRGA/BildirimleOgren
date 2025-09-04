@@ -8,35 +8,43 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
-import com.lyadirga.bildirimleogren.data.getLanguageSet
+import com.lyadirga.bildirimleogren.data.Repository
 import com.lyadirga.bildirimleogren.ui.MainActivityOld
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class NotificationWorker(private val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+@HiltWorker
+class NotificationWorker @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted params: WorkerParameters,
+    private val repository: Repository,
+    private val prefData: PrefData
+) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
 
-        val prefData = PrefData(context)
+        val enabledSetIds = prefData.getNotificationSetIdsOnce()
+        if (enabledSetIds.isEmpty()) return Result.success()
+
+        // Room’dan sadece aktif setleri al
+        val activeSets = repository.getSetsByIds(enabledSetIds)
+        if (activeSets.isEmpty()) return Result.success()
+
+        // Tüm aktif setlerdeki öğeleri tek bir listede birleştir
+        val allItems = activeSets.flatMap { it.items }
+        if (allItems.isEmpty()) return Result.success()
+
+        // Index güncelleme
         var index = prefData.getIndexOnce()
-        val currentCalismaSetiIndex = prefData.getCalismaSetiOnce()
-
-        val currentCalismaSeti = if (currentCalismaSetiIndex >= 100) {
-            prefData.getLanguageSetsOnce()[currentCalismaSetiIndex - 100]
-        } else {
-            getLanguageSet(currentCalismaSetiIndex)!!
-        }
-
-        val setSize = currentCalismaSeti.items.size
-
-        // index güncelle
-        index = (index + 1) % setSize
+        index = (index + 1) % allItems.size
         prefData.setIndex(index)
 
-        // bildirim gönder
-        val languageModel = currentCalismaSeti.items[index]
-        showNotification(languageModel.wordOrSentence, languageModel.meaning)
+        val item = allItems[index]
+        showNotification(item.wordOrSentence, item.meaning)
 
         return Result.success()
     }
