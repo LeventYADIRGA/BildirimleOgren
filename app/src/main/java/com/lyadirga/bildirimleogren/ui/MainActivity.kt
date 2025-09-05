@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Message
 import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
@@ -124,7 +125,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-     fun scheduleNotifications(notificationInterval: Int?) {
+     private fun scheduleNotifications(notificationInterval: Int?) {
 
         val workManager = WorkManager.getInstance(this)
         notificationInterval?.let {
@@ -141,6 +142,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         } ?:run {
             workManager.cancelUniqueWork("notification_work")
             this.showToast("Bildirimler kapatıldı")
+        }
+
+    }
+
+    fun scheduleNotificationsFromSetDetail(notificationInterval: Int?) {
+
+        val workManager = WorkManager.getInstance(this)
+        notificationInterval?.let {
+            val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(it.toLong(), TimeUnit.MINUTES)
+                .build()
+
+            workManager.enqueueUniquePeriodicWork(
+                "notification_work",
+                ExistingPeriodicWorkPolicy.REPLACE, // Önceki varsa iptal et ve yenisiyle değiştir
+                workRequest
+            )
+
+        } ?:run {
+            workManager.cancelUniqueWork("notification_work")
+            this.showToast("Bildirim için hiç çalışma seti bulunmuyor")
         }
 
     }

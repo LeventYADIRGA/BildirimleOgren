@@ -103,7 +103,7 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
 
                         requireContext().showToast(
                             if (isEnabled) "Bildirim açıldı"
-                            else "Bildirim kapatıldı"
+                            else "Bu set için bildirim kapatıldı"
                         )
                     }
 
@@ -149,9 +149,9 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
             val activity = requireActivity() as MainActivity
             if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isNotEmpty()) {
                 val notificationInterval  = MainActivity.intervalsInMinutes[intervalIndex]
-                activity.scheduleNotifications(notificationInterval)
+                activity.scheduleNotificationsFromSetDetail(notificationInterval)
             }else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX){
-                activity.scheduleNotifications(null) // Bildirim kapat, çünkü enabledSets boş
+                activity.scheduleNotificationsFromSetDetail(null) // Bildirim kapat, çünkü enabledSets boş
             }
         }
     }
