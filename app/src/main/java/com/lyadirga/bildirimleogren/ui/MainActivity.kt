@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Message
 import android.provider.Settings
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.activity.viewModels
@@ -107,7 +105,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                                         showAlert("Bildirimler süresi ayarlandı, ama herhangi bir set için bildirim ayarlanmadı. Set detayına gittikten sonra üstteki bildirim ikonu ile set için bildirimi aktif ediniz.")
                                     } else {
                                         val notificationInterval = intervalsInMinutes[currentIntervalIndex]
-                                        scheduleNotifications(notificationInterval)
+                                        scheduleNotifications(notificationInterval, choices[currentIntervalIndex])
                                     }
                                 }
                         }
@@ -125,7 +123,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-     private fun scheduleNotifications(notificationInterval: Int?) {
+     private fun scheduleNotifications(notificationInterval: Int?, intervalLabel: CharSequence) {
 
         val workManager = WorkManager.getInstance(this)
         notificationInterval?.let {
@@ -137,7 +135,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 ExistingPeriodicWorkPolicy.REPLACE, // Önceki varsa iptal et ve yenisiyle değiştir
                 workRequest
             )
-            showToast("Bildirimler $it olarak ayarlandı")
+            showToast("Bildirimler $intervalLabel olarak ayarlandı")
 
         } ?:run {
             workManager.cancelUniqueWork("notification_work")
