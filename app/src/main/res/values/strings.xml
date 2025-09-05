@@ -1,6 +1,24 @@
 <resources>
     <string name="app_name">Bildirimle Öğren</string>
-    <string name="bilgi_body">dddd</string>
+    <string name="bilgi_body"><![CDATA[
+"Bildirimle Öğren" uygulaması, kullanıcıların kendi oluşturdukları çalışma setleriyle öğrenme süreçlerini destekleyen pratik bir araçtır. Uygulama şu temel özellikleri sunar:<br><br>
+
+&#8226; <b>Çalışma Setleri:</b> İlk ekranda kullanıcıların Google E-Tablolarda hazırlayıp uygulamaya aktardıkları Çalışma Setleri listelenir. Her set, içindeki kelime-anlam çiftlerini veya diğer içerikleri barındırır.<br><br>
+
+&#8226; <b>Set Detayları:</b> Bir setin üzerine dokunarak detay ekranına ulaşabilirsiniz. Bu ekranda tüm kelime-anlam çiftleri veya içerikler liste halinde görüntülenir.<br><br>
+
+&#8226; <b>Bildirim ile Öğrenme:</b> Bildirim özelliğini aktif hale getirdiğinizde, seçtiğiniz zaman aralıklarında uygulama size kelime ve anlamlarını bildirime düşürerek hatırlatır.<br><br>
+
+&#8226; <b>Seslendirme:</b> Uygulama üzerinde herhangi bir kelime-anlam çiftine dokunduğunuzda, ilgili metin sesli olarak okunur.<br><br>
+
+&#8226; <b>Esnek Kullanım:</b> Uygulama yalnızca dil öğrenimi için değil, aynı zamanda soru-cevap formatında bilgilerinizi pekiştirmek, terim ve tanımları ezberlemek, tarih–olay eşleştirmeleri yapmak veya kendi öğrenme yöntemlerinize uygun içerikler hazırlamak için de kullanılabilir.<br><br>
+
+Bu özellikler sayesinde öğrenme süreciniz hem daha düzenli hem de günlük rutininize entegre bir hale gelir.<br><br>
+
+Geri bildirimlerinizi bizimle paylaşarak uygulamayı geliştirmemize katkıda bulunabilirsiniz!
+]]></string>
+
+
     <string name="guide_text_title">Çalışma seti eklemek için aşağıdaki adımları uygulayınız:</string>
 
     <string name="guide_text">
@@ -12,8 +30,9 @@
 • \"https://docs.google.com/\" ile başlayan linki kopyalayın.\n
 • Uygulamaya dönün ve alttaki \'+\' butonuna basın.\n
 • Açılan alana kopyaladığınız linki yapıştırın ve \"Ekle\" butonuna basın.\n
+• E Tablolarda hazırlayacağınız Çalışma Seti formatı şu şekildedir. İlk satırdaki ilk hücre Başlık, alta doğru diğer satırlar Kelime-Anlamı şeklinde iki hücreye yazılacaktır.\n
 • Hepsi bu kadar ☺️ İyi çalışmalar\n
-• Ekran resmi aşağıdadır.
+• Ekran resimleri aşağıdadır.\n
 </string>
 
 </resources>

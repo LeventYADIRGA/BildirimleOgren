@@ -23,6 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
+        tools:visibility="gone"
         android:paddingTop="6dp"
         android:paddingBottom="32dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -69,6 +70,39 @@
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:text="@string/guide_text"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/guideTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="20sp"
+                app:fontFamily="sans-serif-condensed-medium"
+                android:text="E Tablolar formatı:"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/guide_sheet"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/guideTitle3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textSize="20sp"
+                android:text="E tablolar link alma işlemi:"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -89,7 +123,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.40"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addButton"
