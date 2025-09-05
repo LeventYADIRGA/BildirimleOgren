@@ -1,12 +1,11 @@
 package com.lyadirga.bildirimleogren.ui.setdetail
 
 import android.os.Bundle
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -74,21 +73,6 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                 requireContext().showToast("Set bulunamadı")
             }
         }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                prefData.observeNotificationSetIds().collect { enabledSetIds ->
-                    if (enabledSetIds.isNotEmpty()) {
-                        val intervalIndex = prefData.getNotificationIntervalIndexOnce()
-                        if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX) {
-                            val intervalsInMinutes = arrayOf(30, 60, 360, 1440) // dakika cinsinden
-                            val activity = requireActivity() as MainActivity
-                            activity.scheduleNotifications(intervalsInMinutes[intervalIndex])
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private fun setupToolbar() {
@@ -114,6 +98,8 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                             if (isEnabled) R.drawable.notification_enable
                             else R.drawable.notification_disable
                         )
+
+                        updateNotification()
 
                         requireContext().showToast(
                             if (isEnabled) "Bildirim açıldı"
@@ -152,6 +138,20 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                     true
                 }
                 else -> false
+            }
+        }
+    }
+
+    private fun updateNotification(){
+        lifecycleScope.launch {
+            val intervalIndex = prefData.getNotificationIntervalIndexOnce()
+            val enabledSets = prefData.getNotificationSetIdsOnce()
+            val activity = requireActivity() as MainActivity
+            if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isNotEmpty()) {
+                val notificationInterval  = MainActivity.intervalsInMinutes[intervalIndex]
+                activity.scheduleNotifications(notificationInterval)
+            }else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX){
+                activity.scheduleNotifications(null) // Bildirim kapat, çünkü enabledSets boş
             }
         }
     }

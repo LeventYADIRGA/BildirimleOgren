@@ -1,4 +1,4 @@
-package com.lyadirga.bildirimleogren.ui
+package com.lyadirga.bildirimleogren.ui.setlist
 
 import android.graphics.Rect
 import android.view.View

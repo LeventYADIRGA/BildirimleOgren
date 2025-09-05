@@ -4,10 +4,8 @@ import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.lyadirga.bildirimleogren.model.LanguageSet
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -25,7 +23,6 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
         private val INDEX = intPreferencesKey("index")
         private val CALISMA_SETI = intPreferencesKey("calisma_seti")
         private val IS_FIRST_LAUNCH = booleanPreferencesKey("is_first_launch")
-        private val LANGUAGE_SETS_KEY = stringPreferencesKey("language_sets")
         private val NOTIFICATION_INTERVAL_INDEX = intPreferencesKey("notification_interval_index")
         private val NOTIFICATION_SET_IDS = stringPreferencesKey("notification_set_ids")
 
@@ -75,26 +72,6 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
 
     suspend fun isFirstLaunchOnce(): Boolean {
         return context.dataStore.data.first()[IS_FIRST_LAUNCH] ?: true
-    }
-
-    // ✅ LanguageSets
-    suspend fun saveLanguageSets(languageSets: List<LanguageSet>) {
-        val jsonString = json.encodeToString(languageSets)
-        context.dataStore.edit { it[LANGUAGE_SETS_KEY] = jsonString }
-    }
-
-    fun observeLanguageSets(): Flow<List<LanguageSet>> {
-        return context.dataStore.data.map { prefs ->
-            val jsonString = prefs[LANGUAGE_SETS_KEY]
-            if (jsonString.isNullOrEmpty()) emptyList()
-            else json.decodeFromString(jsonString)
-        }
-    }
-
-    suspend fun getLanguageSetsOnce(): List<LanguageSet> {
-        val jsonString = context.dataStore.data.first()[LANGUAGE_SETS_KEY]
-        return if (jsonString.isNullOrEmpty()) emptyList()
-        else json.decodeFromString(jsonString)
     }
 
     // ✅ Bildirim interval

@@ -6,12 +6,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -28,7 +28,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.getValue
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -44,6 +43,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     companion object {
         private const val REQUEST_CODE_NOTIFICATION_PERMISSION = 1981
+        private val choices: Array<CharSequence> = arrayOf("30 dakika", "1 saat", "6 saat", "1 gün", "Şimdilik kapalı kalsın")
+        val intervalsInMinutes = arrayOf(30, 60, 360, 1440, null)
     }
 
 
@@ -86,10 +87,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     fun openNotificationIntervalSettings() {
 
-        // Seçenekler
-        val choices: Array<CharSequence> = arrayOf("30 dakika", "1 saat", "6 saat", "1 gün", "Şimdilik kapalı kalsın")
-        val intervalsInMinutes = arrayOf(30, 60, 360, 1440, null) // dakika cinsinden
-
         lifecycleScope.launch {
             var currentIntervalIndex = prefData.getNotificationIntervalIndexOnce()
             val oldIndex = currentIntervalIndex
@@ -100,22 +97,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     lifecycleScope.launch {
                         if (currentIntervalIndex != oldIndex) {
                             prefData.setNotificationIntervalIndex(currentIntervalIndex)
-                            val notificationInterval = intervalsInMinutes[currentIntervalIndex]
-                            scheduleNotifications(notificationInterval)
-                        }
-                        if (currentIntervalIndex < 4 && currentIntervalIndex != oldIndex) {
-                            val enabledSets = prefData.getNotificationSetIdsOnce()
-                            viewModel.getAllSetSummariesOnce { summaries ->
-                                if (summaries.isEmpty()){
-                                    showAlert("Henüz hiç Çalışma Seti eklemediniz. Çalışma setleri eklediğinizde istediğiniz setleri bildirim olarak ayarlayabilirsiniz.")
+                                val enabledSets = prefData.getNotificationSetIdsOnce()
+                                viewModel.getAllSetSummariesOnce { summaries ->
+                                    if (summaries.isEmpty()){
+                                        showAlert("Henüz hiç Çalışma Seti eklemediniz. Çalışma setleri eklediğinizde istediğiniz setleri bildirim olarak ayarlayabilirsiniz.")
+                                    }
+                                    else if (enabledSets.isEmpty()) {
+                                        showAlert("Bildirimler süresi ayarlandı, ama herhangi bir set için bildirim ayarlanmadı. Set detayına gittikten sonra üstteki bildirim ikonu ile set için bildirimi aktif ediniz.")
+                                    } else {
+                                        val notificationInterval = intervalsInMinutes[currentIntervalIndex]
+                                        scheduleNotifications(notificationInterval)
+                                    }
                                 }
-                                else if (enabledSets.isEmpty()) {
-                                    showAlert("Bildirimler süresi ayarlandı, ama herhangi bir set için bildirim ayarlanmadı. Set detayına gittikten sonra üstteki bildirim ikonu ile set için bildirimi aktif ediniz.")
-                                } else {
-                                    showToast("Bildirimler ${choices[currentIntervalIndex]} olarak ayarlandı")
-                                }
-                            }
                         }
+
                     }
                 }
                 setSingleChoiceItems(choices, currentIntervalIndex) { _, which ->
@@ -141,6 +136,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 ExistingPeriodicWorkPolicy.REPLACE, // Önceki varsa iptal et ve yenisiyle değiştir
                 workRequest
             )
+            showToast("Bildirimler $it olarak ayarlandı")
 
         } ?:run {
             workManager.cancelUniqueWork("notification_work")
@@ -191,7 +187,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
         startActivity(intent)
     }
-
 
     override fun observeFlows() {}
 }

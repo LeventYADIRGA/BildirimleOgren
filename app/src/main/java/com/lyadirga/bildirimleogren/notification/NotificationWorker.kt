@@ -8,23 +8,30 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
-import androidx.hilt.work.HiltWorker
+import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.lyadirga.bildirimleogren.R
+import com.lyadirga.bildirimleogren.data.AppDatabase
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.data.Repository
-import com.lyadirga.bildirimleogren.ui.MainActivityOld
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import com.lyadirga.bildirimleogren.ui.MainActivity
 
-@HiltWorker
-class NotificationWorker @AssistedInject constructor(
-    @Assisted appContext: Context,
-    @Assisted params: WorkerParameters,
-    private val repository: Repository,
-    private val prefData: PrefData
+class NotificationWorker (
+     appContext: Context,
+     params: WorkerParameters
 ) : CoroutineWorker(appContext, params) {
+
+    private val database: AppDatabase by lazy {
+        Room.databaseBuilder(appContext, AppDatabase::class.java, "app_database").build()
+    }
+    private val repository: Repository by lazy {
+        Repository(database.languageDao())
+    }
+    private val prefData: PrefData by lazy {
+        PrefData(appContext)
+    }
+
     override suspend fun doWork(): Result {
 
         val enabledSetIds = prefData.getNotificationSetIdsOnce()
@@ -67,7 +74,7 @@ class NotificationWorker @AssistedInject constructor(
         notificationManager.createNotificationChannel(channel)
 
         // Ana aktiviteyi açmak için bir intent
-        val intent = Intent(applicationContext, MainActivityOld::class.java).apply {
+        val intent = Intent(applicationContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 

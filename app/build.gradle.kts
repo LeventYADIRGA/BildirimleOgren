@@ -79,10 +79,11 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
 
+    
     // Hilt
     implementation("com.google.dagger:hilt-android:2.57.1")
-    implementation("androidx.hilt:hilt-common:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.57.1")
+
 
     // Room
     implementation("androidx.room:room-runtime:2.7.2")

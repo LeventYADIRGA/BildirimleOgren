@@ -6,6 +6,7 @@ import com.lyadirga.bildirimleogren.model.LanguageSetSummary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
+import kotlin.collections.forEachIndexed
 
 class Repository @Inject constructor(
     private val dao: LanguageDao
