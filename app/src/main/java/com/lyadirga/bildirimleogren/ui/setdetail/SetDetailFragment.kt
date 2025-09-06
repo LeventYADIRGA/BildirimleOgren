@@ -102,7 +102,7 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                         updateNotification()
 
                         requireContext().showToast(
-                            if (isEnabled) "Bildirim açıldı"
+                            if (isEnabled) "Bu set için bildirim açıldı"
                             else "Bu set için bildirim kapatıldı"
                         )
                     }
@@ -152,6 +152,7 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                 activity.scheduleNotificationsFromSetDetail(notificationInterval)
             }else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX){
                 activity.scheduleNotificationsFromSetDetail(null) // Bildirim kapat, çünkü enabledSets boş
+                prefData.resetIndex()
             }
         }
     }

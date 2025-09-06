@@ -42,8 +42,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     companion object {
         private const val REQUEST_CODE_NOTIFICATION_PERMISSION = 1981
-        private val choices: Array<CharSequence> = arrayOf("30 dakika", "1 saat", "6 saat", "1 gün", "Şimdilik kapalı kalsın")
-        val intervalsInMinutes = arrayOf(30, 60, 360, 1440, null)
+        private val choices: Array<CharSequence> = arrayOf("30 dakika", "1 saat", "3 saat", "6 saat", "1 gün", "Şimdilik kapalı kalsın")
+        val intervalsInMinutes = arrayOf(30, 60, 180, 360, 1440, null)
     }
 
 
