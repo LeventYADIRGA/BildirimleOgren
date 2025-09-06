@@ -57,10 +57,10 @@ You can contribute to improving the app by sharing your feedback with us!
 • Click on "Entire Document" and choose the sheet you want (Sheet1, Sheet2, etc.).\n
 • Select "Web page" and then "Comma-separated values" from the dropdown.\n
 • Copy the link starting with "https://docs.google.com/".\n
-• Return to the app and press the '+' button at the bottom.\n
+• Return to the app and press the \'+\' button at the bottom.\n
 • Paste the copied link in the field and press "Add".\n
 • The format of the Study Set in Google Sheets is as follows: The first cell in the first row is the title, and subsequent rows contain word-meaning pairs in two cells.\n
-• That's it ☺️ Happy learning!\n
+• That\'s it ☺️ Happy learning!\n
 • Screenshots are shown below.\n
 </string>
 
