@@ -1,38 +1,116 @@
 <resources>
-    <string name="app_name">Bildirimle Öğren</string>
-    <string name="bilgi_body"><![CDATA[
-"Bildirimle Öğren" uygulaması, kullanıcıların kendi oluşturdukları çalışma setleriyle öğrenme süreçlerini destekleyen pratik bir araçtır. Uygulama şu temel özellikleri sunar:<br><br>
+    <string name="app_name">Learn with Notifications</string>
 
-&#8226; <b>Çalışma Setleri:</b> İlk ekranda kullanıcıların Google E-Tablolarda hazırlayıp uygulamaya aktardıkları Çalışma Setleri listelenir. Her set, içindeki kelime-anlam çiftlerini veya diğer içerikleri barındırır.<br><br>
+    <!--Generic-->
+    <string name="generic_ok">OK</string>
+    <string name="generic_warning">Warning</string>
+    <string name="generic_yes">Yes</string>
+    <string name="generic_no">No</string>
 
-&#8226; <b>Set Detayları:</b> Bir setin üzerine dokunarak detay ekranına ulaşabilirsiniz. Bu ekranda tüm kelime-anlam çiftleri veya içerikler liste halinde görüntülenir.<br><br>
+    <!-- Error messages -->
+    <string name="unexpected_error">An unexpected error occurred</string>
+    <string name="error_delete_set">An error occurred while deleting the set</string>
+    <string name="error_fetch_set_details">An error occurred while fetching set details</string>
+    <string name="error_invalid_sheet_url">Enter a valid Google Sheet URL</string>
 
-&#8226; <b>Bildirim ile Öğrenme:</b> Bildirim özelliğini aktif hale getirdiğinizde, seçtiğiniz zaman aralıklarında uygulama size kelime ve anlamlarını bildirime düşürerek hatırlatır.<br><br>
+    <!--Set list-->
+    <string name="share_app">Share the App</string>
+    <string name="error_enter_sheet_url">Please enter the Google Sheet URL</string>
+    <string name="sheet_url_hint">Paste the Google Sheet link here…</string>
+    <string name="add">Add</string>
+    <string name="set_added_to_notifications">This set has been added to the notification list.</string>
+    <string name="add_workout_set">Add Workout Set</string>
 
-&#8226; <b>Seslendirme:</b> Uygulama üzerinde herhangi bir kelime-anlam çiftine dokunduğunuzda, ilgili metin sesli olarak okunur.<br><br>
+    <!-- Info -->
+    <string name="info_body"><![CDATA[
+"The Learn with Notifications" app is a practical tool that helps users support their learning process with custom study sets. The app offers the following main features:<br><br>
 
-&#8226; <b>Esnek Kullanım:</b> Uygulama yalnızca dil öğrenimi için değil, aynı zamanda soru-cevap formatında bilgilerinizi pekiştirmek, terim ve tanımları ezberlemek, tarih–olay eşleştirmeleri yapmak veya kendi öğrenme yöntemlerinize uygun içerikler hazırlamak için de kullanılabilir.<br><br>
+&#8226; <b>Study Sets:</b> On the first screen, users can see a list of Study Sets they prepared in Google Sheets and imported into the app. Each set contains word-meaning pairs or other content.<br><br>
 
-Bu özellikler sayesinde öğrenme süreciniz hem daha düzenli hem de günlük rutininize entegre bir hale gelir.<br><br>
+&#8226; <b>Set Details:</b> Tap on a set to open the detail screen. Here, all word-meaning pairs or content are displayed in a list.<br><br>
 
-Geri bildirimlerinizi bizimle paylaşarak uygulamayı geliştirmemize katkıda bulunabilirsiniz!
+&#8226; <b>Learn with Notifications:</b> When the notification feature is enabled, the app reminds you at selected intervals by showing words and their meanings.<br><br>
+
+&#8226; <b>Text-to-Speech:</b> Tapping any word-meaning pair will read the text aloud.<br><br>
+
+&#8226; <b>Flexible Usage:</b> The app can also be used for reinforcing knowledge in Q&A format, memorizing terms and definitions, matching dates with events, or preparing content according to your own learning method.<br><br>
+
+These features make your learning process more organized and integrate it into your daily routine.<br><br>
+
+You can contribute to improving the app by sharing your feedback with us!
 ]]></string>
 
+    <string name="contact">Contact:</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="app_features">App Features</string>
+    <string name="info">Info</string>
 
-    <string name="guide_text_title">Çalışma seti eklemek için aşağıdaki adımları uygulayınız:</string>
+    <!--Guide-->
+    <string name="guide_text_title">Follow these steps to add a study set:</string>
+    <string name="sheet_format">Google Sheet Format:</string>
+    <string name="sheet_link_instructions">Google Sheet Link Instructions:</string>
 
     <string name="guide_text">
-• Google E Tablolar’a gidin ve paylaşmak istediğiniz sayfayı açın.\n
-• Sol üstten Dosya -> Paylaş -> Web\'de yayınla seçeneğini seçin.\n
-• Çıkan ekranda, \"Bağlantı\" sekmesin seçili olduğundan emin olun. \n
-• \"Dökümanın tamamı\" yazan yere tıklayın ve açılır menüden istediğiniz sayfayı seçin. (Sayfa1, Sayfa2 gibi)\n
-• \"Web sayfası\" yazan yere tıklayın ve açılır menüden \"Virgülle ayrılmış değerler\" i seçin.\n
-• \"https://docs.google.com/\" ile başlayan linki kopyalayın.\n
-• Uygulamaya dönün ve alttaki \'+\' butonuna basın.\n
-• Açılan alana kopyaladığınız linki yapıştırın ve \"Ekle\" butonuna basın.\n
-• E Tablolarda hazırlayacağınız Çalışma Seti formatı şu şekildedir. İlk satırdaki ilk hücre Başlık, alta doğru diğer satırlar Kelime-Anlamı şeklinde iki hücreye yazılacaktır.\n
-• Hepsi bu kadar ☺️ İyi çalışmalar\n
-• Ekran resimleri aşağıdadır.\n
+• Go to Google Sheets and open the sheet you want to share.\n
+• Click File -> Share -> Publish to web.\n
+• Ensure the "Link" tab is selected.\n
+• Click on "Entire Document" and choose the sheet you want (Sheet1, Sheet2, etc.).\n
+• Select "Web page" and then "Comma-separated values" from the dropdown.\n
+• Copy the link starting with "https://docs.google.com/".\n
+• Return to the app and press the '+' button at the bottom.\n
+• Paste the copied link in the field and press "Add".\n
+• The format of the Study Set in Google Sheets is as follows: The first cell in the first row is the title, and subsequent rows contain word-meaning pairs in two cells.\n
+• That's it ☺️ Happy learning!\n
+• Screenshots are shown below.\n
 </string>
 
+    <!-- 🇹🇷Türkçe: Bildirim ayarları -->
+    <!-- 🇬🇧English: Notification settings -->
+    <string name="notification_interval_title">Notification Interval</string>
+
+    <string name="notification_no_sets_message">
+    You have not added any Study Sets yet. Once you add sets, you can configure notifications for the ones you want.
+</string>
+
+    <string name="notification_no_enabled_sets_message">
+    The notification interval is set, but no notifications are enabled for any set.
+    Go to the set details and enable notifications for a set using the notification icon at the top.
+</string>
+
+    <!-- 🇹🇷Türkçe: Bildirim izni -->
+    <!-- 🇬🇧English: Notification Permission -->
+    <string name="notification_permission_title">Notification Permission</string>
+    <string name="notification_permission_message">The core feature of our app is sending notifications. Please allow notifications.</string>
+    <string name="go_to_settings">Go to Settings</string>
+
+    <!-- 🇹🇷Türkçe: Bildirim zamanlama -->
+    <!-- 🇬🇧English: Notification scheduling -->
+    <string name="notification_scheduled">Notifications set for %1$s</string>
+    <string name="notification_all_disabled">Notifications turned off</string>
+    <string name="no_notification_set">No study set found for notifications</string>
+
+    <!-- Notification toggle messages -->
+    <string name="notification_set_enabled">Notifications enabled for this set</string>
+    <string name="notification_set_disabled">Notifications disabled for this set</string>
+
+    <!-- Delete set dialog -->
+    <string name="delete_set_title">Delete Set</string>
+    <string name="delete_set_message">Are you sure you want to delete this set?</string>
+    <string name="set_deleted">Set deleted</string>
+
+    <!--Set detail-->
+    <string name="set_not_found">Set not found</string>
+    <string name="tts_lang_missing_data">Language data missing</string>
+    <string name="tts_lang_not_supported">Language not supported</string>
+    <string name="tts_unknown_error">Unknown error: %1$d</string>
+
+    <!--Array for notification interval settings-->
+    <string-array name="notification_intervals">
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>1 day</item>
+        <item>Keep off for now</item>
+    </string-array>
 </resources>

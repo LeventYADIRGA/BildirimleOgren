@@ -1,6 +1,5 @@
 package com.lyadirga.bildirimleogren.ui
 
-import android.R.attr.duration
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -9,19 +8,25 @@ import android.net.NetworkCapabilities
 import android.os.SystemClock
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lyadirga.bildirimleogren.R
+
+fun Context.showToast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(this, message, duration).show()
+}
 
 fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
 
-fun Context.showAlert(message: String) {
+
+fun Context.showAlert(@StringRes message: Int) {
     MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
-        setTitle("Uyarı")
+        setTitle(R.string.generic_warning)
         setMessage(message)
-        setPositiveButton("Tamam") { _, _ -> }
+        setPositiveButton(R.string.generic_ok) { _, _ -> }
         show()
     }
 }
@@ -66,19 +71,21 @@ fun View.fadeVisibility(visibility: Int, duration: Long = 100) {
     val willBeVisible = visibility == View.VISIBLE
 
     if (isCurrentlyVisible == willBeVisible) {
-        // Aynı grup: VISIBLE ↔ VISIBLE veya INVISIBLE/GONE ↔ INVISIBLE/GONE → animasyon yapma
+        // 🇹🇷Türkçe: Aynı grup: VISIBLE ↔ VISIBLE veya INVISIBLE/GONE ↔ INVISIBLE/GONE → animasyon yapma
+        // 🇬🇧English: Same group: VISIBLE ↔ VISIBLE or INVISIBLE/GONE ↔ INVISIBLE/GONE → do not animate
         return
     }
 
 
-    // Animasyon başlat
+    // Start animation
     val fadeIn = ObjectAnimator.ofFloat(this, View.ALPHA, if (visibility == View.VISIBLE) 0f else 1f, if (visibility == View.VISIBLE) 1f else 0f)
     fadeIn.duration = duration
     fadeIn.addListener(object : android.animation.AnimatorListenerAdapter() {
         override fun onAnimationStart(animation: Animator) {
             super.onAnimationStart(animation)
             if (visibility == View.VISIBLE) {
-                // Görünürlük ayarla ve görünür yap
+                // 🇹🇷Türkçe: Görünürlük ayarla ve görünür yap
+                // 🇬🇧English: Set visibility and make it visible
                 this@fadeVisibility.visibility = visibility
             }
         }
@@ -86,7 +93,8 @@ fun View.fadeVisibility(visibility: Int, duration: Long = 100) {
         override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             if (visibility != View.VISIBLE) {
-                // Görünürlük ayarla ve gizle
+                // 🇹🇷Türkçe: Görünürlük ayarla ve gizle
+                // 🇬🇧English: Set visibility and hide
                 this@fadeVisibility.visibility = visibility
             }
         }

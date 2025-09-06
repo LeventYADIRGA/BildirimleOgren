@@ -70,7 +70,7 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
             if (setDetails != null) {
                 listAdapter.submitList(setDetails.items)
             } else {
-                requireContext().showToast("Set bulunamadı")
+                requireContext().showToast(R.string.set_not_found)
             }
         }
     }
@@ -102,8 +102,8 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                         updateNotification()
 
                         requireContext().showToast(
-                            if (isEnabled) "Bu set için bildirim açıldı"
-                            else "Bu set için bildirim kapatıldı"
+                            if (isEnabled) R.string.notification_set_enabled
+                            else R.string.notification_set_disabled
                         )
                     }
 
@@ -115,25 +115,26 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                         requireContext(),
                         R.style.Theme_BildirimleOgren_MaterialAlertDialog
                     )
-                        .setTitle("Seti Sil")
-                        .setMessage("Bu seti silmek istediğinizden emin misiniz?")
-                        .setPositiveButton("Evet") { _, _ ->
+                        .setTitle(R.string.delete_set_title)
+                        .setMessage(R.string.delete_set_message)
+                        .setPositiveButton(R.string.generic_yes) { _, _ ->
                             lifecycleScope.launch {
-                                // Seti sil
+                                // delete set
                                 viewModel.deleteSet(args.setId)
 
-                                // Eğer bildirim açıksa kaldır
+                                // 🇹🇷Türkçe: Eğer bildirim açıksa kaldır
+                                // 🇬🇧English: Remove if notification is enabled
                                 val enabledSets = prefData.getNotificationSetIdsOnce().toMutableSet()
                                 if (args.setId in enabledSets) {
                                     enabledSets.remove(args.setId)
                                     prefData.saveNotificationSetIds(enabledSets.toList())
                                 }
 
-                                requireContext().showToast("Set silindi")
-                                findNavController().popBackStack() // Listeye dön
+                                requireContext().showToast(R.string.set_deleted)
+                                findNavController().popBackStack() // Go back to the list
                             }
                         }
-                        .setNegativeButton("Hayır", null)
+                        .setNegativeButton(R.string.generic_no, null)
                         .show()
                     true
                 }
@@ -151,7 +152,9 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                 val notificationInterval  = MainActivity.intervalsInMinutes[intervalIndex]
                 activity.scheduleNotificationsFromSetDetail(notificationInterval)
             }else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX){
-                activity.scheduleNotificationsFromSetDetail(null) // Bildirim kapat, çünkü enabledSets boş
+                // 🇹🇷Türkçe: Bildirim kapat, çünkü enabledSets boş
+                // 🇬🇧English: Turn off notification because enabledSets is empty
+                activity.scheduleNotificationsFromSetDetail(null)
                 prefData.resetIndex()
             }
         }

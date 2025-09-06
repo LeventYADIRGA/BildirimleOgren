@@ -43,14 +43,15 @@ abstract class BaseActivity<VB: ViewBinding> : AppCompatActivity(){
                 )
 
                 val isDarkTheme = when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                    Configuration.UI_MODE_NIGHT_YES -> true   // Koyu mod
-                    Configuration.UI_MODE_NIGHT_NO -> false   // Açık mod
+                    Configuration.UI_MODE_NIGHT_YES -> true   // Dark mod
+                    Configuration.UI_MODE_NIGHT_NO -> false   // Light mod
                     else -> false
                 }
 
                 val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
 
-                // true -> ikonlar koyu, false -> ikonlar açık
+                // 🇹🇷Türkçe: true -> ikonlar koyu, false -> ikonlar açık
+                // 🇬🇧English: true -> icons dark, false -> icons light
                 windowInsetsController.isAppearanceLightStatusBars = !isDarkTheme
 
                 insets

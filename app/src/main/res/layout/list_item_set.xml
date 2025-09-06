@@ -51,7 +51,7 @@
                     android:src="@drawable/notification_enable" />
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_marginStart="4dp"
-                    android:text="Bu set bildirim listesine eklendi."
+                    android:text="@string/set_added_to_notifications"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     android:textColor="?attr/colorControlNormal"
                     android:layout_width="wrap_content"

@@ -38,14 +38,17 @@ class NotificationWorker (
         if (enabledSetIds.isEmpty()) return Result.success()
 
         // Room’dan sadece aktif setleri al
+        // Get only active sets from Room
         val activeSets = repository.getSetsByIds(enabledSetIds)
         if (activeSets.isEmpty()) return Result.success()
 
         // Tüm aktif setlerdeki öğeleri tek bir listede birleştir
+        // Combine items from all active sets into a single list
         val allItems = activeSets.flatMap { it.items }
         if (allItems.isEmpty()) return Result.success()
 
         // Index güncelleme
+        // Update index
         var index = prefData.getIndexOnce()
         index = (index + 1) % allItems.size
         prefData.setIndex(index)
@@ -74,6 +77,7 @@ class NotificationWorker (
         notificationManager.createNotificationChannel(channel)
 
         // Ana aktiviteyi açmak için bir intent
+        // An intent to open the main activity
         val intent = Intent(applicationContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -84,8 +88,8 @@ class NotificationWorker (
         val builder = NotificationCompat.Builder(applicationContext, channelId)
             .setContentTitle(title)
             .setContentText(message)
-            .setContentIntent(pendingIntent) // PendingIntent'i bildirimde kullan
-            .setAutoCancel(true) // Bildirime tıklanınca otomatik olarak kapat
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true) // Automatically dismiss when the notification is clicked
             .setSmallIcon(R.mipmap.app_icon)
 
         notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())

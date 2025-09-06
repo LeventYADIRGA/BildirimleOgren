@@ -24,8 +24,13 @@ abstract class BaseBottomSheetFragment<VB : ViewBinding?> : BottomSheetDialogFra
     }
 
     /**
+     * 🇹🇷Türkçe:
      * BottomSheet'i göstermek için tek parametreli show.
      * TAG otomatik olarak sınıf adı kullanılır.
+     *
+     * 🇬🇧English:
+     * Show BottomSheet with a single parameter.
+     * TAG is automatically set to the class name.
      */
     fun show(fragmentManager: FragmentManager) {
         super.show(fragmentManager, this::class.java.simpleName)

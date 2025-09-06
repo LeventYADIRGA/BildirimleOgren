@@ -1,11 +1,9 @@
 package com.lyadirga.borsadefterim.ui.bilgi
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -31,7 +29,7 @@ class BilgiFragment : BaseFragment<FragmentBilgiBinding>() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbarBilgi.setupWithNavController(navController, appBarConfiguration)
 
-        val bilgiBody = getString(R.string.bilgi_body)
+        val bilgiBody = getString(R.string.info_body)
         binding.body.text = Html.fromHtml(bilgiBody, Html.FROM_HTML_MODE_LEGACY)
 
         binding.btnFeedback.setOnClickListener {

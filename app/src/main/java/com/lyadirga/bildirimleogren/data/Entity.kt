@@ -9,7 +9,9 @@ data class LanguageSetEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
     val url: String? = null,
-    val orderIndex: Int // setlerin sırasını korumak için
+    // setlerin sırasını korumak için
+    // To preserve the order of the sets
+    val orderIndex: Int
 ) {
     companion object {
         const val TABLE_NAME = "language_sets"

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.LanguageEntity
 import com.lyadirga.bildirimleogren.databinding.ItemBinding
 import com.lyadirga.bildirimleogren.ui.showToast
@@ -64,11 +65,12 @@ class SetItemsAdapter(
             val result = textToSpeech?.setLanguage(Locale.US)
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 val message = when (result) {
-                    TextToSpeech.LANG_MISSING_DATA -> "Dil verisi eksik"
-                    TextToSpeech.LANG_NOT_SUPPORTED -> "Dil desteklenmiyor"
-                    else -> "Bilinmeyen hata durumu: $result"
+                    TextToSpeech.LANG_MISSING_DATA -> context.getString(R.string.tts_lang_missing_data)
+                    TextToSpeech.LANG_NOT_SUPPORTED -> context.getString(R.string.tts_lang_not_supported)
+                    else -> context.getString(R.string.tts_unknown_error, result)
                 }
                 context.showToast(message)
+
             }
         }
     }

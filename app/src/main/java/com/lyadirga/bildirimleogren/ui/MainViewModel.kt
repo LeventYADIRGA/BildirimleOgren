@@ -1,7 +1,9 @@
 package com.lyadirga.bildirimleogren.ui
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.LanguageSetWithItems
 import com.lyadirga.bildirimleogren.data.Repository
 import com.lyadirga.bildirimleogren.model.Language
@@ -9,6 +11,7 @@ import com.lyadirga.bildirimleogren.model.LanguageSet
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
 import com.opencsv.CSVReader
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -26,7 +29,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    @ApplicationContext private val context: Context
 ): ViewModel() {
 
     val setAllSetSummariesFlow = repository.getAllSetSummariesFlow() // Flow<List<LanguageSetSummary>>
@@ -45,7 +49,7 @@ class MainViewModel @Inject constructor(
                 val list = repository.getAllSetSummariesOnce()
                 onResult(list)
             } catch (e: Exception) {
-                _errorEvent.emit(e.localizedMessage ?: "Beklenmeyen bir hata oluştu.")
+                _errorEvent.emit(e.localizedMessage ?: context.getString(R.string.unexpected_error))
                 onResult(emptyList())
             }
         }
@@ -71,7 +75,7 @@ class MainViewModel @Inject constructor(
                 repository.insertOrUpdateSets(sets)
 
             } catch (e: Exception) {
-                _errorEvent.emit(e.localizedMessage ?: "Beklenmeyen bir hata oluştu.")
+                _errorEvent.emit(e.localizedMessage ?: context.getString(R.string.unexpected_error))
             }
         }
     }
@@ -79,7 +83,7 @@ class MainViewModel @Inject constructor(
     fun fetchSingleSheet(url: String) {
         viewModelScope.launch {
             if (url.startsWith("https://docs.google.com/spreadsheets/d/").not() || url.contains("output=csv").not()) {
-                _errorEvent.emit("Geçerli bir Google Sheet bağlantısı (URL) girin.")
+                _errorEvent.emit(context.getString(R.string.error_invalid_sheet_url))
                 return@launch
             }
             _isLoading.value = true
@@ -87,7 +91,7 @@ class MainViewModel @Inject constructor(
                 val newSet = fetchCsvFromUrl(url)
                 repository.insertOrUpdateSets(listOf(newSet))
             } catch (e: Exception) {
-                _errorEvent.emit(e.localizedMessage ?: "Beklenmeyen bir hata oluştu.")
+                _errorEvent.emit(e.localizedMessage ?: context.getString(R.string.unexpected_error))
             } finally {
                 _isLoading.value = false
             }
@@ -100,7 +104,7 @@ class MainViewModel @Inject constructor(
             try {
                 repository.deleteSetById(setId)
             } catch (e: Exception) {
-                _errorEvent.emit(e.localizedMessage ?: "Set silinirken bir hata oluştu.")
+                _errorEvent.emit(e.localizedMessage ?: context.getString(R.string.error_delete_set))
             } finally {
                 _isLoading.value = false
             }
@@ -113,7 +117,7 @@ class MainViewModel @Inject constructor(
                 val set = repository.getSetById(setId)
                 onResult(set)
             } catch (e: Exception) {
-                _errorEvent.emit(e.localizedMessage ?: "Set detayları alınırken bir hata oluştu.")
+                _errorEvent.emit(e.localizedMessage ?: context.getString(R.string.error_fetch_set_details))
                 onResult(null)
             }
         }

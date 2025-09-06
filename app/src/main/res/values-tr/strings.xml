@@ -1,0 +1,122 @@
+<resources>
+    <string name="app_name">Bildirimle Öğren</string>
+
+    <!--Generic-->
+    <string name="generic_ok">Tamam</string>
+    <string name="generic_warning">Uyarı</string>
+    <string name="generic_yes">Evet</string>
+    <string name="generic_no">Hayır</string>
+
+    <!-- Error messages -->
+    <string name="unexpected_error">Beklenmeyen bir hata oluştu</string>
+    <string name="error_delete_set">Set silinirken bir hata oluştu</string>
+    <string name="error_fetch_set_details">Set detayları alınırken bir hata oluştu</string>
+    <string name="error_invalid_sheet_url">Geçerli bir Google Sheet bağlantısı (URL) girin</string>
+
+
+    <!--Set list-->
+    <string name="share_app">Uygulamayı Paylaş</string>
+    <string name="error_enter_sheet_url">Lütfen E Tablolar URL’ini giriniz</string>
+    <string name="sheet_url_hint">E Tablolar linkini buraya yapıştırınız…</string>
+    <string name="add">Ekle</string>
+    <string name="set_added_to_notifications">Bu set bildirim listesine eklendi.</string>
+    <string name="add_workout_set">Çalışma Seti Ekle</string>
+
+    <!-- Info -->
+    <string name="info_body"><![CDATA[
+"Bildirimle Öğren" uygulaması, kullanıcıların kendi oluşturdukları çalışma setleriyle öğrenme süreçlerini destekleyen pratik bir araçtır. Uygulama şu temel özellikleri sunar:<br><br>
+
+&#8226; <b>Çalışma Setleri:</b> İlk ekranda kullanıcıların Google E-Tablolarda hazırlayıp uygulamaya aktardıkları Çalışma Setleri listelenir. Her set, içindeki kelime-anlam çiftlerini veya diğer içerikleri barındırır.<br><br>
+
+&#8226; <b>Set Detayları:</b> Bir setin üzerine dokunarak detay ekranına ulaşabilirsiniz. Bu ekranda tüm kelime-anlam çiftleri veya içerikler liste halinde görüntülenir.<br><br>
+
+&#8226; <b>Bildirim ile Öğrenme:</b> Bildirim özelliğini aktif hale getirdiğinizde, seçtiğiniz zaman aralıklarında uygulama size kelime ve anlamlarını bildirime düşürerek hatırlatır.<br><br>
+
+&#8226; <b>Seslendirme:</b> Uygulama üzerinde herhangi bir kelime-anlam çiftine dokunduğunuzda, ilgili metin sesli olarak okunur.<br><br>
+
+&#8226; <b>Esnek Kullanım:</b> Uygulama yalnızca dil öğrenimi için değil, aynı zamanda soru-cevap formatında bilgilerinizi pekiştirmek, terim ve tanımları ezberlemek, tarih–olay eşleştirmeleri yapmak veya kendi öğrenme yöntemlerinize uygun içerikler hazırlamak için de kullanılabilir.<br><br>
+
+Bu özellikler sayesinde öğrenme süreciniz hem daha düzenli hem de günlük rutininize entegre bir hale gelir.<br><br>
+
+Geri bildirimlerinizi bizimle paylaşarak uygulamayı geliştirmemize katkıda bulunabilirsiniz!
+]]></string>
+
+    <string name="contact">İletişim:</string>
+    <string name="send_feedback">Geri bildirim gönder</string>
+    <string name="app_features">Uygulama Özellikleri</string>
+    <string name="info">Bilgi</string>
+
+
+    <!--Guide-->
+    <string name="guide_text_title">Çalışma seti eklemek için aşağıdaki adımları uygulayınız:</string>
+    <string name="sheet_format">E Tablolar formatı:</string>
+    <string name="sheet_link_instructions">E tablolar link alma işlemi:</string>
+
+    <string name="guide_text">
+• Google E Tablolar’a gidin ve paylaşmak istediğiniz sayfayı açın.\n
+• Sol üstten Dosya -> Paylaş -> Web\'de yayınla seçeneğini seçin.\n
+• Çıkan ekranda, \"Bağlantı\" sekmesin seçili olduğundan emin olun. \n
+• \"Dökümanın tamamı\" yazan yere tıklayın ve açılır menüden istediğiniz sayfayı seçin. (Sayfa1, Sayfa2 gibi)\n
+• \"Web sayfası\" yazan yere tıklayın ve açılır menüden \"Virgülle ayrılmış değerler\" i seçin.\n
+• \"https://docs.google.com/\" ile başlayan linki kopyalayın.\n
+• Uygulamaya dönün ve alttaki \'+\' butonuna basın.\n
+• Açılan alana kopyaladığınız linki yapıştırın ve \"Ekle\" butonuna basın.\n
+• E Tablolarda hazırlayacağınız Çalışma Seti formatı şu şekildedir. İlk satırdaki ilk hücre Başlık, alta doğru diğer satırlar Kelime-Anlamı şeklinde iki hücreye yazılacaktır.\n
+• Hepsi bu kadar ☺️ İyi çalışmalar\n
+• Ekran resimleri aşağıdadır.\n
+</string>
+
+
+    <!-- 🇹🇷Türkçe: Bildirim ayarları -->
+    <!-- 🇬🇧English: Notification settings -->
+    <string name="notification_interval_title">Bildirim Sıklığı</string>
+
+    <string name="notification_no_sets_message">
+    Henüz hiç Çalışma Seti eklemediniz. Çalışma setleri eklediğinizde istediğiniz setleri bildirim olarak ayarlayabilirsiniz.
+</string>
+
+    <string name="notification_no_enabled_sets_message">
+    Bildirimler süresi ayarlandı, ama herhangi bir set için bildirim ayarlanmadı.
+    Set detayına gittikten sonra üstteki bildirim ikonu ile set için bildirimi aktif ediniz.
+    </string>
+
+    <!-- 🇹🇷Türkçe: Bildirim izni -->
+    <!-- 🇬🇧English: Notification Permission -->
+    <string name="notification_permission_title">Bildirim İzni</string>
+    <string name="notification_permission_message">Uygulamamızın temel özelliği bildirim göndermesidir. Lütfen izin verin.</string>
+    <string name="go_to_settings">Ayarlar\'a Git</string>
+
+
+    <!-- 🇹🇷Türkçe: Bildirim zamanlama -->
+    <!-- 🇬🇧English: Notification scheduling -->
+    <string name="notification_scheduled">Bildirimler %1$s olarak ayarlandı</string>
+    <string name="notification_all_disabled">Bildirimler kapatıldı</string>
+    <string name="no_notification_set">Bildirim için hiç çalışma seti bulunmuyor</string>
+
+
+    <!-- Notification toggle messages -->
+    <string name="notification_set_enabled">Bu set için bildirim açıldı</string>
+    <string name="notification_set_disabled">Bu set için bildirim kapatıldı</string>
+
+    <!-- Delete set dialog -->
+    <string name="delete_set_title">Seti Sil</string>
+    <string name="delete_set_message">Bu seti silmek istediğinizden emin misiniz?</string>
+    <string name="set_deleted">Set silindi</string>
+
+    <!--Set detail-->
+    <string name="set_not_found">Set bulunamadı</string>
+    <string name="tts_lang_missing_data">Dil verisi eksik</string>
+    <string name="tts_lang_not_supported">Dil desteklenmiyor</string>
+    <string name="tts_unknown_error">Bilinmeyen hata durumu: %1$d</string>
+
+
+    <!--Array for notification interval settings-->
+    <string-array name="notification_intervals">
+        <item>30 dakika</item>
+        <item>1 saat</item>
+        <item>3 saat</item>
+        <item>6 saat</item>
+        <item>1 gün</item>
+        <item>Şimdilik kapalı kalsın</item>
+    </string-array>
+</resources>

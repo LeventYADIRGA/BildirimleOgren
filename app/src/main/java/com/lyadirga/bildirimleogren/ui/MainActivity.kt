@@ -40,9 +40,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     @Inject
     lateinit var prefData: PrefData
 
+    private val choices: Array<CharSequence> by lazy {
+        resources.getStringArray(R.array.notification_intervals).map { it as CharSequence }.toTypedArray()
+    }
+
+
     companion object {
         private const val REQUEST_CODE_NOTIFICATION_PERMISSION = 1981
-        private val choices: Array<CharSequence> = arrayOf("30 dakika", "1 saat", "3 saat", "6 saat", "1 gün", "Şimdilik kapalı kalsın")
+        private const val UNIQUE_WORK_NAME = "notification_work"
         val intervalsInMinutes = arrayOf(30, 60, 180, 360, 1440, null)
     }
 
@@ -57,13 +62,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         ) as NavHostFragment
         navController = navHostFragment.navController
 
-        // Status bar rengini secondary yap
+        // Status bar color make tertiary
         val typedValue = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorTertiary, typedValue, true)
         window.statusBarColor = typedValue.data
 
         initPermission()
-        viewModel.fetchSheetsFromDbUrls()
+        if(isInternetAvailable()){
+            viewModel.fetchSheetsFromDbUrls()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -74,11 +81,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_NOTIFICATION_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // İzin verildi
+                // 🇹🇷Türkçe: İzin verildi
+                // 🇬🇧English: Permission granted
                 openNotificationIntervalSettings()
 
             } else {
-                // İzin reddedildi
+                // 🇹🇷Türkçe: İzin reddedildi
+                // 🇬🇧English: Permission denied
                 showNotificationPermissionDialog()
             }
         }
@@ -91,18 +100,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             val oldIndex = currentIntervalIndex
 
             val builder = MaterialAlertDialogBuilder(this@MainActivity, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
-                setTitle("Bildirim Sıklığı")
-                setPositiveButton("Tamam") { _, _ ->
+                setTitle(R.string.notification_interval_title)
+                setPositiveButton(R.string.generic_ok) { _, _ ->
                     lifecycleScope.launch {
                         if (currentIntervalIndex != oldIndex) {
                             prefData.setNotificationIntervalIndex(currentIntervalIndex)
                                 val enabledSets = prefData.getNotificationSetIdsOnce()
                                 viewModel.getAllSetSummariesOnce { summaries ->
                                     if (summaries.isEmpty()){
-                                        showAlert("Henüz hiç Çalışma Seti eklemediniz. Çalışma setleri eklediğinizde istediğiniz setleri bildirim olarak ayarlayabilirsiniz.")
+                                        showAlert(R.string.notification_no_sets_message)
                                     }
                                     else if (enabledSets.isEmpty()) {
-                                        showAlert("Bildirimler süresi ayarlandı, ama herhangi bir set için bildirim ayarlanmadı. Set detayına gittikten sonra üstteki bildirim ikonu ile set için bildirimi aktif ediniz.")
+                                        showAlert(R.string.notification_no_enabled_sets_message)
                                     } else {
                                         val notificationInterval = intervalsInMinutes[currentIntervalIndex]
                                         scheduleNotifications(notificationInterval, choices[currentIntervalIndex])
@@ -131,15 +140,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 .build()
 
             workManager.enqueueUniquePeriodicWork(
-                "notification_work",
-                ExistingPeriodicWorkPolicy.REPLACE, // Önceki varsa iptal et ve yenisiyle değiştir
+                UNIQUE_WORK_NAME,
+                ExistingPeriodicWorkPolicy.REPLACE, // Cancel previous if any and replace with the new one
                 workRequest
             )
-            showToast("Bildirimler $intervalLabel olarak ayarlandı")
+            showToast(getString(R.string.notification_scheduled, intervalLabel))
 
         } ?:run {
-            workManager.cancelUniqueWork("notification_work")
-            this.showToast("Bildirimler kapatıldı")
+            workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
+            this.showToast(R.string.notification_all_disabled)
         }
 
     }
@@ -152,14 +161,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 .build()
 
             workManager.enqueueUniquePeriodicWork(
-                "notification_work",
-                ExistingPeriodicWorkPolicy.REPLACE, // Önceki varsa iptal et ve yenisiyle değiştir
+                UNIQUE_WORK_NAME,
+                ExistingPeriodicWorkPolicy.REPLACE, // Cancel previous if any and replace with the new one
                 workRequest
             )
 
         } ?:run {
-            workManager.cancelUniqueWork("notification_work")
-            this.showToast("Bildirim için hiç çalışma seti bulunmuyor")
+            workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
+            this.showToast(R.string.no_notification_set)
         }
 
     }
@@ -193,9 +202,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun showNotificationPermissionDialog() {
         MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
-            setTitle("Bildirim İzni")
-            setMessage("Uygulamamızın temel özelliği bildirim göndermesidir. Lütfen izin verin.")
-            setPositiveButton("Ayarlar'a Git") { _, _ ->
+            setTitle(R.string.notification_permission_title)
+            setMessage(R.string.notification_permission_message)
+            setPositiveButton(R.string.go_to_settings) { _, _ ->
                 openNotificationSettings()
             }.setCancelable(false).show()
         }

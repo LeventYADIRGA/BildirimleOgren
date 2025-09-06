@@ -1,7 +1,6 @@
 package com.lyadirga.bildirimleogren.data
 
 import android.content.Context
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -21,14 +20,11 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
 
     companion object {
         private val INDEX = intPreferencesKey("index")
-        private val CALISMA_SETI = intPreferencesKey("calisma_seti")
-        private val IS_FIRST_LAUNCH = booleanPreferencesKey("is_first_launch")
         private val NOTIFICATION_INTERVAL_INDEX = intPreferencesKey("notification_interval_index")
         private val NOTIFICATION_SET_IDS = stringPreferencesKey("notification_set_ids")
 
         private const val DEFAULT_INDEX = -1
-        private const val DEFAULT_CALISMA_SETI = 0
-        const val NOTIFICATION_DISABLED_INDEX = 4 // Bildirim kapalı
+        const val NOTIFICATION_DISABLED_INDEX = 4 // Notification is off
     }
 
     // ✅ INDEX
@@ -40,47 +36,14 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
         context.dataStore.edit { it[INDEX] = index }
     }
 
-    fun observeIndex(): Flow<Int> {
-        return context.dataStore.data.map { it[INDEX] ?: DEFAULT_INDEX }
-    }
-
     suspend fun getIndexOnce(): Int {
         return context.dataStore.data.first()[INDEX] ?: DEFAULT_INDEX
     }
 
-    // ✅ Çalışma seti
-    suspend fun setCalismaSeti(index: Int) {
-        context.dataStore.edit { it[CALISMA_SETI] = index }
-    }
 
-    fun observeCalismaSeti(): Flow<Int> {
-        return context.dataStore.data.map { it[CALISMA_SETI] ?: DEFAULT_CALISMA_SETI }
-    }
-
-    suspend fun getCalismaSetiOnce(): Int {
-        return context.dataStore.data.first()[CALISMA_SETI] ?: DEFAULT_CALISMA_SETI
-    }
-
-    // ✅ İlk açılış
-    suspend fun setFirstLaunch(value: Boolean) {
-        context.dataStore.edit { it[IS_FIRST_LAUNCH] = value }
-    }
-
-    fun observeFirstLaunch(): Flow<Boolean> {
-        return context.dataStore.data.map { it[IS_FIRST_LAUNCH] ?: true }
-    }
-
-    suspend fun isFirstLaunchOnce(): Boolean {
-        return context.dataStore.data.first()[IS_FIRST_LAUNCH] ?: true
-    }
-
-    // ✅ Bildirim interval
+    // ✅ Notification interval
     suspend fun setNotificationIntervalIndex(index: Int) {
         context.dataStore.edit { it[NOTIFICATION_INTERVAL_INDEX] = index }
-    }
-
-    fun observeNotificationIntervalIndex(): Flow<Int> {
-        return context.dataStore.data.map { it[NOTIFICATION_INTERVAL_INDEX] ?: 0 }
     }
 
     suspend fun getNotificationIntervalIndexOnce(): Int {
@@ -88,12 +51,13 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
     }
 
     // Bildirim açık olan set ID’lerini kaydet
+    // Save the IDs of sets with notifications enabled
     suspend fun saveNotificationSetIds(setIds: List<Long>) {
         val jsonString = json.encodeToString(setIds)
         context.dataStore.edit { it[NOTIFICATION_SET_IDS] = jsonString }
     }
 
-    // Akış olarak gözlemle
+    // Observe as a flow
     fun observeNotificationSetIds(): Flow<List<Long>> {
         return context.dataStore.data.map { prefs ->
             val jsonString = prefs[NOTIFICATION_SET_IDS]
@@ -102,6 +66,7 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
         }
     }
 
+    // Get once
     // Tek seferlik al
     suspend fun getNotificationSetIdsOnce(): List<Long> {
         val jsonString = context.dataStore.data.first()[NOTIFICATION_SET_IDS]
@@ -110,12 +75,17 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
     }
 
     // Toggle mantığı (ekle/çıkar)
+    // Toggle logic (add/remove)
     suspend fun toggleNotificationSetId(setId: Long) {
         val current = getNotificationSetIdsOnce().toMutableList()
         if (current.contains(setId)) {
-            current.remove(setId) // zaten varsa çıkar
+            // zaten varsa çıkar
+            // Remove if already exists
+            current.remove(setId)
         } else {
-            current.add(setId) // yoksa ekle
+            // yoksa ekle
+            // Add if not exists
+            current.add(setId)
         }
         saveNotificationSetIds(current)
     }

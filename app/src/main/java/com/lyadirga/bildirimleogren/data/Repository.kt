@@ -14,6 +14,7 @@ class Repository @Inject constructor(
 
     suspend fun insertOrUpdateSets(languageSets: List<LanguageSet>) {
         // Mevcut setleri DB'den al (URL ile eşleştireceğiz)
+        // Get existing sets from DB (to match with URL)
         val existingSets = dao.getAllLanguageSetsWithItems().associateBy { it.set.url }
         val maxOrderIndex = existingSets.values.maxOfOrNull { it.set.orderIndex } ?: -1
         var currentMaxOrderIndex = maxOrderIndex
@@ -24,10 +25,10 @@ class Repository @Inject constructor(
             val orderIndex = existing?.set?.orderIndex ?: (++currentMaxOrderIndex)
 
 
-            // Seti ekle/güncelle
+            // Add the set or update if it exists
             val setId = dao.insertLanguageSet(
                 LanguageSetEntity(
-                    id = existing?.set?.id ?: 0, // varsa update, yoksa insert
+                    id = existing?.set?.id ?: 0, // Update if exists, otherwise insert
                     title = newSet.title,
                     url = newSet.url,
                     orderIndex = orderIndex
@@ -35,9 +36,11 @@ class Repository @Inject constructor(
             )
 
             // Bu setin eski kelimelerini sil
+            // Delete the old words of this set
             dao.deleteLanguagesBySetId(setId)
 
             // Yeni kelimeleri sırayla ekle
+            // Add new words in order
             val entities = newSet.items.mapIndexed { index, lang ->
                 LanguageEntity(
                     setId = setId,
@@ -54,7 +57,7 @@ class Repository @Inject constructor(
     }
 
     suspend fun getAllSetSummariesOnce(): List<LanguageSetSummary> {
-        return dao.getAllSetSummariesFlow().first() // Flow'dan ilk değeri al
+        return dao.getAllSetSummariesFlow().first()
     }
 
 

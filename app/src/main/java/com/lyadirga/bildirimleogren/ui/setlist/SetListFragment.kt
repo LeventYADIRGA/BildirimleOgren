@@ -94,10 +94,12 @@ class SetListFragment: BaseFragment<FragmentSetListBinding>() {
                     }
                 }
 
-                // PrefData'dan notification açık olan set id'lerini izle
+                // 🇹🇷Türkçe: PrefData'dan notification açık olan set id'lerini izle
+                // 🇬🇧English: Observe the set ids that have notifications turned on from PrefData
                 launch {
                     prefData.observeNotificationSetIds().collect { enabledSetIds ->
-                        // adapter'e bildir
+                        // 🇹🇷Türkçe: adapter'e bildir
+                        // 🇬🇧English: notify adapter
                         adapter.updateEnabledSets(enabledSetIds.toSet())
                     }
                 }
@@ -141,7 +143,7 @@ class SetListFragment: BaseFragment<FragmentSetListBinding>() {
                 "https://play.google.com/store/apps/details?id=${packageName}"
             )
         }
-        startActivity(Intent.createChooser(shareIntent, "Uygulamayı Paylaş"))
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_app)))
     }
 
     private fun rateAppOnPlayStore() {
@@ -156,7 +158,8 @@ class SetListFragment: BaseFragment<FragmentSetListBinding>() {
         try {
             startActivity(goToMarket)
         } catch (e: ActivityNotFoundException) {
-            // Play Store yoksa tarayıcı ile aç
+            // 🇹🇷Türkçe: Play Store yoksa tarayıcı ile aç
+            // 🇬🇧English: If Play Store is not available, open in browser
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,

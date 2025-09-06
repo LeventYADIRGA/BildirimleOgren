@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.databinding.BottomSheetSetEkleBinding
 import com.lyadirga.bildirimleogren.ui.base.BaseBottomSheetFragment
 
@@ -23,7 +24,7 @@ class SetEkleBottomSheet(private val onUrlAdded: (String) -> Unit): BaseBottomSh
             binding.etUrlLayout.error = null
             val url = binding.etUrl.text?.trim().toString()
             if (url.isEmpty()) {
-                binding.etUrlLayout.error = "Lütfen E Tablolar url i giriniz."
+                binding.etUrlLayout.error = getString(R.string.error_enter_sheet_url)
             } else {
                 dismiss()
                 binding.etUrl.text = null

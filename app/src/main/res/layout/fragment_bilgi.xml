@@ -11,7 +11,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Bilgi" />
+        app:title="@string/info" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Uygulama Özellikleri"
+                android:text="@string/app_features"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/bilgi_body"
+                android:text="@string/info_body"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
             <com.google.android.material.button.MaterialButton
@@ -51,13 +51,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="24dp"
-                android:text="Geri bildirim gönder"
+                android:text="@string/send_feedback"
                 app:icon="@drawable/baseline_send_24" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="İletişim:"
+                android:text="@string/contact"
                 android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
 
             <com.google.android.material.textview.MaterialTextView

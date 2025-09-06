@@ -8,14 +8,15 @@ class MarginItemDecoration(private val verticalSpaceHeight: Int, private val hor
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
 
-        // Üst margin belirle
+        // Set top margin
         outRect.top = verticalSpaceHeight
 
-        // Sol ve sağ margin belirle
+        // Set left and right margins
         outRect.left = horizontalSpaceWidth
         outRect.right = horizontalSpaceWidth
 
-        // Eğer son item değilse, alt margini de ekle
+        // 🇹🇷Türkçe: Eğer son item değilse, alt margini de ekle
+        // 🇬🇧English: If not the last item, also add bottom margin
         if (parent.getChildAdapterPosition(view) != parent.adapter?.itemCount?.minus(1)) {
             outRect.bottom = verticalSpaceHeight
         }
