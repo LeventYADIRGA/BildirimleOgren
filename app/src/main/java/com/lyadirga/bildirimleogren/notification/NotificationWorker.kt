@@ -50,7 +50,10 @@ class NotificationWorker (
         // Index güncelleme
         // Update index
         var index = prefData.getIndexOnce()
-        index = (index + 1) % allItems.size
+        index++
+        if (index >= allItems.size) {
+            index = 0
+        }
         prefData.setIndex(index)
 
         val item = allItems[index]

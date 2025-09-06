@@ -12,6 +12,8 @@
     <string name="error_delete_set">An error occurred while deleting the set</string>
     <string name="error_fetch_set_details">An error occurred while fetching set details</string>
     <string name="error_invalid_sheet_url">Enter a valid Google Sheet URL</string>
+    <string name="error_sheet_already_added">This Google Sheet has already been added.</string>
+
 
     <!--Set list-->
     <string name="share_app">Share the App</string>

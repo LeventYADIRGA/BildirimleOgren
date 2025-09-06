@@ -24,7 +24,7 @@ class PrefData @Inject constructor(@ApplicationContext private val context: Cont
         private val NOTIFICATION_SET_IDS = stringPreferencesKey("notification_set_ids")
 
         private const val DEFAULT_INDEX = -1
-        const val NOTIFICATION_DISABLED_INDEX = 4 // Notification is off
+        const val NOTIFICATION_DISABLED_INDEX = 5 // Notification is off
     }
 
     // ✅ INDEX

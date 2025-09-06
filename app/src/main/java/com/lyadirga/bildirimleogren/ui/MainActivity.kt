@@ -23,6 +23,7 @@ import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.databinding.ActivityMainBinding
 import com.lyadirga.bildirimleogren.notification.NotificationWorker
 import com.lyadirga.bildirimleogren.ui.base.BaseActivity
+import com.lyadirga.bildirimleogren.util.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -68,6 +69,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         window.statusBarColor = typedValue.data
 
         initPermission()
+
         if(isInternetAvailable()){
             viewModel.fetchSheetsFromDbUrls()
         }

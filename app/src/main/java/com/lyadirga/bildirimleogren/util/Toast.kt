@@ -126,7 +126,12 @@ class Toast private constructor(
 
         rootView = FrameLayout(context)
         val inflater = LayoutInflater.from(context)
-        fab = inflater.inflate(R.layout.fab_toast, rootView, false) as ExtendedFloatingActionButton
+
+        if (type == ToastType.ALERT) {
+            fab = inflater.inflate(R.layout.fab_toast_error, rootView, false) as ExtendedFloatingActionButton
+        } else {
+            fab = inflater.inflate(R.layout.fab_toast_succes, rootView, false) as ExtendedFloatingActionButton
+        }
 
         messageResId?.let {
             fab.setText(it)
@@ -134,21 +139,13 @@ class Toast private constructor(
             fab.text = message
         }
 
-        if (type == ToastType.ALERT) {
-            fab.icon = AppCompatResources.getDrawable(context, R.drawable.baseline_error_outline_24)
-            fab.backgroundTintList = ColorStateList.valueOf(getThemeColor(com.google.android.material.R.attr.colorError))
-        } else {
-            fab.icon = AppCompatResources.getDrawable(context, R.drawable.baseline_task_alt_24)
-            fab.backgroundTintList = ColorStateList.valueOf(getThemeColor(com.google.android.material.R.attr.colorTertiary))
-        }
-
         rootView.addView(fab, params)
 
     } // end init
 
-    private fun getThemeColor(attr: Int): Int {
+    private fun Context.getThemeColor(attrRes: Int): Int {
         val typedValue = TypedValue()
-        context.theme.resolveAttribute(attr, typedValue, true)
+        theme.resolveAttribute(attrRes, typedValue, true)
         return typedValue.data
     }
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.BildirimleOgren.ExtendedFAB.Error" parent="Widget.Material3.ExtendedFloatingActionButton.Icon.Primary">
+        <item name="backgroundTint">?attr/colorError</item>
+        <item name="iconTint">?attr/colorOnError</item>
+        <item name="android:textColor">?attr/colorOnError</item>
+    </style>
+
+    <style name="Widget.BildirimleOgren.ExtendedFAB.Success" parent="Widget.Material3.ExtendedFloatingActionButton.Icon.Primary">
+        <item name="backgroundTint">?attr/colorTertiary</item>
+        <item name="iconTint">?attr/colorOnPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+</resources>

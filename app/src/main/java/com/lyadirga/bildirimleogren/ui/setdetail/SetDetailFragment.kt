@@ -1,7 +1,6 @@
 package com.lyadirga.bildirimleogren.ui.setdetail
 
 import android.os.Bundle
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
@@ -99,7 +98,7 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
                             else R.drawable.notification_disable
                         )
 
-                        updateNotification()
+                        updateNotification(isEnabled, enabledSets)
 
                         requireContext().showToast(
                             if (isEnabled) R.string.notification_set_enabled
@@ -143,15 +142,16 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
         }
     }
 
-    private fun updateNotification(){
+    private fun updateNotification(isEnabled: Boolean, enabledSets: List<Long>) {
         lifecycleScope.launch {
             val intervalIndex = prefData.getNotificationIntervalIndexOnce()
-            val enabledSets = prefData.getNotificationSetIdsOnce()
             val activity = requireActivity() as MainActivity
-            if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isNotEmpty()) {
+            if (isEnabled && intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1) {
+                // 🇹🇷Türkçe: İlk defa bir set bildirime açılıyor. Bildirimi başlat
+                // 🇬🇧English: This is the first time a set is enabled for notifications. Start the notification.
                 val notificationInterval  = MainActivity.intervalsInMinutes[intervalIndex]
                 activity.scheduleNotificationsFromSetDetail(notificationInterval)
-            }else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX){
+            }else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isEmpty()){
                 // 🇹🇷Türkçe: Bildirim kapat, çünkü enabledSets boş
                 // 🇬🇧English: Turn off notification because enabledSets is empty
                 activity.scheduleNotificationsFromSetDetail(null)

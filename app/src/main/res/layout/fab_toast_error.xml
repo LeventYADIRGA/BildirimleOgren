@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="@style/Widget.BildirimleOgren.ExtendedFAB.Error"
+    app:icon="@drawable/baseline_error_outline_24"
+    android:textAllCaps="false"
+    android:maxLines="2"
+    android:ellipsize="end"
+    android:gravity="center"
+    tools:text="İnternet bağlantınızı kontrol ediniz"
+    app:fabSize="normal" />

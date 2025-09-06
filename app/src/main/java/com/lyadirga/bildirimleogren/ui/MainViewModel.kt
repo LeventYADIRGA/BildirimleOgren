@@ -60,6 +60,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // DB’deki mevcut setlerin URL’lerini al
+                // Get the URLs of existing sets from the DB
                 val existingSets = repository.getAllSetSummariesFlow().first() // Flow’u bir kere al
                 val urls = existingSets.mapNotNull { it.url }
 
@@ -67,11 +68,12 @@ class MainViewModel @Inject constructor(
 
 
                 // Her URL için paralel fetch başlat
+                // Start parallel fetch for each URL
                 val sets = urls.map { url ->
                     async(Dispatchers.IO) { fetchCsvFromUrl(url) }
                 }.awaitAll() // URL sırasına göre liste halinde döner
 
-                // DB’yi güncelle
+                // Update the database
                 repository.insertOrUpdateSets(sets)
 
             } catch (e: Exception) {
@@ -86,6 +88,16 @@ class MainViewModel @Inject constructor(
                 _errorEvent.emit(context.getString(R.string.error_invalid_sheet_url))
                 return@launch
             }
+
+            // Daha önce eklenmiş mi kontrol et
+            // Check if the URL has already been added
+            val existingUrls = repository.getAllSetSummariesOnce().mapNotNull { it.url }
+            if (existingUrls.contains(url)) {
+                _errorEvent.emit(context.getString(R.string.error_sheet_already_added))
+                return@launch
+            }
+
+
             _isLoading.value = true
             try {
                 val newSet = fetchCsvFromUrl(url)

@@ -12,6 +12,7 @@
     <string name="error_delete_set">Set silinirken bir hata oluştu</string>
     <string name="error_fetch_set_details">Set detayları alınırken bir hata oluştu</string>
     <string name="error_invalid_sheet_url">Geçerli bir Google Sheet bağlantısı (URL) girin</string>
+    <string name="error_sheet_already_added">Bu Google Sheet zaten eklenmiş.</string>
 
 
     <!--Set list-->
