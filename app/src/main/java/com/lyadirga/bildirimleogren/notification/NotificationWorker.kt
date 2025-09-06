@@ -23,7 +23,7 @@ class NotificationWorker (
 ) : CoroutineWorker(appContext, params) {
 
     private val database: AppDatabase by lazy {
-        Room.databaseBuilder(appContext, AppDatabase::class.java, "app_database").build()
+        AppDatabase.getInstance(appContext)
     }
     private val repository: Repository by lazy {
         Repository(database.languageDao())

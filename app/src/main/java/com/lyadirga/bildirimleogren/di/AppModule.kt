@@ -24,7 +24,7 @@ object AppModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "app_database"
+            AppDatabase.DATABASE_NAME
         ).build()
     }
 
