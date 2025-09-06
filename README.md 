@@ -1,0 +1,70 @@
+# Bildirimle Öğren / Learn with Notifications
+
+🇹🇷 Türkçe: Kullanıcılara bildirimlerle kelime öğrenmeyi sağlayan Android uygulaması.
+🇬🇧 English: Android app to learn languages with scheduled notifications.
+
+---
+
+## 📱 Screenshots
+
+![Screenshot 1](screenshots/screen1.png)
+![Screenshot 2](screenshots/screen2.png)
+![Screenshot 3](screenshots/screen3.png)
+![Screenshot 4](screenshots/screen4.png)
+
+> **NOT:** Eğer resim dosyalarının isimleri farklıysa, kendi eklediğin dosya isimlerini kullan.
+
+---
+
+## 🚀 Features
+
+- Learn vocabulary and sentences with scheduled notifications.
+- Customize notification frequency.
+- Multiple language sets supported.
+- Simple and clean Material 3 design.
+- Uses **Flow** for reactive data handling.
+
+---
+
+## 🛠️ Technologies & Libraries
+
+- **Kotlin** – Main programming language.
+- **Android SDK** – Target SDK 36.
+- **Jetpack Components**:
+  - **Room** (Local Database)
+  - **WorkManager** (Notifications)
+  - **ViewModel + Flow**
+  - **Navigation Component**
+- **DataStore Preferences** – Local key-value storage.
+- **Dagger Hilt** – Dependency Injection.
+- **Kotlinx Serialization** – JSON parsing.
+- **Material 3** – Modern UI components.
+- **OpenCSV** – CSV parsing.
+- **KTX Extensions** – `activity-ktx`, `fragment-ktx`, `lifecycle-runtime-ktx`.
+- **ConstraintLayout** – Flexible layouts.
+
+
+📄 Usage
+
+Open the app and select a language set.
+
+Enable notifications.
+
+Learn new words through scheduled notifications.
+
+📂 File Structure
+
+data/ – Room entities, DAO, Repository.
+
+ui/ – Activities and Fragments.
+
+notification/ – WorkManager worker for notifications.
+
+di/ – Hilt modules.
+
+screenshots/ – App screenshots used in README.
+
+
+## 📝 License
+
+MIT License © 2025 Levent YADIRGA böyle yapsam yeterli mi
