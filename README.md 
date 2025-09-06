@@ -43,28 +43,26 @@
 - **KTX Extensions** – `activity-ktx`, `fragment-ktx`, `lifecycle-runtime-ktx`.
 - **ConstraintLayout** – Flexible layouts.
 
+---
 
-📄 Usage
+## 📄 Usage
 
-Open the app and select a language set.
+1. Open the app and select a language set.
+2. Enable notifications.
+3. Learn new words through scheduled notifications.
 
-Enable notifications.
+---
 
-Learn new words through scheduled notifications.
+## 📂 File Structure
 
-📂 File Structure
+- `data/` – Room entities, DAO, Repository.
+- `ui/` – Activities and Fragments.
+- `notification/` – WorkManager worker for notifications.
+- `di/` – Hilt modules.
+- `screenshots/` – App screenshots used in README.
 
-data/ – Room entities, DAO, Repository.
-
-ui/ – Activities and Fragments.
-
-notification/ – WorkManager worker for notifications.
-
-di/ – Hilt modules.
-
-screenshots/ – App screenshots used in README.
-
+---
 
 ## 📝 License
 
-MIT License © 2025 Levent YADIRGA böyle yapsam yeterli mi
+MIT License © 2025 Levent YADIRGA
