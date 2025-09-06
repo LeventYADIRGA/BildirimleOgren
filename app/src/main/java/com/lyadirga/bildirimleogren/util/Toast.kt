@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Handler
 import android.os.Looper
 import android.util.TypedValue
@@ -16,7 +15,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
-import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.lyadirga.bildirimleogren.R
 
