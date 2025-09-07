@@ -9,13 +9,10 @@
 ## 📱 Screenshots
 
 <p align="center">
-  <img src="screenshots/screen1.jpeg" width="300" />
-  <img src="screenshots/screen2.jpeg" width="300" />
-</p>
-
-<p align="center">
-  <img src="screenshots/screen3.jpeg" width="300" />
-  <img src="screenshots/screen4.jpeg" width="300" />
+  <img src="screenshots/screen1.jpeg" width="220" />
+  <img src="screenshots/screen2.jpeg" width="220" />
+  <img src="screenshots/screen3.jpeg" width="220" />
+  <img src="screenshots/screen4.jpeg" width="220" />
 </p>
 
 
