@@ -19,6 +19,7 @@ import com.lyadirga.bildirimleogren.ui.MainActivity
 import com.lyadirga.bildirimleogren.ui.MainViewModel
 import com.lyadirga.bildirimleogren.ui.base.BaseFragment
 import com.lyadirga.bildirimleogren.ui.showToast
+import com.lyadirga.bildirimleogren.util.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -100,10 +101,6 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
 
                         updateNotification(isEnabled, enabledSets)
 
-                        requireContext().showToast(
-                            if (isEnabled) R.string.notification_set_enabled
-                            else R.string.notification_set_disabled
-                        )
                     }
 
                     true
@@ -147,15 +144,23 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
             val intervalIndex = prefData.getNotificationIntervalIndexOnce()
             val activity = requireActivity() as MainActivity
             if (isEnabled && intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1) {
-                // 🇹🇷Türkçe: İlk defa bir set bildirime açılıyor. Bildirimi başlat
-                // 🇬🇧English: This is the first time a set is enabled for notifications. Start the notification.
+                // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor. Bildirimi başlat
+                // 🇬🇧English: When no set has notifications enabled, this set will be enabled. Start the notification.
                 val notificationInterval  = MainActivity.intervalsInMinutes[intervalIndex]
                 activity.scheduleNotificationsFromSetDetail(notificationInterval)
-            }else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isEmpty()){
+                Toast.showSuccessToast(requireActivity(), R.string.notification_set_enabled)
+            } else if (isEnabled && intervalIndex == PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1){
+                // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor ama bildirim sıklığı ayarlarından seçim yapılmamış. Bildirim sıklığı dialog unu aç.
+                // 🇬🇧English: When no set has notifications enabled, this set is enabled but no frequency is selected. Open the notification frequency dialog.
+                activity.openNotificationIntervalSettings()
+            }
+            else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isEmpty()){
                 // 🇹🇷Türkçe: Bildirim kapat, çünkü enabledSets boş
                 // 🇬🇧English: Turn off notification because enabledSets is empty
                 activity.scheduleNotificationsFromSetDetail(null)
                 prefData.resetIndex()
+            }else if (isEnabled.not()){
+                Toast.showSuccessToast(requireActivity(), R.string.notification_set_disabled)
             }
         }
     }

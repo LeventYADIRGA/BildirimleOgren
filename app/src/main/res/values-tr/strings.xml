@@ -92,6 +92,7 @@ Geri bildirimlerinizi bizimle paylaşarak uygulamayı geliştirmemize katkıda b
     <!-- 🇬🇧English: Notification scheduling -->
     <string name="notification_scheduled">Bildirimler %1$s olarak ayarlandı</string>
     <string name="notification_all_disabled">Bildirimler kapatıldı</string>
+    <string name="notifications_disabled_no_enabled_set">Bildirimin açık olduğu hiçbir set kalmadığı için bildirimler kapatıldı</string>
     <string name="no_notification_set">Bildirim için hiç çalışma seti bulunmuyor</string>
 
 

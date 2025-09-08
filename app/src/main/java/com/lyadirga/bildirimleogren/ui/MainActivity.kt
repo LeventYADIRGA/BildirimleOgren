@@ -23,6 +23,7 @@ import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.databinding.ActivityMainBinding
 import com.lyadirga.bildirimleogren.notification.NotificationWorker
 import com.lyadirga.bildirimleogren.ui.base.BaseActivity
+import com.lyadirga.bildirimleogren.util.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -149,7 +150,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         } ?:run {
             workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
-            this.showToast(R.string.notification_all_disabled)
+            Toast.showSuccessToast(this, R.string.notification_all_disabled)
         }
 
     }
@@ -169,7 +170,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         } ?:run {
             workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
-            this.showToast(R.string.no_notification_set)
+            Toast.showSuccessToast(this, R.string.notifications_disabled_no_enabled_set)
         }
 
     }
@@ -217,5 +218,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         startActivity(intent)
     }
 
-    override fun observeFlows() {}
 }

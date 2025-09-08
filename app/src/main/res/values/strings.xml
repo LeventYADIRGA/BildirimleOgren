@@ -89,6 +89,7 @@ You can contribute to improving the app by sharing your feedback with us!
     <!-- 🇬🇧English: Notification scheduling -->
     <string name="notification_scheduled">Notifications set for %1$s</string>
     <string name="notification_all_disabled">Notifications turned off</string>
+    <string name="notifications_disabled_no_enabled_set">Notifications have been disabled because no set is enabled</string>
     <string name="no_notification_set">No study set found for notifications</string>
 
     <!-- Notification toggle messages -->
