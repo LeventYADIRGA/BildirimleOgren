@@ -62,15 +62,15 @@ class SetItemsAdapter(
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            val result = textToSpeech?.setLanguage(Locale.US)
+            val result = textToSpeech?.setLanguage(Locale.getDefault())
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                textToSpeech?.language = Locale.US //default
                 val message = when (result) {
                     TextToSpeech.LANG_MISSING_DATA -> context.getString(R.string.tts_lang_missing_data)
                     TextToSpeech.LANG_NOT_SUPPORTED -> context.getString(R.string.tts_lang_not_supported)
                     else -> context.getString(R.string.tts_unknown_error, result)
                 }
                 context.showToast(message)
-
             }
         }
     }
