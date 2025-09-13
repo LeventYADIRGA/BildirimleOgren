@@ -5,6 +5,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -40,8 +41,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlin {
@@ -52,6 +53,10 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    kotlinOptions {
+        jvmTarget = "11"
     }
 
     kapt {
@@ -93,6 +98,24 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.57.1")
     kapt("com.google.dagger:hilt-android-compiler:2.57.1")
+
+    // Compose
+    implementation("androidx.activity:activity-compose:1.11.0")
+    implementation(platform("androidx.compose:compose-bom:2025.09.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2025.09.00"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Hilt + Compose
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
+
+    // Navigation Compose
+    implementation("androidx.navigation:navigation-compose:2.9.4")
 
 
     // Room

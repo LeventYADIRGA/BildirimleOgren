@@ -36,7 +36,8 @@
         <item name="colorSurfaceContainerLow">@color/green_surface_container_low_light</item>
         <item name="colorSurfaceContainer">@color/green_surface_container_light</item>
         <item name="colorSurfaceContainerHigh">@color/green_surface_container_high_light</item>
-        <item name="colorSurfaceContainerHighest">@color/green_surface_container_highest_light</item>
+        <item name="colorSurfaceContainerHighest">@color/green_surface_container_highest_light
+        </item>
     </style>
 
     <style name="Theme.BildirimleOgren" parent="Base.Theme.BildirimleOgren" />

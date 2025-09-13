@@ -13,7 +13,7 @@ import androidx.work.WorkerParameters
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.AppDatabase
 import com.lyadirga.bildirimleogren.data.PrefData
-import com.lyadirga.bildirimleogren.data.Repository
+import com.lyadirga.bildirimleogren.data.repository.AppRepository
 import com.lyadirga.bildirimleogren.ui.MainActivity
 
 class NotificationWorker (
@@ -24,8 +24,8 @@ class NotificationWorker (
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(appContext)
     }
-    private val repository: Repository by lazy {
-        Repository(database.languageDao())
+    private val repository: AppRepository by lazy {
+        AppRepository(database.languageDao())
     }
     private val prefData: PrefData by lazy {
         PrefData(appContext)

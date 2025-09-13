@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:name=".App"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_icon"
@@ -17,12 +17,18 @@
         android:theme="@style/Theme.BildirimleOgren"
         tools:targetApi="31">
         <activity
-            android:name=".ui.MainActivity"
-            android:exported="true">
+            android:name=".ui_compose.MainActivityCompose"
+            android:exported="true"
+            android:label="@string/title_activity_main_compose">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true">
         </activity>
     </application>
 

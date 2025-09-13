@@ -116,4 +116,5 @@ You can contribute to improving the app by sharing your feedback with us!
         <item>1 day</item>
         <item>Keep off for now</item>
     </string-array>
+    <string name="title_activity_main_compose">MainActivityCompose</string>
 </resources>

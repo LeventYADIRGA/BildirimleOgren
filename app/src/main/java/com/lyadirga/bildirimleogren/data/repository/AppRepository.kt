@@ -1,18 +1,21 @@
+package com.lyadirga.bildirimleogren.data.repository
 
-package com.lyadirga.bildirimleogren.data
-
+import com.lyadirga.bildirimleogren.data.LanguageDao
+import com.lyadirga.bildirimleogren.data.LanguageEntity
+import com.lyadirga.bildirimleogren.data.LanguageSetEntity
+import com.lyadirga.bildirimleogren.data.LanguageSetWithItems
+import com.lyadirga.bildirimleogren.data.repository.Repository
 import com.lyadirga.bildirimleogren.model.LanguageSet
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
-import kotlin.collections.forEachIndexed
 
-class Repository @Inject constructor(
+class AppRepository @Inject constructor(
     private val dao: LanguageDao
-) {
+) : Repository {
 
-    suspend fun insertOrUpdateSets(languageSets: List<LanguageSet>) {
+    override suspend fun insertOrUpdateSets(languageSets: List<LanguageSet>) {
         // Mevcut setleri DB'den al (URL ile eşleştireceğiz)
         // Get existing sets from DB (to match with URL)
         val existingSets = dao.getAllLanguageSetsWithItems().associateBy { it.set.url }
@@ -52,28 +55,28 @@ class Repository @Inject constructor(
         }
     }
 
-    fun getAllSetSummariesFlow(): Flow<List<LanguageSetSummary>> {
+    override fun getAllSetSummariesFlow(): Flow<List<LanguageSetSummary>> {
         return dao.getAllSetSummariesFlow()
     }
 
-    suspend fun getAllSetSummariesOnce(): List<LanguageSetSummary> {
+    override suspend fun getAllSetSummariesOnce(): List<LanguageSetSummary> {
         return dao.getAllSetSummariesFlow().first()
     }
 
 
-    suspend fun getSetById(setId: Long): LanguageSetWithItems? {
+    override suspend fun getSetById(setId: Long): LanguageSetWithItems? {
         return dao.getLanguageSetWithItemsById(setId)
     }
 
-    fun getAllSetsFlow(): Flow<List<LanguageSetWithItems>> {
+    override fun getAllSetsFlow(): Flow<List<LanguageSetWithItems>> {
         return dao.getAllLanguageSetsWithItemsFlow()
     }
 
-    suspend fun getSetsByIds(setIds: List<Long>): List<LanguageSetWithItems> {
+    override suspend fun getSetsByIds(setIds: List<Long>): List<LanguageSetWithItems> {
         return dao.getLanguageSetsWithItemsByIds(setIds)
     }
 
-    suspend fun deleteSetById(setId: Long) {
+    override suspend fun deleteSetById(setId: Long) {
         dao.deleteLanguageSetById(setId)
     }
 

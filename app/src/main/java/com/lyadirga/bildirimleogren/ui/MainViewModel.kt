@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.LanguageSetWithItems
-import com.lyadirga.bildirimleogren.data.Repository
+import com.lyadirga.bildirimleogren.data.repository.AppRepository
+import com.lyadirga.bildirimleogren.data.repository.Repository
 import com.lyadirga.bildirimleogren.model.Language
 import com.lyadirga.bildirimleogren.model.LanguageSet
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
@@ -40,6 +41,9 @@ class MainViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> get() = _isLoading
+
+    private val _currentSet = MutableStateFlow<LanguageSetWithItems?>(null)
+    val currentSet: StateFlow<LanguageSetWithItems?> = _currentSet
 
 
 
@@ -131,6 +135,17 @@ class MainViewModel @Inject constructor(
             } catch (e: Exception) {
                 _errorEvent.emit(e.localizedMessage ?: context.getString(R.string.error_fetch_set_details))
                 onResult(null)
+            }
+        }
+    }
+
+    fun getSetDetails(setId: Long) {
+        viewModelScope.launch {
+            try {
+                val set = repository.getSetById(setId)
+                _currentSet.value = set
+            } catch (e: Exception) {
+                _errorEvent.emit(e.localizedMessage ?: context.getString(R.string.error_fetch_set_details))
             }
         }
     }

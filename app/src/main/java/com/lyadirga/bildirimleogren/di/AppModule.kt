@@ -5,7 +5,8 @@ import androidx.room.Room
 import com.lyadirga.bildirimleogren.data.AppDatabase
 import com.lyadirga.bildirimleogren.data.LanguageDao
 import com.lyadirga.bildirimleogren.data.PrefData
-import com.lyadirga.bildirimleogren.data.Repository
+import com.lyadirga.bildirimleogren.data.repository.AppRepository
+import com.lyadirga.bildirimleogren.data.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,17 +33,5 @@ object AppModule {
     @Singleton
     fun provideLanguageDao(db: AppDatabase): LanguageDao {
         return db.languageDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRepository(dao: LanguageDao): Repository {
-        return Repository(dao)
-    }
-
-    @Provides
-    @Singleton
-    fun providePrefData(@ApplicationContext context: Context): PrefData {
-        return PrefData(context)
     }
 }
