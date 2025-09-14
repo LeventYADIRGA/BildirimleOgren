@@ -1,11 +1,12 @@
 package com.lyadirga.bildirimleogren.ui_compose
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -41,17 +42,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -60,7 +63,6 @@ import androidx.navigation.navArgument
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
@@ -69,11 +71,11 @@ import com.lyadirga.bildirimleogren.ui.MainActivity.Companion.UNIQUE_WORK_NAME
 import com.lyadirga.bildirimleogren.ui.MainActivity.Companion.intervalsInMinutes
 import com.lyadirga.bildirimleogren.ui.MainViewModel
 import com.lyadirga.bildirimleogren.ui.isInternetAvailable
-import com.lyadirga.bildirimleogren.ui.showAlert
 import com.lyadirga.bildirimleogren.ui.showToast
 import com.lyadirga.bildirimleogren.ui_compose.theme.BildirimleOgrenTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import com.lyadirga.bildirimleogren.util.Toast as AppToast
@@ -85,11 +87,42 @@ class MainActivityCompose : ComponentActivity() {
     @Inject
     lateinit var prefData: PrefData
 
-    private val viewModel: MainViewModel by viewModels()
-
-    private val choices: Array<CharSequence> by lazy {
-        resources.getStringArray(R.array.notification_intervals).map { it as CharSequence }.toTypedArray()
+    fun shareAppLink() {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "https://play.google.com/store/apps/details?id=${appPackageName}"
+            )
+        }
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_app)))
     }
+
+    fun rateAppOnPlayStore() {
+        val uri = "market://details?id=$appPackageName".toUri()
+        val goToMarket = Intent(Intent.ACTION_VIEW, uri).apply {
+            addFlags(
+                Intent.FLAG_ACTIVITY_NO_HISTORY or
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+            )
+        }
+        try {
+            startActivity(goToMarket)
+        } catch (e: ActivityNotFoundException) {
+            // 🇹🇷Türkçe: Play Store yoksa tarayıcı ile aç
+            // 🇬🇧English: If Play Store is not available, open in browser
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    "https://play.google.com/store/apps/details?id=$appPackageName".toUri()
+                )
+            )
+        }
+    }
+
+    private val appPackageName: String
+        get() = "com.lyadirga.bildirimleogren"
 
 
 
@@ -104,71 +137,7 @@ class MainActivityCompose : ComponentActivity() {
         }
     } // end onCreate
 
-    fun updateNotification(isEnabled: Boolean, enabledSets: List<Long>) {
-        lifecycleScope.launch {
-            val intervalIndex = prefData.getNotificationIntervalIndexOnce()
-            if (isEnabled && intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1) {
-                // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor. Bildirimi başlat
-                // 🇬🇧English: When no set has notifications enabled, this set will be enabled. Start the notification.
-                val notificationInterval  = intervalsInMinutes[intervalIndex]
-                scheduleNotificationsFromSetDetail(notificationInterval)
-                AppToast.showSuccessToast(this@MainActivityCompose, R.string.notification_set_enabled)
-            } else if (isEnabled && intervalIndex == PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1){
-                // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor ama bildirim sıklığı ayarlarından seçim yapılmamış. Bildirim sıklığı dialog unu aç.
-                // 🇬🇧English: When no set has notifications enabled, this set is enabled but no frequency is selected. Open the notification frequency dialog.
-                openNotificationIntervalSettings()
-            }
-            else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isEmpty()){
-                // 🇹🇷Türkçe: Bildirim kapat, çünkü enabledSets boş
-                // 🇬🇧English: Turn off notification because enabledSets is empty
-                scheduleNotificationsFromSetDetail(null)
-                prefData.resetIndex()
-            }else if (isEnabled.not()){
-                AppToast.showSuccessToast(this@MainActivityCompose, R.string.notification_set_disabled)
-            }
-        }
-    }
-
-    fun openNotificationIntervalSettings() {
-
-        lifecycleScope.launch {
-            var currentIntervalIndex = prefData.getNotificationIntervalIndexOnce()
-            val oldIndex = currentIntervalIndex
-
-            val builder = MaterialAlertDialogBuilder(this@MainActivityCompose, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
-                setTitle(R.string.notification_interval_title)
-                setPositiveButton(R.string.generic_ok) { _, _ ->
-                    lifecycleScope.launch {
-                        if (currentIntervalIndex != oldIndex) {
-                            prefData.setNotificationIntervalIndex(currentIntervalIndex)
-                            val enabledSets = prefData.getNotificationSetIdsOnce()
-                            viewModel.getAllSetSummariesOnce { summaries ->
-                                if (summaries.isEmpty()){
-                                    showAlert(R.string.notification_no_sets_message)
-                                }
-                                else if (enabledSets.isEmpty()) {
-                                    showAlert(R.string.notification_no_enabled_sets_message)
-                                } else {
-                                    val notificationInterval = intervalsInMinutes[currentIntervalIndex]
-                                    scheduleNotifications(notificationInterval, choices[currentIntervalIndex])
-                                }
-                            }
-                        }
-
-                    }
-                }
-                setSingleChoiceItems(choices, currentIntervalIndex) { _, which ->
-                    currentIntervalIndex = which
-                }
-            }
-
-            val dialog = builder.create()
-            dialog.show()
-
-        }
-    }
-
-    private fun scheduleNotifications(notificationInterval: Int?, intervalLabel: CharSequence) {
+    fun scheduleNotifications(notificationInterval: Int?, intervalLabel: CharSequence) {
 
         val workManager = WorkManager.getInstance(this)
         notificationInterval?.let {
@@ -226,6 +195,9 @@ fun MainScreenWithNavigation(viewModel: MainViewModel, prefData: PrefData) {
                 prefData = prefData,
                 onSetClick = { setId, setTitle ->
                     navController.navigate("detail/$setId/$setTitle")
+                },
+                onInfoClick = {
+                    navController.navigate("info")
                 }
             )
         }
@@ -240,6 +212,12 @@ fun MainScreenWithNavigation(viewModel: MainViewModel, prefData: PrefData) {
             val setTitle = backStackEntry.arguments?.getString("setTitle") ?: ""
             DetailScreen(setId = setId, setTitle = setTitle, navController = navController)
         }
+
+        composable("info") {
+            Info(
+                navController = navController
+            )
+        }
     }
 }
 
@@ -247,10 +225,15 @@ fun MainScreenWithNavigation(viewModel: MainViewModel, prefData: PrefData) {
 @Composable
 fun MainScreen(viewModel: MainViewModel,
                prefData: PrefData,
-               onSetClick: (Long, String) -> Unit
+               onSetClick: (Long, String) -> Unit,
+               onInfoClick: () -> Unit
 ) {
 
+
     val context = LocalContext.current
+
+    val choices = LocalResources.current.getStringArray(R.array.notification_intervals)
+
 
     LaunchedEffect(Unit) {
         if (context.isInternetAvailable()) {
@@ -278,6 +261,35 @@ fun MainScreen(viewModel: MainViewModel,
 
     var expanded by remember { mutableStateOf(false) }
 
+    var showDialog by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+
+    if (showDialog) {
+        NotificationIntervalDialog(
+            currentIndex = runBlocking { prefData.getNotificationIntervalIndexOnce() },
+            choices = choices,
+            onConfirm = { selectedIndex ->
+                coroutineScope.launch {
+                    prefData.setNotificationIntervalIndex(selectedIndex)
+                    val enabledSets = prefData.getNotificationSetIdsOnce()
+                    context
+                    if (enabledSets.isEmpty()) {
+                        Toast.makeText(context, R.string.notification_no_enabled_sets_message, Toast.LENGTH_SHORT).show()
+                    } else {
+                        val notificationInterval = intervalsInMinutes[selectedIndex]
+                        (context as MainActivityCompose).scheduleNotifications(
+                            notificationInterval,
+                            choices[selectedIndex]
+                        )
+                    }
+                }
+                showDialog = false
+            },
+            onDismiss = { showDialog = false }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -285,9 +297,7 @@ fun MainScreen(viewModel: MainViewModel,
                 title = { Text(stringResource(id = R.string.app_name)) },
                 actions = {
                     // Bilgi
-                    IconButton(onClick = {
-                        //TODO: navigate bilgi screen
-                    }) {
+                    IconButton(onClick = onInfoClick) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_help_outline_24),
                             contentDescription = "Bilgi"
@@ -295,9 +305,7 @@ fun MainScreen(viewModel: MainViewModel,
                     }
 
                     // Bildirim ayarları
-                    IconButton(onClick = {
-                        //TODO: open dialog
-                    }) {
+                    IconButton(onClick = { showDialog = true }) {
                         Icon(
                             painter = painterResource(id = R.drawable.notification_settings),
                             contentDescription = "Bildirim ayarları"
@@ -321,12 +329,14 @@ fun MainScreen(viewModel: MainViewModel,
                             text = { Text("Paylaş") },
                             onClick = {
                                 expanded = false
+                                (context as? MainActivityCompose)?.shareAppLink()
                             }
                         )
                         DropdownMenuItem(
                             text = { Text("Oy ver") },
                             onClick = {
                                 expanded = false
+                                (context as? MainActivityCompose)?.rateAppOnPlayStore()
                             }
                         )
                     }

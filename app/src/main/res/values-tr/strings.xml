@@ -6,6 +6,10 @@
     <string name="generic_warning">Uyarı</string>
     <string name="generic_yes">Evet</string>
     <string name="generic_no">Hayır</string>
+    <string name="generic_cancel">İptal</string>
+    <string name="generic_back">Geri</string>
+
+
 
     <!-- Error messages -->
     <string name="unexpected_error">Beklenmeyen bir hata oluştu</string>

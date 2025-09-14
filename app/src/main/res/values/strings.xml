@@ -6,6 +6,9 @@
     <string name="generic_warning">Warning</string>
     <string name="generic_yes">Yes</string>
     <string name="generic_no">No</string>
+    <string name="generic_cancel">Cancel</string>
+    <string name="generic_back">Back</string>
+
 
     <!-- Error messages -->
     <string name="unexpected_error">An unexpected error occurred</string>
@@ -116,5 +119,4 @@ You can contribute to improving the app by sharing your feedback with us!
         <item>1 day</item>
         <item>Keep off for now</item>
     </string-array>
-    <string name="title_activity_main_compose">MainActivityCompose</string>
 </resources>
