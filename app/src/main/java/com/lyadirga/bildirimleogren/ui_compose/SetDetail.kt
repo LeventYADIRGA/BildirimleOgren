@@ -1,5 +1,6 @@
 package com.lyadirga.bildirimleogren.ui_compose
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,14 +31,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
+import com.lyadirga.bildirimleogren.ui.MainActivity
 import com.lyadirga.bildirimleogren.ui.MainViewModel
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.launch
 import kotlin.jvm.java
 
 
@@ -52,17 +57,24 @@ fun DetailScreen(
     setId: Long,
     setTitle: String,
     navController: NavController,
-    mainViewModel: MainViewModel = hiltViewModel(),
-    onNotificationClick: () -> Unit = {},
-    onDeleteClick: () -> Unit = {}
+    viewModel: MainViewModel = hiltViewModel(),
 ) {
 
     val context = LocalContext.current
 
-    val setDetails by mainViewModel.currentSet.collectAsState()
+    val setDetails by viewModel.currentSet.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.errorEvent.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     // Bildirim durumu
     var notificationEnabled by remember { mutableStateOf(false) }
+
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
 
     val prefData = EntryPointAccessors.fromApplication(
         context.applicationContext,
@@ -70,10 +82,52 @@ fun DetailScreen(
     ).prefData
 
     LaunchedEffect(setId) {
-        mainViewModel.getSetDetails(setId) // ViewModel üzerinden set detaylarını al
+        viewModel.getSetDetails(setId) // ViewModel üzerinden set detaylarını al
         val enabledSets = prefData.getNotificationSetIdsOnce()
         notificationEnabled = setId in enabledSets
     }
+
+    val coroutineScope = rememberCoroutineScope()
+
+
+    // Silme dialogu
+    if (showDeleteDialog) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(text = context.getString(R.string.delete_set_title)) },
+            text = { Text(text = context.getString(R.string.delete_set_message)) },
+            containerColor = MaterialTheme.colorScheme.surface,
+            confirmButton = {
+                androidx.compose.material3.TextButton(onClick = {
+                    showDeleteDialog = false
+                    // Silme işlemi
+                    coroutineScope.launch {
+                        viewModel.deleteSet(setId)
+
+                        // Bildirim listesinde varsa çıkar
+                        val enabledSets = prefData.getNotificationSetIdsOnce().toMutableSet()
+                        if (setId in enabledSets) {
+                            enabledSets.remove(setId)
+                            prefData.saveNotificationSetIds(enabledSets.toList())
+                        }
+
+                        Toast.makeText(context, R.string.set_deleted, Toast.LENGTH_SHORT).show()
+                        navController.popBackStack()
+                    }
+                }) {
+                    Text(text = context.getString(R.string.generic_yes))
+                }
+            },
+            dismissButton = {
+                androidx.compose.material3.TextButton(onClick = {
+                    showDeleteDialog = false
+                }) {
+                    Text(text = context.getString(R.string.generic_no))
+                }
+            }
+        )
+    }
+
 
     Scaffold(
         topBar = {
@@ -92,13 +146,33 @@ fun DetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = onNotificationClick) {
+                    IconButton(onClick = {
+                        // Toggle
+                        coroutineScope.launch {
+                            prefData.toggleNotificationSetId(setId)
+                            val enabledSets = prefData.getNotificationSetIdsOnce()
+                            notificationEnabled = setId in enabledSets
+                            Toast.makeText(
+                                context,
+                                if (notificationEnabled) R.string.notification_set_enabled
+                                else R.string.notification_set_disabled,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val activity = context as MainActivityCompose
+                            activity.updateNotification(notificationEnabled, enabledSets)
+                        }
+                    }) {
                         Icon(
-                            painter = painterResource(id = R.drawable.notification_disable),
+                            painter = painterResource(
+                                id = if (notificationEnabled)
+                                    R.drawable.notification_enable
+                                else
+                                    R.drawable.notification_disable
+                            ),
                             contentDescription = "Bildirim"
                         )
                     }
-                    IconButton(onClick = onDeleteClick) {
+                    IconButton(onClick = { showDeleteDialog = true }) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_delete_outline_24),
                             contentDescription = "Sil"
@@ -133,7 +207,7 @@ fun DetailListItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {  }
+            .clickable { }
             .padding(horizontal = 16.dp, vertical = 5.dp)
     ) {
         Text(

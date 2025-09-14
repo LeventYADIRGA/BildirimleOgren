@@ -5,8 +5,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +22,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -49,25 +51,47 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
+import com.lyadirga.bildirimleogren.notification.NotificationWorker
+import com.lyadirga.bildirimleogren.ui.MainActivity.Companion.UNIQUE_WORK_NAME
+import com.lyadirga.bildirimleogren.ui.MainActivity.Companion.intervalsInMinutes
 import com.lyadirga.bildirimleogren.ui.MainViewModel
 import com.lyadirga.bildirimleogren.ui.isInternetAvailable
+import com.lyadirga.bildirimleogren.ui.showAlert
+import com.lyadirga.bildirimleogren.ui.showToast
 import com.lyadirga.bildirimleogren.ui_compose.theme.BildirimleOgrenTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import com.lyadirga.bildirimleogren.util.Toast as AppToast
+
 
 @AndroidEntryPoint
 class MainActivityCompose : ComponentActivity() {
 
     @Inject
     lateinit var prefData: PrefData
+
+    private val viewModel: MainViewModel by viewModels()
+
+    private val choices: Array<CharSequence> by lazy {
+        resources.getStringArray(R.array.notification_intervals).map { it as CharSequence }.toTypedArray()
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,8 +102,115 @@ class MainActivityCompose : ComponentActivity() {
                 MainScreenWithNavigation(mainViewModel, prefData)
             }
         }
+    } // end onCreate
+
+    fun updateNotification(isEnabled: Boolean, enabledSets: List<Long>) {
+        lifecycleScope.launch {
+            val intervalIndex = prefData.getNotificationIntervalIndexOnce()
+            if (isEnabled && intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1) {
+                // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor. Bildirimi başlat
+                // 🇬🇧English: When no set has notifications enabled, this set will be enabled. Start the notification.
+                val notificationInterval  = intervalsInMinutes[intervalIndex]
+                scheduleNotificationsFromSetDetail(notificationInterval)
+                AppToast.showSuccessToast(this@MainActivityCompose, R.string.notification_set_enabled)
+            } else if (isEnabled && intervalIndex == PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1){
+                // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor ama bildirim sıklığı ayarlarından seçim yapılmamış. Bildirim sıklığı dialog unu aç.
+                // 🇬🇧English: When no set has notifications enabled, this set is enabled but no frequency is selected. Open the notification frequency dialog.
+                openNotificationIntervalSettings()
+            }
+            else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isEmpty()){
+                // 🇹🇷Türkçe: Bildirim kapat, çünkü enabledSets boş
+                // 🇬🇧English: Turn off notification because enabledSets is empty
+                scheduleNotificationsFromSetDetail(null)
+                prefData.resetIndex()
+            }else if (isEnabled.not()){
+                AppToast.showSuccessToast(this@MainActivityCompose, R.string.notification_set_disabled)
+            }
+        }
     }
-}
+
+    fun openNotificationIntervalSettings() {
+
+        lifecycleScope.launch {
+            var currentIntervalIndex = prefData.getNotificationIntervalIndexOnce()
+            val oldIndex = currentIntervalIndex
+
+            val builder = MaterialAlertDialogBuilder(this@MainActivityCompose, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
+                setTitle(R.string.notification_interval_title)
+                setPositiveButton(R.string.generic_ok) { _, _ ->
+                    lifecycleScope.launch {
+                        if (currentIntervalIndex != oldIndex) {
+                            prefData.setNotificationIntervalIndex(currentIntervalIndex)
+                            val enabledSets = prefData.getNotificationSetIdsOnce()
+                            viewModel.getAllSetSummariesOnce { summaries ->
+                                if (summaries.isEmpty()){
+                                    showAlert(R.string.notification_no_sets_message)
+                                }
+                                else if (enabledSets.isEmpty()) {
+                                    showAlert(R.string.notification_no_enabled_sets_message)
+                                } else {
+                                    val notificationInterval = intervalsInMinutes[currentIntervalIndex]
+                                    scheduleNotifications(notificationInterval, choices[currentIntervalIndex])
+                                }
+                            }
+                        }
+
+                    }
+                }
+                setSingleChoiceItems(choices, currentIntervalIndex) { _, which ->
+                    currentIntervalIndex = which
+                }
+            }
+
+            val dialog = builder.create()
+            dialog.show()
+
+        }
+    }
+
+    private fun scheduleNotifications(notificationInterval: Int?, intervalLabel: CharSequence) {
+
+        val workManager = WorkManager.getInstance(this)
+        notificationInterval?.let {
+            val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(it.toLong(), TimeUnit.MINUTES)
+                .build()
+
+            workManager.enqueueUniquePeriodicWork(
+                UNIQUE_WORK_NAME,
+                ExistingPeriodicWorkPolicy.REPLACE, // Cancel previous if any and replace with the new one
+                workRequest
+            )
+            showToast(getString(R.string.notification_scheduled, intervalLabel))
+
+        } ?:run {
+            workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
+            AppToast.showSuccessToast(this@MainActivityCompose, R.string.notification_all_disabled)
+        }
+
+    }
+
+
+    fun scheduleNotificationsFromSetDetail(notificationInterval: Int?) {
+
+        val workManager = WorkManager.getInstance(this)
+        notificationInterval?.let {
+            val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(it.toLong(), TimeUnit.MINUTES)
+                .build()
+
+            workManager.enqueueUniquePeriodicWork(
+                UNIQUE_WORK_NAME,
+                ExistingPeriodicWorkPolicy.REPLACE, // Cancel previous if any and replace with the new one
+                workRequest
+            )
+
+        } ?:run {
+            workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
+            AppToast.showSuccessToast(this@MainActivityCompose, R.string.notifications_disabled_no_enabled_set)
+        }
+
+    }
+
+} // end MainActivityCompose
 
 @Composable
 fun MainScreenWithNavigation(viewModel: MainViewModel, prefData: PrefData) {
@@ -145,6 +276,7 @@ fun MainScreen(viewModel: MainViewModel,
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showSheet by remember { mutableStateOf(false) }
 
+    var expanded by remember { mutableStateOf(false) }
 
 
     Scaffold(
@@ -152,10 +284,50 @@ fun MainScreen(viewModel: MainViewModel,
             TopAppBar(
                 title = { Text(stringResource(id = R.string.app_name)) },
                 actions = {
-                    IconButton(onClick = { /* menu tıklandığında */ }) {
+                    // Bilgi
+                    IconButton(onClick = {
+                        //TODO: navigate bilgi screen
+                    }) {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_add_24),
-                            contentDescription = null
+                            painter = painterResource(id = R.drawable.baseline_help_outline_24),
+                            contentDescription = "Bilgi"
+                        )
+                    }
+
+                    // Bildirim ayarları
+                    IconButton(onClick = {
+                        //TODO: open dialog
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.notification_settings),
+                            contentDescription = "Bildirim ayarları"
+                        )
+                    }
+
+                    // Overflow (üç nokta) menü
+                    IconButton(onClick = { expanded = true }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.outline_more_vert_24),
+                            contentDescription = "Daha fazla"
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        containerColor = MaterialTheme.colorScheme.surface // Menü arka plan rengi
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Paylaş") },
+                            onClick = {
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Oy ver") },
+                            onClick = {
+                                expanded = false
+                            }
                         )
                     }
                 }

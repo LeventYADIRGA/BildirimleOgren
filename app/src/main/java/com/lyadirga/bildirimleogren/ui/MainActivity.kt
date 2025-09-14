@@ -48,7 +48,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     companion object {
         private const val REQUEST_CODE_NOTIFICATION_PERMISSION = 1981
-        private const val UNIQUE_WORK_NAME = "notification_work"
+        const val UNIQUE_WORK_NAME = "notification_work"
         val intervalsInMinutes = arrayOf(30, 60, 180, 360, 1440, null)
     }
 
