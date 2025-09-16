@@ -1,8 +1,12 @@
 package com.lyadirga.bildirimleogren.ui_compose
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -54,6 +58,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavType
@@ -64,6 +70,7 @@ import androidx.navigation.navArgument
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
@@ -125,11 +132,16 @@ class MainActivityCompose : ComponentActivity() {
     private val appPackageName: String
         get() = "com.lyadirga.bildirimleogren"
 
+    companion object {
+        private const val REQUEST_CODE_NOTIFICATION_PERMISSION = 1981
+    }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        initPermission()
         setContent {
             val mainViewModel: MainViewModel = hiltViewModel()
             BildirimleOgrenTheme {
@@ -137,6 +149,49 @@ class MainActivityCompose : ComponentActivity() {
             }
         }
     } // end onCreate
+
+    private fun initPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // İzni daha önce istenmiş ve reddedilmiş mi?
+            val isPermissionDenied = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_DENIED && ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+            if (isPermissionDenied) {
+                showNotificationPermissionDialog()
+            } else if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    REQUEST_CODE_NOTIFICATION_PERMISSION
+                )
+            }
+        }
+    }
+
+    private fun showNotificationPermissionDialog() {
+        MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
+            setTitle(R.string.notification_permission_title)
+            setMessage(R.string.notification_permission_message)
+            setPositiveButton(R.string.go_to_settings) { _, _ ->
+                openNotificationSettings()
+            }.setCancelable(false).show()
+        }
+    }
+
+    private fun openNotificationSettings() {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        startActivity(intent)
+    }
+
 
     fun scheduleNotifications(notificationInterval: Int?, intervalLabel: CharSequence) {
 

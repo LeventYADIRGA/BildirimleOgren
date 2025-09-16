@@ -1,7 +1,7 @@
 package com.lyadirga.bildirimleogren.ui_compose
 
-import android.R.attr.contentDescription
-import android.util.Log.d
+import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -23,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,22 +38,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
-import com.lyadirga.bildirimleogren.ui.MainActivity
 import com.lyadirga.bildirimleogren.ui.MainActivity.Companion.intervalsInMinutes
 import com.lyadirga.bildirimleogren.ui.MainViewModel
+import com.lyadirga.bildirimleogren.ui.showToast
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlin.jvm.java
+import java.util.Locale
 import com.lyadirga.bildirimleogren.util.Toast as AppToast
-
 
 
 @EntryPoint
@@ -275,11 +272,14 @@ fun DetailScreen(
 fun DetailListItem(
     sentence: String,
     mean: String,
+    tts: TextToSpeech = rememberTextToSpeech()
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { }
+            .clickable {
+                tts.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, null)
+            }
             .padding(horizontal = 16.dp, vertical = 5.dp)
     ) {
         Text(
@@ -296,4 +296,51 @@ fun DetailListItem(
             modifier = Modifier.padding(top = 2.dp)
         )
     }
+}
+
+
+
+@Composable
+fun rememberTextToSpeech(): TextToSpeech {
+    val context = LocalContext.current
+
+    val tts = remember {
+        var tmpTts: TextToSpeech? = null
+
+        tmpTts = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = tmpTts?.setLanguage(Locale.getDefault())
+
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    // fallback
+                    tmpTts?.language = Locale.US
+                    val message = when (result) {
+                        TextToSpeech.LANG_MISSING_DATA -> context.getString(R.string.tts_lang_missing_data)
+                        TextToSpeech.LANG_NOT_SUPPORTED -> context.getString(R.string.tts_lang_not_supported)
+                        else -> context.getString(R.string.tts_unknown_error, result)
+                    }
+                    context.showToast(message)
+                }
+            } else {
+                val message = context.getString(R.string.tts_unknown_error, status)
+                context.showToast(message)
+            }
+        }
+
+        tmpTts
+    }
+
+    // Activity/Composable lifecycleda temizleme
+    DisposableEffect(Unit) {
+        onDispose {
+            try {
+                tts.stop()
+                tts.shutdown()
+            } catch (throwable: Throwable) {
+                Log.e("DetailScreen -> TextToSpeech: ", throwable.message.toString())
+            }
+        }
+    }
+
+    return tts
 }
