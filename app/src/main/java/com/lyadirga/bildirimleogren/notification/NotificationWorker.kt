@@ -14,7 +14,7 @@ import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.AppDatabase
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.data.repository.AppRepository
-import com.lyadirga.bildirimleogren.ui.MainActivity
+import com.lyadirga.bildirimleogren.ui.MainActivityCompose
 
 class NotificationWorker (
      appContext: Context,
@@ -80,7 +80,7 @@ class NotificationWorker (
 
         // Ana aktiviteyi açmak için bir intent
         // An intent to open the main activity
-        val intent = Intent(applicationContext, MainActivity::class.java).apply {
+        val intent = Intent(applicationContext, MainActivityCompose::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 

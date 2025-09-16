@@ -1,4 +1,4 @@
-package com.lyadirga.bildirimleogren.ui_compose.theme
+package com.lyadirga.bildirimleogren.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.lyadirga.bildirimleogren.ui_compose
+package com.lyadirga.bildirimleogren.ui
 
 import android.content.Intent
 import android.text.Html

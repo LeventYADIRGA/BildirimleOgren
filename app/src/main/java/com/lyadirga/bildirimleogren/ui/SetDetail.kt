@@ -1,4 +1,4 @@
-package com.lyadirga.bildirimleogren.ui_compose
+package com.lyadirga.bildirimleogren.ui
 
 import android.speech.tts.TextToSpeech
 import android.util.Log
@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -19,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -41,9 +43,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
-import com.lyadirga.bildirimleogren.ui.MainActivity.Companion.intervalsInMinutes
-import com.lyadirga.bildirimleogren.ui.MainViewModel
-import com.lyadirga.bildirimleogren.ui.showToast
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -114,7 +113,7 @@ fun DetailScreen(
                     if (enabledSets.isEmpty()) {
                         Toast.makeText(context, R.string.notification_no_enabled_sets_message, Toast.LENGTH_SHORT).show()
                     } else {
-                        val notificationInterval = intervalsInMinutes[selectedIndex]
+                        val notificationInterval = MainActivityCompose.Companion.intervalsInMinutes[selectedIndex]
                         (context as MainActivityCompose).scheduleNotifications(
                             notificationInterval,
                             choices[selectedIndex]
@@ -130,13 +129,13 @@ fun DetailScreen(
 
     // Silme dialogu
     if (showDeleteDialog) {
-        androidx.compose.material3.AlertDialog(
+        AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
             title = { Text(text = context.getString(R.string.delete_set_title)) },
             text = { Text(text = context.getString(R.string.delete_set_message)) },
             containerColor = MaterialTheme.colorScheme.surface,
             confirmButton = {
-                androidx.compose.material3.TextButton(onClick = {
+                TextButton(onClick = {
                     showDeleteDialog = false
                     // Silme işlemi
                     coroutineScope.launch {
@@ -157,7 +156,7 @@ fun DetailScreen(
                 }
             },
             dismissButton = {
-                androidx.compose.material3.TextButton(onClick = {
+                TextButton(onClick = {
                     showDeleteDialog = false
                 }) {
                     Text(text = context.getString(R.string.generic_no))
@@ -190,35 +189,32 @@ fun DetailScreen(
                             prefData.toggleNotificationSetId(setId)
                             val enabledSets = prefData.getNotificationSetIdsOnce()
                             notificationEnabled = setId in enabledSets
-                            Toast.makeText(
-                                context,
-                                if (notificationEnabled) R.string.notification_set_enabled
-                                else R.string.notification_set_disabled,
-                                Toast.LENGTH_SHORT
-                            ).show()
                             val intervalIndex = prefData.getNotificationIntervalIndexOnce()
                             val activity = context as MainActivityCompose
 
                             if (notificationEnabled && intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1) {
                                 // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor. Bildirimi başlat
                                 // 🇬🇧English: When no set has notifications enabled, this set will be enabled. Start the notification.
-                                val notificationInterval  = intervalsInMinutes[intervalIndex]
+                                val notificationInterval  = MainActivityCompose.Companion.intervalsInMinutes[intervalIndex]
                                 activity.scheduleNotificationsFromSetDetail(notificationInterval)
                                 AppToast.showSuccessToast(activity, R.string.notification_set_enabled)
                             } else if (notificationEnabled && intervalIndex == PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1){
                                 // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor ama bildirim sıklığı ayarlarından seçim yapılmamış. Bildirim sıklığı dialog unu aç.
                                 // 🇬🇧English: When no set has notifications enabled, this set is enabled but no frequency is selected. Open the notification frequency dialog.
                                 showDialog = true
+                                AppToast.showSuccessToast(activity, R.string.notification_set_enabled)
                             }
                             else if (intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.isEmpty()){
                                 // 🇹🇷Türkçe: Bildirim kapat, çünkü enabledSets boş
                                 // 🇬🇧English: Turn off notification because enabledSets is empty
                                 activity.scheduleNotificationsFromSetDetail(null)
+                                AppToast.showSuccessToast(activity, R.string.notifications_disabled_no_enabled_set)
                                 prefData.resetIndex()
                             }else if (notificationEnabled.not()){
                                 AppToast.showSuccessToast(activity, R.string.notification_set_disabled)
+                            } else if (notificationEnabled) {
+                                AppToast.showSuccessToast(activity, R.string.notification_set_enabled)
                             }
-
 
                         } // end coroutineScope.launch
                     }) {

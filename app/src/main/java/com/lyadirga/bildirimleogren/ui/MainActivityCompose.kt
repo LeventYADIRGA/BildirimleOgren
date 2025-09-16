@@ -1,4 +1,4 @@
-package com.lyadirga.bildirimleogren.ui_compose
+package com.lyadirga.bildirimleogren.ui
 
 import android.Manifest
 import android.content.ActivityNotFoundException
@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -45,19 +48,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -75,12 +80,7 @@ import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
 import com.lyadirga.bildirimleogren.notification.NotificationWorker
-import com.lyadirga.bildirimleogren.ui.MainActivity.Companion.UNIQUE_WORK_NAME
-import com.lyadirga.bildirimleogren.ui.MainActivity.Companion.intervalsInMinutes
-import com.lyadirga.bildirimleogren.ui.MainViewModel
-import com.lyadirga.bildirimleogren.ui.isInternetAvailable
-import com.lyadirga.bildirimleogren.ui.showToast
-import com.lyadirga.bildirimleogren.ui_compose.theme.BildirimleOgrenTheme
+import com.lyadirga.bildirimleogren.ui.theme.BildirimleOgrenTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -134,6 +134,8 @@ class MainActivityCompose : ComponentActivity() {
 
     companion object {
         private const val REQUEST_CODE_NOTIFICATION_PERMISSION = 1981
+        private const val UNIQUE_WORK_NAME = "notification_work"
+        val intervalsInMinutes = arrayOf(30, 60, 180, 360, 1440, null)
     }
 
 
@@ -230,7 +232,6 @@ class MainActivityCompose : ComponentActivity() {
 
         } ?:run {
             workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
-            AppToast.showSuccessToast(this@MainActivityCompose, R.string.notifications_disabled_no_enabled_set)
         }
 
     }
@@ -333,7 +334,7 @@ fun MainScreen(viewModel: MainViewModel,
                     if (enabledSets.isEmpty()) {
                         Toast.makeText(context, R.string.notification_no_enabled_sets_message, Toast.LENGTH_SHORT).show()
                     } else {
-                        val notificationInterval = intervalsInMinutes[selectedIndex]
+                        val notificationInterval = MainActivityCompose.Companion.intervalsInMinutes[selectedIndex]
                         (context as MainActivityCompose).scheduleNotifications(
                             notificationInterval,
                             choices[selectedIndex]
@@ -500,8 +501,75 @@ fun BottomSheetContent(onAddClicked: (String) -> Unit) {
 }
 
 @Composable
-fun GuideContent(modifier: Modifier) {
-   Text("Guide", modifier = modifier)
+fun GuideContent(
+    modifier: Modifier = Modifier
+) {
+    // Scrollable content
+    Column(
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(vertical = 8.dp) // ScrollView padding gibi
+    ) {
+        // Title
+        Text(
+            text = stringResource(R.string.guide_text_title),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontFamily = FontFamily.SansSerif,
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+        )
+
+        // Detail
+        Text(
+            text = stringResource(R.string.guide_text),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontFamily = FontFamily.SansSerif,
+            modifier = Modifier
+                .padding(horizontal = 24.dp, vertical = 4.dp)
+        )
+
+        // Title 2
+        Text(
+            text = stringResource(R.string.sheet_format),
+            style = MaterialTheme.typography.titleMedium.copy(fontSize = 20.sp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontFamily = FontFamily.SansSerif,
+            modifier = Modifier
+                .padding(horizontal = 24.dp, vertical = 8.dp)
+        )
+
+        // Image 1
+        Image(
+            painter = painterResource(id = R.drawable.guide_sheet),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            contentScale = ContentScale.FillWidth // oranı koruyarak genişliği ekrana sığdırır
+        )
+
+        // Title 3
+        Text(
+            text = stringResource(R.string.sheet_link_instructions),
+            style = MaterialTheme.typography.titleMedium.copy(fontSize = 20.sp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontFamily = FontFamily.SansSerif,
+            modifier = Modifier
+                .padding(horizontal = 24.dp, vertical = 10.dp)
+        )
+
+        // Image 2
+        Image(
+            painter = painterResource(id = R.drawable.guide),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            contentScale = ContentScale.FillWidth // oranı koruyarak genişliği ekrana sığdırır
+        )
+    }
 }
 
 
@@ -594,5 +662,7 @@ fun PreviewSetListItem() {
             notificationEnabled = true,
             onClick = {}
         )
+
+        //GuideContent()
     }
 }

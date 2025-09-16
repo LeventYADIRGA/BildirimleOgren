@@ -1,4 +1,4 @@
-package com.lyadirga.bildirimleogren.ui_compose.theme
+package com.lyadirga.bildirimleogren.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

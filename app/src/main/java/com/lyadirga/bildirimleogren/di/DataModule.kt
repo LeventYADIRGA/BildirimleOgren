@@ -4,9 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.lyadirga.bildirimleogren.data.AppDatabase
 import com.lyadirga.bildirimleogren.data.LanguageDao
-import com.lyadirga.bildirimleogren.data.PrefData
-import com.lyadirga.bildirimleogren.data.repository.AppRepository
-import com.lyadirga.bildirimleogren.data.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +14,7 @@ import kotlin.jvm.java
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object DataModule {
 
     @Provides
     @Singleton
