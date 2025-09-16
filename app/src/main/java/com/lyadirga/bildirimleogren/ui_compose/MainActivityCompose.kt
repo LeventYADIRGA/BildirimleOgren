@@ -41,6 +41,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -274,7 +275,6 @@ fun MainScreen(viewModel: MainViewModel,
                 coroutineScope.launch {
                     prefData.setNotificationIntervalIndex(selectedIndex)
                     val enabledSets = prefData.getNotificationSetIdsOnce()
-                    context
                     if (enabledSets.isEmpty()) {
                         Toast.makeText(context, R.string.notification_no_enabled_sets_message, Toast.LENGTH_SHORT).show()
                     } else {
