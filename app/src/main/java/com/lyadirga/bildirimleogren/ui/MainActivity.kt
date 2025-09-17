@@ -74,6 +74,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.lyadirga.bildirimleogren.App
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
@@ -327,7 +328,7 @@ fun MainScreen(viewModel: MainViewModel,
                     prefData.setNotificationIntervalIndex(selectedIndex)
                     val enabledSets = prefData.getNotificationSetIdsOnce()
                     if (enabledSets.isEmpty()) {
-                        Toast.makeText(context, R.string.notification_no_enabled_sets_message, Toast.LENGTH_SHORT).show()
+                        AppToast.showSuccessToast(context, R.string.notification_no_enabled_sets_message)
                     } else {
                         val notificationInterval = MainActivity.Companion.intervalsInMinutes[selectedIndex]
                         (context as MainActivity).scheduleNotifications(

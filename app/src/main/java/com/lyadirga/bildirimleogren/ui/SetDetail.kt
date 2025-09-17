@@ -112,7 +112,7 @@ fun DetailScreen(
                     val enabledSets = prefData.getNotificationSetIdsOnce()
                     context
                     if (enabledSets.isEmpty()) {
-                        Toast.makeText(context, R.string.notification_no_enabled_sets_message, Toast.LENGTH_SHORT).show()
+                        AppToast.showSuccessToast(context, R.string.notification_no_enabled_sets_message)
                     } else {
                         val notificationInterval = MainActivity.Companion.intervalsInMinutes[selectedIndex]
                         (context as MainActivity).scheduleNotifications(
