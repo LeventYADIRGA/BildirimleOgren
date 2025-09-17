@@ -4,24 +4,24 @@
     <item
         android:id="@+id/action_bilgi"
         android:icon="@drawable/baseline_help_outline_24"
-        android:title="Bilgi"
+        android:title="@string/menu_info"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/notification_settings"
-        android:title="Bildirim ayarları"
+        android:title="@string/menu_notification_setting"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/baseline_share_24"
-        android:title="Paylaş"
+        android:title="@string/menu_share"
         app:showAsAction="ifRoom|withText" />
 
     <item
         android:id="@+id/action_rate_me"
         android:icon="@drawable/baseline_star_rate_24"
-        android:title="Oy ver"
+        android:title="@string/menu_rate"
         app:showAsAction="ifRoom|withText" />
 </menu>

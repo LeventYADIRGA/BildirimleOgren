@@ -7,6 +7,16 @@
     <string name="generic_yes">Evet</string>
     <string name="generic_no">Hayır</string>
 
+    <!-- Menu -->
+    <string name="menu_share">Paylaş</string>
+    <string name="menu_rate">Oy ver</string>
+    <string name="menu_more">Daha fazla</string>
+    <string name="menu_notification_setting">Bildirim ayarları</string>
+    <string name="menu_info">Bilgi</string>
+    <string name="menu_notification">Bildirim</string>
+    <string name="menu_delete">Sil</string>
+
+
     <!-- Error messages -->
     <string name="unexpected_error">Beklenmeyen bir hata oluştu</string>
     <string name="error_delete_set">Set silinirken bir hata oluştu</string>
