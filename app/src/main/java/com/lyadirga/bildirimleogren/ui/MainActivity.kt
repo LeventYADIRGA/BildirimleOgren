@@ -110,10 +110,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                                 val enabledSets = prefData.getNotificationSetIdsOnce()
                                 viewModel.getAllSetSummariesOnce { summaries ->
                                     if (summaries.isEmpty()){
-                                        showAlert(R.string.notification_no_sets_message)
+                                        Toast.showSuccessToast(context, R.string.notification_no_sets_message)
                                     }
                                     else if (enabledSets.isEmpty()) {
-                                        showAlert(R.string.notification_no_enabled_sets_message)
+                                        Toast.showSuccessToast(context, R.string.notification_no_enabled_sets_message)
                                     } else {
                                         val notificationInterval = intervalsInMinutes[currentIntervalIndex]
                                         scheduleNotifications(notificationInterval, choices[currentIntervalIndex])
