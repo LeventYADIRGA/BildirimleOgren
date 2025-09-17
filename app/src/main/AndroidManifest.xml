@@ -17,7 +17,7 @@
         android:theme="@style/Theme.BildirimleOgren"
         tools:targetApi="31">
         <activity
-            android:name=".ui.MainActivityCompose"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

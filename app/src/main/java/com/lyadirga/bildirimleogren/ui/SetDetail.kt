@@ -113,8 +113,8 @@ fun DetailScreen(
                     if (enabledSets.isEmpty()) {
                         Toast.makeText(context, R.string.notification_no_enabled_sets_message, Toast.LENGTH_SHORT).show()
                     } else {
-                        val notificationInterval = MainActivityCompose.Companion.intervalsInMinutes[selectedIndex]
-                        (context as MainActivityCompose).scheduleNotifications(
+                        val notificationInterval = MainActivity.Companion.intervalsInMinutes[selectedIndex]
+                        (context as MainActivity).scheduleNotifications(
                             notificationInterval,
                             choices[selectedIndex]
                         )
@@ -190,12 +190,12 @@ fun DetailScreen(
                             val enabledSets = prefData.getNotificationSetIdsOnce()
                             notificationEnabled = setId in enabledSets
                             val intervalIndex = prefData.getNotificationIntervalIndexOnce()
-                            val activity = context as MainActivityCompose
+                            val activity = context as MainActivity
 
                             if (notificationEnabled && intervalIndex != PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1) {
                                 // 🇹🇷Türkçe: Bildirime açık hiçbir set yokken bu set bildirime açılıyor. Bildirimi başlat
                                 // 🇬🇧English: When no set has notifications enabled, this set will be enabled. Start the notification.
-                                val notificationInterval  = MainActivityCompose.Companion.intervalsInMinutes[intervalIndex]
+                                val notificationInterval  = MainActivity.Companion.intervalsInMinutes[intervalIndex]
                                 activity.scheduleNotificationsFromSetDetail(notificationInterval)
                                 AppToast.showSuccessToast(activity, R.string.notification_set_enabled)
                             } else if (notificationEnabled && intervalIndex == PrefData.NOTIFICATION_DISABLED_INDEX && enabledSets.size == 1){

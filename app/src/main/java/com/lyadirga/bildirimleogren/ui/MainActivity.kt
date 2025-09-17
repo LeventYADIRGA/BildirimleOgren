@@ -90,7 +90,7 @@ import com.lyadirga.bildirimleogren.util.Toast as AppToast
 
 
 @AndroidEntryPoint
-class MainActivityCompose : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var prefData: PrefData
@@ -132,7 +132,7 @@ class MainActivityCompose : ComponentActivity() {
     private val appPackageName: String
         get() = "com.lyadirga.bildirimleogren"
 
-    companion object {
+    companion object Companion {
         private const val REQUEST_CODE_NOTIFICATION_PERMISSION = 1981
         private const val UNIQUE_WORK_NAME = "notification_work"
         val intervalsInMinutes = arrayOf(30, 60, 180, 360, 1440, null)
@@ -211,7 +211,7 @@ class MainActivityCompose : ComponentActivity() {
 
         } ?:run {
             workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
-            AppToast.showSuccessToast(this@MainActivityCompose, R.string.notification_all_disabled)
+            AppToast.showSuccessToast(this@MainActivity, R.string.notification_all_disabled)
         }
 
     }
@@ -244,33 +244,30 @@ fun MainScreenWithNavigation(viewModel: MainViewModel, prefData: PrefData) {
 
     NavHost(
         navController = navController,
-        startDestination = "main"
+        startDestination = Screen.Main.route
     ) {
-        composable("main") {
+        composable(Screen.Main.route) {
             MainScreen(
                 viewModel = viewModel,
                 prefData = prefData,
                 onSetClick = { setId, setTitle ->
-                    navController.navigate("detail/$setId/$setTitle")
+                    navController.navigate(Screen.Detail(setId, setTitle).route)
                 },
                 onInfoClick = {
-                    navController.navigate("info")
+                    navController.navigate(Screen.Info.route)
                 }
             )
         }
         composable(
-            route = "detail/{setId}/{setTitle}",
-            arguments = listOf(
-                navArgument("setId") { type = NavType.LongType },
-                navArgument("setTitle") { type = NavType.StringType }
-            )
+            route = Screen.Detail.baseRoute,
+            arguments = Screen.Detail.arguments
         ) { backStackEntry ->
-            val setId = backStackEntry.arguments?.getLong("setId") ?: 0L
-            val setTitle = backStackEntry.arguments?.getString("setTitle") ?: ""
+            val setId = backStackEntry.arguments?.getLong(Screen.Detail.ARG_SET_ID) ?: 0L
+            val setTitle = backStackEntry.arguments?.getString(Screen.Detail.ARG_SET_TITLE) ?: ""
             DetailScreen(setId = setId, setTitle = setTitle, navController = navController)
         }
 
-        composable("info") {
+        composable(Screen.Info.route) {
             Info(
                 navController = navController
             )
@@ -334,8 +331,8 @@ fun MainScreen(viewModel: MainViewModel,
                     if (enabledSets.isEmpty()) {
                         Toast.makeText(context, R.string.notification_no_enabled_sets_message, Toast.LENGTH_SHORT).show()
                     } else {
-                        val notificationInterval = MainActivityCompose.Companion.intervalsInMinutes[selectedIndex]
-                        (context as MainActivityCompose).scheduleNotifications(
+                        val notificationInterval = MainActivity.Companion.intervalsInMinutes[selectedIndex]
+                        (context as MainActivity).scheduleNotifications(
                             notificationInterval,
                             choices[selectedIndex]
                         )
@@ -385,14 +382,14 @@ fun MainScreen(viewModel: MainViewModel,
                             text = { Text("Paylaş") },
                             onClick = {
                                 expanded = false
-                                (context as? MainActivityCompose)?.shareAppLink()
+                                (context as? MainActivity)?.shareAppLink()
                             }
                         )
                         DropdownMenuItem(
                             text = { Text("Oy ver") },
                             onClick = {
                                 expanded = false
-                                (context as? MainActivityCompose)?.rateAppOnPlayStore()
+                                (context as? MainActivity)?.rateAppOnPlayStore()
                             }
                         )
                     }
@@ -662,7 +659,14 @@ fun PreviewSetListItem() {
             notificationEnabled = true,
             onClick = {}
         )
+    }
+}
 
-        //GuideContent()
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewGuide(){
+    BildirimleOgrenTheme {
+        GuideContent()
     }
 }
