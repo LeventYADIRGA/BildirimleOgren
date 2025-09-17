@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -178,7 +179,7 @@ fun DetailScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Geri"
+                            contentDescription = "Back"
                         )
                     }
                 },
@@ -225,13 +226,13 @@ fun DetailScreen(
                                 else
                                     R.drawable.notification_disable
                             ),
-                            contentDescription = "Bildirim"
+                            contentDescription = stringResource(R.string.menu_notification)
                         )
                     }
                     IconButton(onClick = { showDeleteDialog = true }) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_delete_outline_24),
-                            contentDescription = "Sil"
+                            contentDescription = stringResource(R.string.menu_delete)
                         )
                     }
                 }

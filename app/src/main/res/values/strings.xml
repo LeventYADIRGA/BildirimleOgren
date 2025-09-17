@@ -9,6 +9,16 @@
     <string name="generic_cancel">Cancel</string>
     <string name="generic_back">Back</string>
 
+    <!-- Menu -->
+    <string name="menu_share">Share</string>
+    <string name="menu_rate">Rate</string>
+    <string name="menu_more">More</string>
+    <string name="menu_notification_setting">Notification settings</string>
+    <string name="menu_info">Info</string>
+    <string name="menu_notification">Notification</string>
+    <string name="menu_delete">Delete</string>
+
+
 
     <!-- Error messages -->
     <string name="unexpected_error">An unexpected error occurred</string>

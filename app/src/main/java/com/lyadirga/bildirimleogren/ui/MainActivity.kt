@@ -67,11 +67,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -353,7 +351,7 @@ fun MainScreen(viewModel: MainViewModel,
                     IconButton(onClick = onInfoClick) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_help_outline_24),
-                            contentDescription = "Bilgi"
+                            contentDescription = stringResource(R.string.menu_info)
                         )
                     }
 
@@ -361,7 +359,7 @@ fun MainScreen(viewModel: MainViewModel,
                     IconButton(onClick = { showDialog = true }) {
                         Icon(
                             painter = painterResource(id = R.drawable.notification_settings),
-                            contentDescription = "Bildirim ayarları"
+                            contentDescription = stringResource(R.string.menu_notification_setting)
                         )
                     }
 
@@ -369,7 +367,7 @@ fun MainScreen(viewModel: MainViewModel,
                     IconButton(onClick = { expanded = true }) {
                         Icon(
                             painter = painterResource(id = R.drawable.outline_more_vert_24),
-                            contentDescription = "Daha fazla"
+                            contentDescription = stringResource(R.string.menu_more)
                         )
                     }
 
@@ -379,14 +377,14 @@ fun MainScreen(viewModel: MainViewModel,
                         containerColor = MaterialTheme.colorScheme.surface // Menü arka plan rengi
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Paylaş") },
+                            text = { Text(stringResource(R.string.menu_share)) },
                             onClick = {
                                 expanded = false
                                 (context as? MainActivity)?.shareAppLink()
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Oy ver") },
+                            text = { Text(stringResource(R.string.menu_rate)) },
                             onClick = {
                                 expanded = false
                                 (context as? MainActivity)?.rateAppOnPlayStore()
