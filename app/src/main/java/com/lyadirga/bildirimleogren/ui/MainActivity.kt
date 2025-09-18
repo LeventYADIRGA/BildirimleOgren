@@ -327,7 +327,7 @@ fun MainScreen(viewModel: MainViewModel,
                 coroutineScope.launch {
                     prefData.setNotificationIntervalIndex(selectedIndex)
                     val enabledSets = prefData.getNotificationSetIdsOnce()
-                    if (enabledSets.isEmpty()) {
+                    if (enabledSets.isEmpty() && selectedIndex != choices.size -1) {
                         AppToast.showSuccessToast(context, R.string.notification_no_enabled_sets_message)
                     } else {
                         val notificationInterval = MainActivity.Companion.intervalsInMinutes[selectedIndex]
