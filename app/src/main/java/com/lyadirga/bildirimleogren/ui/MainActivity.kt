@@ -112,7 +112,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                                     if (summaries.isEmpty()){
                                         Toast.showSuccessToast(context, R.string.notification_no_sets_message)
                                     }
-                                    else if (enabledSets.isEmpty()) {
+                                    else if (enabledSets.isEmpty() && currentIntervalIndex != choices.size - 1) {
                                         Toast.showSuccessToast(context, R.string.notification_no_enabled_sets_message)
                                     } else {
                                         val notificationInterval = intervalsInMinutes[currentIntervalIndex]
