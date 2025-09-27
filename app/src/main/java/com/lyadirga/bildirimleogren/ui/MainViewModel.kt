@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.data.LanguageSetWithItems
-import com.lyadirga.bildirimleogren.data.AppRepository
+import com.lyadirga.bildirimleogren.data.repository.Repository
 import com.lyadirga.bildirimleogren.model.Language
 import com.lyadirga.bildirimleogren.model.LanguageSet
 import com.lyadirga.bildirimleogren.model.LanguageSetSummary
@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: AppRepository,
+    private val repository: Repository,
     @ApplicationContext private val context: Context
 ): ViewModel() {
 
