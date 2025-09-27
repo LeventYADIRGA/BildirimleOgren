@@ -4,12 +4,15 @@
 > - **main**: XML layouts.
 > - **compose**: Jetpack Compose layouts.
 
+
+
 🇹🇷 Türkçe: Kullanıcılara bildirimlerle kelime öğrenmeyi sağlayan Android uygulaması. 
 
 - **main branch**: XML tabanlı klasik Android UI kullanıyor.
 - **compose branch**: UI tamamen **Jetpack Compose** ile yeniden yazılmıştır.
-- 
-  🇬🇧 English: Android app to learn languages with scheduled notifications.  
+
+
+🇬🇧 English: Android app to learn languages with scheduled notifications.  
 
 - **main branch**: Uses traditional XML-based Android UI.
 - **compose branch**: UI is completely rewritten using **Jetpack Compose**.
