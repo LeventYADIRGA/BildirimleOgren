@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -62,11 +61,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             R.id.nav_host_fragment
         ) as NavHostFragment
         navController = navHostFragment.navController
-
-        // Status bar color make tertiary
-        val typedValue = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorTertiary, typedValue, true)
-        window.statusBarColor = typedValue.data
 
         initPermission()
 
