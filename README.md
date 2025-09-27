@@ -1,8 +1,18 @@
 # Bildirimle Öğren / Learn with Notifications
 
-🇹🇷 Türkçe: Kullanıcılara bildirimlerle kelime öğrenmeyi sağlayan Android uygulaması.  
-🇬🇧 English: Android app to learn languages with scheduled notifications.  
+> ⚠️ This repository has two branches for UI:
+> - **main**: XML layouts.
+> - **compose**: Jetpack Compose layouts.
 
+🇹🇷 Türkçe: Kullanıcılara bildirimlerle kelime öğrenmeyi sağlayan Android uygulaması. 
+
+- **main branch**: XML tabanlı klasik Android UI kullanıyor.
+- **compose branch**: UI tamamen **Jetpack Compose** ile yeniden yazılmıştır.
+- 
+  🇬🇧 English: Android app to learn languages with scheduled notifications.  
+
+- **main branch**: Uses traditional XML-based Android UI.
+- **compose branch**: UI is completely rewritten using **Jetpack Compose**.
 
 ---
 
@@ -23,7 +33,9 @@
 - Learn vocabulary and sentences with scheduled notifications.
 - Customize notification frequency.
 - Multiple language sets supported.
-- Simple and clean Material 3 design.
+- Clean Material 3 design.
+  - **main branch**: XML layouts.
+  - **compose branch**: Jetpack Compose.
 - Uses **Flow** for reactive data handling.
 
 
@@ -42,6 +54,8 @@
 - **Dagger Hilt** – Dependency Injection.
 - **Kotlinx Serialization** – JSON parsing.
 - **Material 3** – Modern UI components.
+- **Jetpack Compose** – Used in compose branch for modern declarative UI.
+- **Compose Material3** – Material 3 components in Compose (compose branch).
 - **OpenCSV** – CSV parsing.
 - **KTX Extensions** – `activity-ktx`, `fragment-ktx`, `lifecycle-runtime-ktx`.
 - **ConstraintLayout** – Flexible layouts.
