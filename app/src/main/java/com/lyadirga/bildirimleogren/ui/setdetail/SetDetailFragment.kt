@@ -108,8 +108,7 @@ class SetDetailFragment : BaseFragment<FragmentSetDetailBinding>() {
 
                 R.id.delete -> {
                     MaterialAlertDialogBuilder(
-                        requireContext(),
-                        R.style.Theme_BildirimleOgren_MaterialAlertDialog
+                        requireContext()
                     )
                         .setTitle(R.string.delete_set_title)
                         .setMessage(R.string.delete_set_message)

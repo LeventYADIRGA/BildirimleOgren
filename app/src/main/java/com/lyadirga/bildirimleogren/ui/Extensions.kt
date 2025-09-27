@@ -23,7 +23,7 @@ fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
 
 
 fun Context.showAlert(@StringRes message: Int) {
-    MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
+    MaterialAlertDialogBuilder(this).apply {
         setTitle(R.string.generic_warning)
         setMessage(message)
         setPositiveButton(R.string.generic_ok) { _, _ -> }

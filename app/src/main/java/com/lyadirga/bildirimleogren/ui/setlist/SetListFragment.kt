@@ -16,11 +16,9 @@ import com.lyadirga.bildirimleogren.data.PrefData
 import com.lyadirga.bildirimleogren.databinding.FragmentSetListBinding
 import com.lyadirga.bildirimleogren.ui.MainActivity
 import com.lyadirga.bildirimleogren.ui.MainViewModel
-import com.lyadirga.bildirimleogren.ui.setlist.MarginItemDecoration
 import com.lyadirga.bildirimleogren.ui.base.BaseFragment
 import com.lyadirga.bildirimleogren.ui.setGone
 import com.lyadirga.bildirimleogren.ui.setVisible
-import com.lyadirga.bildirimleogren.ui.showToast
 import com.lyadirga.bildirimleogren.util.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

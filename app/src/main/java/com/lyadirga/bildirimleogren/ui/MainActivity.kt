@@ -101,7 +101,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             var currentIntervalIndex = prefData.getNotificationIntervalIndexOnce()
             val oldIndex = currentIntervalIndex
 
-            val builder = MaterialAlertDialogBuilder(this@MainActivity, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
+            val builder = MaterialAlertDialogBuilder(this@MainActivity).apply {
                 setTitle(R.string.notification_interval_title)
                 setPositiveButton(R.string.generic_ok) { _, _ ->
                     lifecycleScope.launch {
@@ -110,10 +110,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                                 val enabledSets = prefData.getNotificationSetIdsOnce()
                                 viewModel.getAllSetSummariesOnce { summaries ->
                                     if (summaries.isEmpty()){
-                                        Toast.showSuccessToast(context, R.string.notification_no_sets_message)
+                                        Toast.showSuccessToast(this@MainActivity, R.string.notification_no_sets_message)
                                     }
                                     else if (enabledSets.isEmpty() && currentIntervalIndex != choices.size - 1) {
-                                        Toast.showSuccessToast(context, R.string.notification_no_enabled_sets_message)
+                                        Toast.showSuccessToast(this@MainActivity, R.string.notification_no_enabled_sets_message)
                                     } else {
                                         val notificationInterval = intervalsInMinutes[currentIntervalIndex]
                                         scheduleNotifications(notificationInterval, choices[currentIntervalIndex])
@@ -150,7 +150,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         } ?:run {
             workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
-            Toast.showSuccessToast(this, R.string.notification_all_disabled)
+            Toast.showSuccessToast(this@MainActivity, R.string.notification_all_disabled)
         }
 
     }
@@ -170,7 +170,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         } ?:run {
             workManager.cancelUniqueWork(UNIQUE_WORK_NAME)
-            Toast.showSuccessToast(this, R.string.notifications_disabled_no_enabled_set)
+            Toast.showSuccessToast(this@MainActivity, R.string.notifications_disabled_no_enabled_set)
         }
 
     }
@@ -203,7 +203,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun showNotificationPermissionDialog() {
-        MaterialAlertDialogBuilder(this, R.style.Theme_BildirimleOgren_MaterialAlertDialog).apply {
+        MaterialAlertDialogBuilder(this).apply {
             setTitle(R.string.notification_permission_title)
             setMessage(R.string.notification_permission_message)
             setPositiveButton(R.string.go_to_settings) { _, _ ->

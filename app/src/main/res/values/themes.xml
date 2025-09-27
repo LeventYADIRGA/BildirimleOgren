@@ -42,20 +42,7 @@
     <style name="Theme.BildirimleOgren" parent="Base.Theme.BildirimleOgren" />
 
     <style name="Theme.BildirimleOgren.PopupMenu" parent="Widget.Material3.PopupMenu">
-        <item name="android:popupBackground">@color/green_surface_container_light</item>
-        <item name="android:textColor">@color/green_on_surface_light</item>
+        <item name="android:popupBackground">?attr/colorSurface</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
-
-    <style name="Theme.BildirimleOgren.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <!-- Arka plan -->
-        <item name="android:background">@color/green_surface_container_light</item>
-        <!-- Başlık rengi -->
-        <item name="titleTextColor">@color/green_on_surface_light</item>
-        <!-- Mesaj rengi -->
-        <item name="android:textColor">@color/green_on_surface_light</item>
-        <!-- Pozitif buton rengi -->
-        <item name="colorPrimary">@color/green_primary_light</item>
-    </style>
-
-
 </resources>

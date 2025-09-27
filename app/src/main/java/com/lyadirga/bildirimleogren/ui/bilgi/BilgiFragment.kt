@@ -12,10 +12,13 @@ import com.lyadirga.bildirimleogren.R
 import com.lyadirga.bildirimleogren.databinding.FragmentBilgiBinding
 import com.lyadirga.bildirimleogren.ui.base.BaseFragment
 import androidx.core.net.toUri
-import com.lyadirga.bildirimleogren.util.GOOGLE_FORM_URL
 
 
 class BilgiFragment : BaseFragment<FragmentBilgiBinding>() {
+
+    companion object {
+        private const val GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeBcfoT_eMMj6z1sG7P4t2_AAzd49bUiII2nQ8GzdZ2BQTr6A/viewform?usp=header"
+    }
 
     override fun createBinding(
         inflater: LayoutInflater,
